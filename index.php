@@ -2,11 +2,8 @@
 
 include_once 'library.php';
 
-$logged_in = isLoggedIn();
+$logged_in = Session::isLoggedIn();
 $action = url_get_query_parameter(url_full(), 'action');
-
-$u = URL::urlFromString("abc.xyz.de/index.php?action=1");
-echo $u;
 
 beginPage();
 echo render_page_header($logged_in);
