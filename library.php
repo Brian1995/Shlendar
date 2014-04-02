@@ -9,10 +9,6 @@ include_once 'lib/url.php';
 setlocale(LC_ALL, 'de_DE.utf-8');
 session_start();
 
-function isLoggedIn() {
-	return isset($_SESSION['logged_in']) && $_SESSION['logged_in'];
-}
-
 function beginPage ($title="kein Titel") { 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
