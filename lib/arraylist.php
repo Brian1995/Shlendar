@@ -46,10 +46,16 @@ class ArrayList {
 		return $result;
 	}
 	
+	/**
+	 * 
+	 * @param integer $index The index of the object that should be removed.
+	 * @return The removed object.
+	 */
 	public function remove($index) {
 		$this->checkIndex(0, $this->size-1, $index);
-		array_splice($this->data, $index, 1);
+		$removed = array_splice($this->data, $index, 1);
 		$this->size--;
+		return reset($removed);
 	}
 	
 	public function clear() {
