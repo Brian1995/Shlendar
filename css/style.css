@@ -1,0 +1,270 @@
+* { border:0px; padding:0; margin:0; }
+
+html { width: 100%; height: 100%; }
+body { min-height:100%; font: 16px "Helvetica Neue",Arial,Helvetica,Geneva,sans-serif; }
+
+.sharp  { background:url('../img/background.png') fixed; background-size: cover; }
+.blured { background:url('../img/background-blured.png') fixed; background-size: cover; }
+.round  { border-radius: 4px; -webkit-border-radius: 4px; }
+
+.table   { display: table; }
+.row     { display: table-row; }
+.cell    { display: table-cell; }
+.vcenter { vertical-align: middle; }
+
+.clear { clear:both; }
+
+/* PAGE ***********************************************************************/
+#page { 
+	margin: 0 auto; 
+	box-shadow:         0px 2px 5px -1px rgba(0,0,0,1);
+	-webkit-box-shadow: 0px 2px 5px -1px rgba(0,0,0,1);
+}
+
+#page > div {
+	background: rgba(255,255,255,0.3);
+}
+
+/* PAGE HEADER ****************************************************************/
+#page-header { 
+	width: 100%;
+	color: #fff;
+	background: rgba(0,0,0,0.7);
+	border-radius:         4px 4px 0px 0px; 
+	-webkit-border-radius: 4px 4px 0px 0px;
+}
+
+#page-header .center {
+	width: 100%;
+	text-align: center;
+	font-style: italic;
+	padding: 0.5em;
+}
+
+#page-header a {
+	display: block;
+	text-decoration: none;
+	color: #fff;
+	padding: 0.5em;
+}
+
+#page-header .left a:hover {
+	background: rgba(0,0,0,0.5);
+	border-radius:         4px 0px 0px 0px; 
+	-webkit-border-radius: 4px 0px 0px 0px;	
+}
+
+#page-header .right a:hover {
+	background: rgba(0,0,0,0.5);
+	border-radius:         0px 4px 0px 0px; 
+	-webkit-border-radius: 0px 4px 0px 0px;	
+}
+
+/* CONTENT ********************************************************************/
+#page-content { padding:2em; }
+#page-content > .table { width: 100%; }
+#page-content > .table > .row { width: 100%; }
+
+#sidebar-area { 
+	padding-right: 2em; 
+	color: #fff;
+	text-align: center;
+}
+
+#sidebar-area > .section {
+	width: 100%;
+	padding-top: 0.5em; 
+}
+#sidebar-area > .section:first-child { padding: 0; }
+
+.block {
+	width: 100%;
+	background: rgba(0,0,0,0.6);
+	border-radius:         4px; 
+	-webkit-border-radius: 4px;
+}
+
+.block > .header {
+	background: rgba(0,0,0,0.4);
+	-webkit-border-radius: 4px 4px 0px 0px;
+	border-radius: 4px 4px 0px 0px;
+}
+
+.block > .content {
+}
+
+.main-area {
+	width: 100%;
+	min-width:580px;
+}
+.main-area > .section > div {
+	padding: 1em;
+	background: rgba(0,0,0,0.7);
+	border-radius:         4px; 
+	-webkit-border-radius: 4px;
+}
+
+/* CALENDAR *******************************************************************/
+.calendar-header {
+	width: 100%;
+	background: rgba(0,0,0,0.2);
+	-webkit-border-radius: 4px 4px 0px 0px;
+	border-radius: 4px 4px 0px 0px;
+}
+
+.calendar-monthyear {
+	width: 100%;
+}
+
+.calendar a {
+	color: #fff;
+	text-decoration: none;
+	display: block;
+	padding: 0.3em;
+}
+
+.calendar-day > a {
+	display: block;
+	padding: 0.5em;
+	border:1px solid rgba(255,255,255,0.0);
+}
+
+.calendar-day > a:hover {
+	display: block;
+	padding: 0.5em;
+	background: rgba(0,0,0,0.2);
+	border:1px solid rgba(255,255,255,0.6);
+	border-radius: 4px;
+}
+
+/* ACTIONS *********************************************************************/
+#actions > .header {
+	padding: 0.3em;
+}
+
+#actions > .content {
+	padding: 0.2em;
+}
+
+#actions a {
+	display: block;
+	color: #fff;
+}
+
+#actions a:hover {
+	background: rgba(0,0,0,0.4);
+	border-radius: 4px;	
+}
+
+h1 {
+	font-weight: normal;
+}
+
+/* LOGIN **********************************************************************/
+div.login {
+	background: rgba(0,0,0,0.6);
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+div.login-failed {
+	padding: 1em;
+	padding-bottom: 0;
+}
+
+div.login-failed2 {
+	padding: 0.5em;
+	color: #fff;
+	background: rgba(190, 0, 0, 0.5);
+	-webkit-box-shadow: 0px 1px 3px -1px rgba(0,0,0,.5); 
+	box-shadow: 0px 1px 3px -1px rgba(0,0,0,.5);
+}
+
+.login-failed-head {
+	margin-bottom:0.6em;
+}
+
+.login-failed-body {
+	font-size: 80%;
+}
+
+form.login-form {
+	padding: 0em 1em;
+}
+
+div.login-form {
+	padding:1em;
+}
+
+div.login-username {
+	padding: 0.5em;
+	color: #fff;
+	
+}
+
+.login-username input {
+	background: rgba(0,0,0,0.2);
+	color: #fff;
+	padding:0.5em;
+	font-size:18px;
+	margin-top:0.5em;
+	border:1px solid rgba(255,255,255,0.5);
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.login-username input:focus {
+	border:1px solid rgba(255,255,255,1.0);
+}
+
+div.login-password {
+	padding: 0.5em;
+	margin-top: 0.5em;
+	color: #fff;
+	
+}
+
+.login-password input {
+	background: rgba(0,0,0,0.2);
+	color: #fff;
+	padding:0.5em;
+	font-size:18px;
+	margin-top:0.5em;
+	border:1px solid rgba(255,255,255,0.5);
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.login-password input:focus {
+	border:1px solid rgba(255,255,255,1.0);
+}
+
+.login-form .submit input {
+	width: 128px;
+	height: 128px;
+	margin-top: 0.5em;
+	color: transparent;
+	background: transparent url('../img/login.png');
+	opacity: 0.5;
+	border:1px solid rgba(255,255,255,0.0);
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	outline: 0px;
+	cursor: pointer;
+}
+
+.login-form .submit input:hover {
+	opacity: 1.0;
+}
+
+.login-form .submit input:focus {
+	background: transparent url('../img/login-hover.png');
+}
+
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+    border: none;
+}
