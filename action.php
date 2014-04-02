@@ -1,5 +1,6 @@
 <?php
 include_once 'library.php';
+include_once 'session.php';
 
 $logged_in = isLoggedIn();
 
@@ -22,7 +23,7 @@ function drawCreateCalendar() {
 	if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_DEFAULT) === 'POST') {
 		if (filter_has_var(INPUT_POST, 'name')) {
 			$name    = filter_input(INPUT_POST, 'name');
-			$user_id = $_SESSION['user_id'];
+			$user_id = Session::getUserID();
 			$link    = getDatabaseLink();
 			
 			$query = sprintf(
