@@ -24,8 +24,16 @@ abstract class ElementContainer extends Element {
 		$this->children->add($element, $index);
 	}
 	
+	public function getChild($index) {
+		return $this->children->get($index);
+	}
+	
 	public function removeChild($index) {
 		return $this->children->remove($index);
+	}
+	
+	public function getChildCount() {
+		return $this->children->size();
 	}
 	
 }
