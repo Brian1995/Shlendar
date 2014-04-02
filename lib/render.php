@@ -1,5 +1,7 @@
 <?php
 
+require_once 'session.php';
+
 function render_link($content=NULL, $url=NULL, $class=NULL) {
 	if (empty($content)) {
 		return '';
@@ -50,7 +52,7 @@ function render_start_page() {
 function render_login_form() {
 	$s = '<div class="login"><div class="login2">';
 	
-	if (isset($_SESSION['login_failed'])) {
+	if (Session::loginFailed()) {
 		$s .= '<div class="login-failed"><div class="login-failed2">';
 		$s .= '<p class="login-failed-head">Anmeldung fehlgeschlagen</p>';
 		$s .= '<p class="login-failed-body">Benutzername oder Passwort falsch</p>';
