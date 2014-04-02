@@ -33,23 +33,34 @@ class URL {
 		$url = new URL();
 		$parts = parse_url($urlString);
 		if ($parts) {
-			$this->set($url->scheme, $parts, 'scheme');
-			$this->set($url->host, $parts, 'host');
-			$this->set($url->port, $parts, 'port');
-			$this->set($url->user, $parts, 'user');
-			$this->set($url->pass, $parts, 'pass');
-			$this->set($url->path, $parts, 'path');
-			$this->set($url->query, $parts, 'query');
-			$this->set($url->fragment, $parts, 'fragment');
+			URL::set($url->scheme, $parts, 'scheme');
+			URL::set($url->host, $parts, 'host');
+			URL::set($url->port, $parts, 'port');
+			URL::set($url->user, $parts, 'user');
+			URL::set($url->pass, $parts, 'pass');
+			URL::set($url->path, $parts, 'path');
+			URL::set($url->query, $parts, 'query');
+			URL::set($url->fragment, $parts, 'fragment');
 			return $url;
 		}
 		throw new InvalidArgumentException('not parseable url (url=\''.$urlString.'\'');
 	}
 	
 	public static function urlFromCurrent() {
-		$protocol = isset($_SERVER['HTTPS']) ? 'https' : 'http';
-		$urlString = $protocol.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-		return URL::urlFromString($urlString);
+		$https = filter_input(INPUT_SERVER, 'HTTPS');
+		if ($https) {
+			$protocol = 'https';
+		} else {
+			$protocol = 'http';
+		}
+		$httpHost = filter_input(INPUT_SERVER, 'HTTP_HOST');
+		$requestURI = filter_input(INPUT_SERVER, 'REQUEST_URI');
+		if ($httpHost && $requestURI) {
+			$urlString = $protocol.'://'.$httpHost.$requestURI;
+			return URL::urlFromString($urlString);
+		} else {
+			throw new Exception('could note dertermine host or request uri');
+		}
 	}
 	
 	public function getScheme() {
