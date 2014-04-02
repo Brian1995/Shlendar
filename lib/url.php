@@ -1,6 +1,6 @@
 <?php
 
-include_once 'lib/external/http_build_url.php';
+require_once 'lib/external/http_build_url.php';
 
 class URL {
 	
