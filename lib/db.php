@@ -36,15 +36,16 @@ function db_exec_login() {
 				$row = mysql_fetch_array($result);
 			
 				// Benutzer als angemeldet speichern
-				$_SESSION['logged_in'] = true;
-				$_SESSION['user_name'] = $username;
-				$_SESSION['user_id']   = $row['id'];
-				unset($_SESSION['login_failed']);
+				Session::setLoggedIn(true);
+				Session::setUserName($username);
+				Session::setUserID($row['id']);
+				Session::setLoginFailed(false);
 
 				// redirect to start page
 				url_redirect(url_set_query_parameter(url_full(), 'action', NULL));
 			} else {
-				$_SESSION['login_failed'] = true;
+				Session::setLoginFailed(true);
+				
 				// redirect to login page
 				url_redirect(url_set_query_parameter(url_full(), 'action', 'login'));
 			}

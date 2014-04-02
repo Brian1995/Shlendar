@@ -11,12 +11,43 @@ class Session {
 		$_SESSION[$key] = $value;
 	}
 	
+	private static function get($key) {
+		if(isset($_SESSION[$key])){
+			return  $_SESSION[$key];
+		} else {
+			return NULL;
+		}
+	}
+	
 	public static function setLoggedIn($loggedIn) {
-		$_SESSION['logged_in'] = $loggedIn;
+		set('logged_in', $loggedIn);
 	}
 
 	public static function isLoggedIn() {
-		return isset($_SESSION['logged_in']) && $_SESSION['logged_in'];
+		return get('logged_in');
+	}
+	
+	public static function setLoginFailed($loginFailed) {
+		set('login_failed', $loginFailed);
 	}
 
+	public static function loginFailed() {
+		return get('login_failed');
+	}
+	
+	public static function setUserID($userID){
+		set('user_id', $userID);
+	}
+	
+	public static function getUserID(){
+		return get('user_id');
+	}
+	
+	public static function setUserName($userName){
+		set('user_name', $userName);
+	}
+	
+	public static function getUserName(){
+		return get('user_name');
+	}
 }
