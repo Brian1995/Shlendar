@@ -29,4 +29,8 @@ switch($action) {
 $content = render_content_area($left_content, $center_content);
 echo render_page_content($content);
 
+$a = new Link(new Text('Nur ein Test<haha></a>'), URL::urlFromCurrent());
+$a->setAttribute('name', 'anker');
+echo $a;
+
 endPage();

@@ -1,10 +1,9 @@
 <?php
 
-include_once 'lib/arraylist.php';
 include_once 'lib/calendar.php';
 include_once 'lib/db.php';
+include_once 'lib/elements.php';
 include_once 'lib/render.php';
-include_once 'lib/url.php';
 
 setlocale(LC_ALL, 'de_DE.utf-8');
 session_start();
