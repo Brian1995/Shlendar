@@ -1,0 +1,2 @@
+grep -rl $'\xEF\xBB\xBF'  /var/www/projekt  > files_with_boms.txt
+while read l; do sed -i '1 s/^\xef\xbb\xbf//'  $l; done < files_with_boms.txt

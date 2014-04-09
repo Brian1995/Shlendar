@@ -1,40 +1,42 @@
 <?php
 
+require_once 'lib/xml.php';
+
 /**
  * Base class for all page elements.
  */
-abstract class Element {
+abstract class PageElement {
 
 	/**
 	 * An array that gets initialized if at least one attribute is set. If the 
 	 * element does not have any attributes this member will be NULL.
 	 * @var array
 	 */
-	private $attributes = NULL;
+	private $properties = NULL;
 
-	private function removeAttribute($name) {
+	private function removeProperty($name) {
 		$old = NULL;
-		if (!is_null($this->attributes)) {
-			if (isset($this->attributes[$name])) {
-				$old = $this->attributes[$name];
-				unset($this->attributes[$name]);
+		if (!is_null($this->properties)) {
+			if (isset($this->properties[$name])) {
+				$old = $this->properties[$name];
+				unset($this->properties[$name]);
 			}
-			if (count($this->attributes) == 0) {
-				$this->attributes = NULL;
+			if (count($this->properties) == 0) {
+				$this->properties = NULL;
 			}
 		}
 		return $old;
 	}
 	
-	private function addAttribute($name, $value) {
+	private function addProperty($name, $value) {
 		$old = NULL;
-		if (is_null($this->attributes)) {
-			$this->attributes = array();
+		if (is_null($this->properties)) {
+			$this->properties = array();
 		}
-		if (isset($this->attributes[$name])) {
-			$old = $this->attributes[$name];
+		if (isset($this->properties[$name])) {
+			$old = $this->properties[$name];
 		}
-		$this->attributes[$name] = $value;
+		$this->properties[$name] = $value;
 		return $old;
 	}
 	
@@ -52,14 +54,14 @@ abstract class Element {
 	 * @throws InvalidArgumentException Will be thrown if the name parameter is 
 	 *         NULL.
 	 */
-	public function setAttribute($name, $value) {
+	public function setProperty($name, $value) {
 		if (is_null($name)) {
 			throw new InvalidArgumentException('"name" can´t be null');
 		}
 		if (is_null($value)) {
-			return $this->removeAttribute($name);
+			return $this->removeProperty($name);
 		} else {
-			return $this->addAttribute($name, $value);
+			return $this->addProperty($name, $value);
 		}
 	}
 
@@ -68,41 +70,33 @@ abstract class Element {
 	 * @param string $name
 	 * @return mixed
 	 */
-	public function getAttribute($name) {
-		if (is_null($this->attributes)) {
+	public function getProperty($name) {
+		if (is_null($this->properties)) {
 			return NULL;
 		}
-		return isset($this->attributes[$name]) ? $this->attributes[$name] : NULL;
+		return isset($this->properties[$name]) ? $this->properties[$name] : NULL;
 	}
 
 	/**
 	 * 
 	 * @return array
 	 */
-	public function getAttributes() {
-		return is_null($this->attributes) ? array() : $this->attributes;
+	public function getProperties() {
+		return is_null($this->properties) ? array() : $this->properties;
 	}
 
 	/**
 	 * 
-	 * @return string
+	 * @return XMLElement
 	 */
-	abstract function toHTML();
-
-	/**
-	 * 
-	 * @return string
-	 */
-	public function __toString() {
-		return $this->toHTML();
-	}
+	abstract function toXML();
 
 }
 
 /**
  * Base class for alle page elements that can contain other page elements.
  */
-abstract class ElementContainer extends Element {
+abstract class PageContainer extends PageElement {
 
 	private $children;
 
@@ -110,7 +104,7 @@ abstract class ElementContainer extends Element {
 		$this->children = new ArrayList();
 	}
 
-	public function addChild(Element $element, $index = -1) {
+	public function addChild($element, $index = -1) {
 		$this->children->add($element, $index);
 	}
 

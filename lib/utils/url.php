@@ -63,6 +63,20 @@ class URL {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param string $relativePath
+	 * @param URL|null $url
+	 * @return URL 
+	 */
+	public static function urlFromRelativePath($relativePath, $url = NULL) {
+		if ($url === NULL) {
+			$url = URL::urlFromCurrent();
+		}
+		$url->setPathRelativeToCurrentPath($relativePath);
+		return $url;
+	}
+	
 	public function getScheme() {
 		return $this->scheme;
 	}
@@ -126,7 +140,75 @@ class URL {
 	public function setFragment($fragment) {
 		$this->fragment = $fragment;
 	}
-
+	
+	/**
+	 * 
+	 * @param string $name
+	 * @return string|null
+	 */
+	public function getQueryParameter($name) {
+		$query = $this->getQuery();
+		if ($query === NULL) {
+			return NULL;
+		}
+		$a = array();
+		parse_str($query, $a);
+		return isset($a[$name]) ? $a[$name] : NULL;
+	}
+	
+	/**
+	 * 
+	 * @param string $name
+	 * @param string $value
+	 * @return string|null
+	 * @throws InvalidArgumentException
+	 */
+	public function setQueryParameter($name, $value) {
+		if ($name === NULL) {
+			throw new InvalidArgumentException("name can't null");
+		}
+		$query = $this->getQuery();
+		if ($query === NULL) {
+			if (!($value === NULL)) {
+				$query = array();
+				$query[$name] = $value;
+				$this->setQuery($query);
+			}
+			return NULL;
+		}
+		$a = array();
+		parse_str($query, $a);
+		$old = isset($a[$name]) ? $a[$name] : NULL;
+		if ($value === NULL && !($old === NULL)) {
+			unset($a[$name]);
+		} else {
+			$a[$name] = $value;
+		}
+		$this->setQuery(http_build_query($a));
+		return $old;
+	}
+	
+	public function setPathRelativeToCurrentPath($relativePath) {
+		$path = $this->getPath();
+		
+		// if no path is set assume base path
+		if ($path == null) {
+			$path = '';
+		}
+		
+		// remove filename and trailing slash at end of path
+		$dir = preg_replace('#/[^/]*$#', '', $path);
+		
+		// append dirty relative path to the end
+		$newPath = $dir.'/'.$relativePath;
+		
+		// replace "/./" or "//" or "foo/../" with "/"
+		$regex = array('#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#');
+		for($n=1; $n>0; $newPath=preg_replace($regex, '/', $newPath, -1, $n)) {}
+		
+		$this->setPath($newPath);
+	}
+	
 	public function __toString() {
 		$parts = array();
 		$parts['scheme'] = $this->scheme;

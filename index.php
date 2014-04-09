@@ -1,12 +1,9 @@
-﻿<?php
+<?php
 
 include_once 'library.php';
 
 $logged_in = Session::isLoggedIn();
 $action = url_get_query_parameter(url_full(), 'action');
-
-beginPage();
-echo render_page_header($logged_in);
 
 $center_content = NULL;
 $left_content = NULL;
@@ -22,15 +19,28 @@ switch($action) {
 		db_exec_logout();
 		break;
 	default:
-		$center_content = $logged_in ? NULL : render_start_page();
+//		$center_content = $logged_in ? NULL : render_start_page();
 		break;
 }
 
-$content = render_content_area($left_content, $center_content);
-echo render_page_content($content);
 
-$a = new Link(new Text('Nur ein Test<haha></a>'), URL::urlFromCurrent());
-$a->setAttribute('name', 'anker');
-echo $a;
+echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'."\r\n\r\n";
 
-endPage();
+$root = new XMLElement('html');
+$root->addAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+$root->addChild($head = new XMLElement('head'));
+$head->addChild($title = new XMLElement('title'));
+$title->addChild(new XMLText('Seitentitel'));
+$head->addChild($meta_charset = new XMLElement('meta'));
+$meta_charset->addAttribute('http-equiv', 'content-type')->addAttribute('content', 'text/html; charset=utf-8');
+$head->addChild($link_style = new XMLElement('link'));
+$link_style->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')->addAttribute('href', 'css/style.css');
+$root->addChild($body = new XMLElement('body'));
+
+$url = URL::urlFromCurrent();
+$url2 = URL::urlFromRelativePath('../css/style.css', $url);
+$link = new Link(NULL, $url2);
+$body->addChild($link->toXML());
+
+$printer = new XMLPrinter();
+echo $printer->createString($root);

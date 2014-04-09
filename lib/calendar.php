@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 include_once 'tools/time.php';
 include_once 'tools/url.php';

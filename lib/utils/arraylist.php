@@ -1,6 +1,6 @@
 <?php
 
-class ArrayList {
+class ArrayList implements IteratorAggregate {
 
 	private $data = array();
 	private $size = 0;
@@ -67,6 +67,10 @@ class ArrayList {
 		return $this->size == 0;
 	}
 	
+	public function getIterator() {
+		return new ArrayListIterator($this);
+	}
+	
 	public function __toString() {
 		$s = 'ArrayList [';
 		for ($i=0; $i<$this->size-1; $i++) {
@@ -78,6 +82,44 @@ class ArrayList {
 		}
 		$s .= ']';
 		return $s;
+	}
+	
+}
+
+class ArrayListIterator implements Iterator {
+	
+	/**
+	 * @var int
+	 */
+	private $index = 0;
+	
+	/**
+	 * @var ArrayList
+	 */
+	private $list;
+	
+	function __construct($list) {
+		$this->list = $list;
+	}
+	
+	public function current() {
+		return $this->list->get($this->index);
+	}
+
+	public function key() {
+		return $this->index;
+	}
+
+	public function next() {
+		$this->index += 1;
+	}
+
+	public function rewind() {
+		$this->index = 0;
+	}
+
+	public function valid() {
+		return $this->index >= 0 && $this->index < $this->list->size();
 	}
 	
 }

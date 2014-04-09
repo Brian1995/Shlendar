@@ -1,10 +1,13 @@
 <?php
 
-class Link extends Element {
+require_once 'lib/utils.php';
+require_once 'lib/xml.php';
+
+class Link extends PageElement {
 	
 	/**
 	 *
-	 * @var Element
+	 * @var PageElement
 	 */
 	private $content;
 	
@@ -34,7 +37,7 @@ class Link extends Element {
 	 * @return URL
 	 */
 	public function getHref() {
-		return $this->getAttribute('href');
+		return $this->getProperty('href');
 	}
 
 	/**
@@ -43,29 +46,23 @@ class Link extends Element {
 	 * @return URL 
 	 */
 	public function setHref($url=NULL) {
-		return $this->setAttribute('href', $url);
+		return $this->setProperty('href', $url);
 	}
 
 	/**
-	 * @return string 
+	 * @return XMLElement 
 	 */
-	public function toHTML() {
-		$content = NULL;
+	public function toXML() {
+		$a = new XMLElement('a');
+		$properties = $this->getProperties();
+		foreach ($properties as $name => $value) {
+			$a->addAttribute($name, $value);
+		}
 		if (!is_null($this->content)) {
-			$content = $this->content->toHTML();
+			$content = $this->content->toXML();
+			$a->addChild($content);
 		}
-		$s = '<a';
-		$attributes = $this->getAttributes();
-		if (count($attributes) > 0) {
-			$s .= ' ';
-			$s .= StringUtils::asAttributeString($attributes);
-		}
-		if (is_null($content)) {
-			$s .= '/>';
-		} else {
-			$s .= '>'.$content.'</a>';
-		}
-		return $s;
+		return $a;
 	}
 	
 }
