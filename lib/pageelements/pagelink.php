@@ -3,7 +3,7 @@
 require_once 'lib/utils.php';
 require_once 'lib/xml.php';
 
-class Link extends PageElement {
+class PageLink extends PageElement {
 	
 	/**
 	 *

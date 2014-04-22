@@ -2,24 +2,26 @@
 
 include_once 'library.php';
 
+
 $logged_in = Session::isLoggedIn();
 $action = url_get_query_parameter(url_full(), 'action');
 
-$center_content = NULL;
-$left_content = NULL;
+$url_start = URL::urlFromRelativePath('index.php');
+
+$header = new PageHeader();
+$header->setLogo(new PageImage(URL::urlFromRelativePath('img/logo.png'), $url_start));
+$content = new PageSplit();
 
 switch($action) {
 	case 'login':
-		$center_content = render_login_form();
+		$header->setTitle(new PageText('Login'));
 		break;
 	case 'login_exec':
-		db_exec_login();
 		break;
 	case 'logout':
-		db_exec_logout();
 		break;
 	default:
-//		$center_content = $logged_in ? NULL : render_start_page();
+		$header->setTitle(new PageText('Startseite'));
 		break;
 }
 
@@ -35,12 +37,15 @@ $head->addChild($meta_charset = new XMLElement('meta'));
 $meta_charset->addAttribute('http-equiv', 'content-type')->addAttribute('content', 'text/html; charset=utf-8');
 $head->addChild($link_style = new XMLElement('link'));
 $link_style->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')->addAttribute('href', 'css/style.css');
+$head->addChild($link_font = new XMLElement('link'));
+$link_font->addAttribute('rel', 'stylesheet')->addAttribute('type','text/css')->addAttribute('href','http://fonts.googleapis.com/css?family=Open+Sans:400,300');
 $root->addChild($body = new XMLElement('body'));
+$body->addAttribute('class', 'sharp');
+$body->addChild($page = new XMLElement('div'));
+$page->addAttribute('id', 'page');
+$page->addChild($header->toXML());
+$page->addChild($content->toXML());
 
-$url = URL::urlFromCurrent();
-$url2 = URL::urlFromRelativePath('../css/style.css', $url);
-$link = new Link(NULL, $url2);
-$body->addChild($link->toXML());
 
 $printer = new XMLPrinter();
 echo $printer->createString($root);

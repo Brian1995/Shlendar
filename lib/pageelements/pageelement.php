@@ -16,7 +16,7 @@ abstract class PageElement {
 
 	private function removeProperty($name) {
 		$old = NULL;
-		if (!is_null($this->properties)) {
+		if ($this->properties !== null) {
 			if (isset($this->properties[$name])) {
 				$old = $this->properties[$name];
 				unset($this->properties[$name]);
@@ -30,7 +30,7 @@ abstract class PageElement {
 	
 	private function addProperty($name, $value) {
 		$old = NULL;
-		if (is_null($this->properties)) {
+		if ($this->properties === NULL) {
 			$this->properties = array();
 		}
 		if (isset($this->properties[$name])) {
@@ -55,10 +55,10 @@ abstract class PageElement {
 	 *         NULL.
 	 */
 	public function setProperty($name, $value) {
-		if (is_null($name)) {
+		if ($name === NULL) {
 			throw new InvalidArgumentException('"name" can´t be null');
 		}
-		if (is_null($value)) {
+		if ($value === NULL) {
 			return $this->removeProperty($name);
 		} else {
 			return $this->addProperty($name, $value);
@@ -71,7 +71,7 @@ abstract class PageElement {
 	 * @return mixed
 	 */
 	public function getProperty($name) {
-		if (is_null($this->properties)) {
+		if ($this->properties === NULL) {
 			return NULL;
 		}
 		return isset($this->properties[$name]) ? $this->properties[$name] : NULL;
@@ -82,7 +82,7 @@ abstract class PageElement {
 	 * @return array
 	 */
 	public function getProperties() {
-		return is_null($this->properties) ? array() : $this->properties;
+		return $this->properties === NULL ? array() : $this->properties;
 	}
 
 	/**

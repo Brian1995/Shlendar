@@ -2,7 +2,7 @@
 
 require_once 'lib/xml.php';
 
-class Text extends PageElement {
+class PageText extends PageElement {
 	
 	private $text;
 	

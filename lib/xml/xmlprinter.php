@@ -4,10 +4,16 @@ class XMLPrinter {
 	
 	private $indent;
 	private $linebreak;
+	private $noShortCloseList;
 	
-	function __construct($indent="\t", $linebreak="\r\n") {
+	function __construct($indent="\t", $linebreak="\r\n", $noShortCloseList=NULL) {
 		$this->indent = $indent;
 		$this->linebreak = $linebreak;
+		if ($noShortCloseList === NULL) {
+			$this->noShortCloseList = array('div', 'span', 'a');
+		} else {
+			$this->noShortCloseList = $noShortCloseList;
+		}
 	}
 	
 	public function getIndent() {
@@ -73,6 +79,8 @@ class XMLPrinter {
 					$s .= $indent;
 				}
 				$s .= '</'.$element->getName().'>';
+			} else if (in_array($element->getName(), $this->noShortCloseList)) {
+				$s .= '></'.$element->getName().'>';
 			} else {
 				$s .= ' />';
 			}
