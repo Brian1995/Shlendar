@@ -65,14 +65,21 @@ class PageHeader extends PageElement {
 		$right->addAttribute('class', 'cell right');
 		$headerContainer->addChild($right);
 		
-		if (!($this->getLogo() === NULL)) {
+		if ($this->getLogo() !== NULL) {
 			$left->addChild($this->getLogo()->toXML());
 		}
-		if (!($this->getTitle() === NULL)) {
+		if ($this->getTitle() !== NULL) {
 			$h1 = new XMLElement('h1');
 			$center->addChild($h1);
 			$h1->addChild($this->getTitle()->toXML());
 		}
+		if (!Session::isLoggedIn()) {
+			$login = new PageLink("Login", URL::urlFromCurrent()->setQueryParameter("action", "execLogin"));
+		} else {
+			$login = new PageLink("Logout", URL::urlFromCurrent()->setQueryParameter("action", "logout"));
+		}
+		$right->addChild($login->toXML());
+		
 		return $header;
 	}
 	

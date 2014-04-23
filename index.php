@@ -8,18 +8,22 @@ $action = url_get_query_parameter(url_full(), 'action');
 
 $url_start = URL::urlFromRelativePath('index.php');
 
+$dbConnection = new DatabaseConnection();
+$dbConnection->connect();
+
 $header = new PageHeader();
 $header->setLogo(new PageImage(URL::urlFromRelativePath('img/logo.png'), $url_start));
 $content = new PageSplit();
 
-switch($action) {
+switch ($action) {
 	case 'login':
 		$header->setTitle(new PageText('Login'));
 		break;
 	case 'login_exec':
+		Session::execLogin($dbConnection);
 		break;
 	case 'logout':
-                Session::logout();
+		Session::logout();
 		break;
 	default:
 		$header->setTitle(new PageText('Startseite'));
@@ -27,7 +31,7 @@ switch($action) {
 }
 
 
-echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'."\r\n\r\n";
+echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">' . "\r\n\r\n";
 
 $root = new XMLElement('html');
 $root->addAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
@@ -39,7 +43,7 @@ $meta_charset->addAttribute('http-equiv', 'content-type')->addAttribute('content
 $head->addChild($link_style = new XMLElement('link'));
 $link_style->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')->addAttribute('href', 'css/style.css');
 $head->addChild($link_font = new XMLElement('link'));
-$link_font->addAttribute('rel', 'stylesheet')->addAttribute('type','text/css')->addAttribute('href','http://fonts.googleapis.com/css?family=Open+Sans:400,300');
+$link_font->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')->addAttribute('href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300');
 $root->addChild($body = new XMLElement('body'));
 $body->addAttribute('class', 'sharp');
 $body->addChild($page = new XMLElement('div'));
