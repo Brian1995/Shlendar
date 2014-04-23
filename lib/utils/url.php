@@ -209,6 +209,18 @@ class URL {
 		$this->setPath($newPath);
 	}
 	
+	public function redirect() {
+		if ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.1') {
+			if(php_sapi_name() == 'cqi'){
+				header('Status: 303 See Other');
+			} else {
+				header('HTTP/1.1 303 See Other');
+			}
+		}
+		header('Location: '.$this, true, 303);
+		die();
+	}
+	
 	public function __toString() {
 		$parts = array();
 		$parts['scheme'] = $this->scheme;

@@ -63,7 +63,19 @@ class Session {
 			die('Fehler bei SQL Abfrage: '.mysql_error());
 		}
 		if (DatabaseConnection::countRows($result) == 1) {
-			$row = Da
+			$row = DatabaseConnection::fetchRow($result);
+			Session::setLoggedIn(true);
+			Session::setUserName($username);
+			Session::setUserID($row['id']);
+			Session::setLoginFailed(false);
+			$url = URL::urlFromCurrent();
+			$url->setQueryParameter('action', NULL);
+			$url->redirect();
+		} else {
+			Session::setLoginFailed(true);
+			$url = URL::urlFromCurrent();
+			$url->setQueryParameter('action', 'login');
+			$url->redirect();	
 		}
 		
 	}
