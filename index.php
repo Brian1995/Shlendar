@@ -19,6 +19,7 @@ switch($action) {
 	case 'login_exec':
 		break;
 	case 'logout':
+                Session::logout();
 		break;
 	default:
 		$header->setTitle(new PageText('Startseite'));
