@@ -71,8 +71,7 @@ if ( ! function_exists('http_build_url')) :
 		$new_url = $parts + $url + $defaults;
 
 		$flags or $flags = (HTTP_URL_JOIN_PATH); // Default flags ?
-
-
+	
 		$JOIN_PATH      = (($flags | HTTP_URL_JOIN_PATH) == $flags);
 		$JOIN_QUERY     = (($flags | HTTP_URL_JOIN_QUERY) == $flags);
 		$STRIP_USER     = (($flags | HTTP_URL_STRIP_USER) == $flags);
@@ -155,10 +154,9 @@ if ( ! function_exists('http_build_url')) :
 
 			$query = $new_url['query'];
 
-			if (is_array($p_query))
-				$query = $u_query;
-			elseif ($JOIN_QUERY)
-			{
+			if (is_array($p_query)) {
+				$query = $p_query;
+			} elseif ($JOIN_QUERY) {
 				if ( ! is_array($u_query)) parse_str($u_query, $u_query);
 				if ( ! is_array($p_query)) parse_str($p_query, $p_query);
 

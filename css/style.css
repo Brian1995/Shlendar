@@ -59,3 +59,19 @@ h1 { font-size: 150%; }
 	text-shadow: 0 0 2px #000;
 	letter-spacing: 0.1em;
 }
+
+#site-header .right {
+	position: relative;
+}
+
+#site-header .right a {
+	display: block;
+	position: absolute;
+	top:0; left:0; right:0; height: 100%;
+	color: #fff;
+	text-shadow: 0 0 2px #000;
+	letter-spacing: 0.06em;
+	font-weight: 400;
+	font-family: 'Open Sans', sans-serif;
+	text-align: center;
+}

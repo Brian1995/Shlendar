@@ -7,6 +7,7 @@ $logged_in = Session::isLoggedIn();
 $action = url_get_query_parameter(url_full(), 'action');
 
 $url_start = URL::urlFromRelativePath('index.php');
+$url_start->setQueryParameter('action', NULL);
 
 $dbConnection = new DatabaseConnection();
 $dbConnection->connect();

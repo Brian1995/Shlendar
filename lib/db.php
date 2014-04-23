@@ -24,7 +24,7 @@ class DatabaseConnection {
 	
 	public function connect() {
 		$link = mysql_connect($this->server, $this->user, $this->password, false);
-		return ($link && mysql_select_db($schema, $link));
+		return ($link && mysql_select_db($this->schema, $link));
 	}
 	
 	public function query($query) {

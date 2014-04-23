@@ -73,10 +73,14 @@ class PageHeader extends PageElement {
 			$center->addChild($h1);
 			$h1->addChild($this->getTitle()->toXML());
 		}
+		$url = URL::urlFromCurrent();
+		$url->setPathRelativeToCurrentPath('index.php', $url);
 		if (!Session::isLoggedIn()) {
-			$login = new PageLink("Login", URL::urlFromCurrent()->setQueryParameter("action", "execLogin"));
+			$url->setQueryParameter("action", "login");
+			$login = new PageLink(new PageText("Anmelden"), $url);
 		} else {
-			$login = new PageLink("Logout", URL::urlFromCurrent()->setQueryParameter("action", "logout"));
+			$url->setQueryParameter("action", "logout");
+			$login = new PageLink(new PageText("Abmelden"), $url);
 		}
 		$right->addChild($login->toXML());
 		
