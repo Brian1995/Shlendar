@@ -48,8 +48,23 @@ class Session {
 		return Session::get('user_name');
 	}
 	
+	/**
+	 * 
+	 * @param DatabaseConnection $dbConnection
+	 * @param string $username
+	 * @param string $password
+	 */
 	public static function login(DatabaseConnection $dbConnection, $username, $password) {
-		
+		$result = $dbConnection->query(
+			"SELECT id, username, password FROM users WHERE username='%s' AND password = '%s'",
+			$username,
+			$password);
+		if(!$result) {
+			die('Fehler bei SQL Abfrage: '.mysql_error());
+		}
+		if (DatabaseConnection::countRows($result) == 1) {
+			$row = Da
+		}
 		
 	}
 	
