@@ -41,7 +41,6 @@ h1 { font-size: 150%; }
 
 #site-header .left a {
 	display:inline-block;
-	padding:0.5em;
 }
 
 #site-header .left a img {
@@ -61,17 +60,20 @@ h1 { font-size: 150%; }
 }
 
 #site-header .right {
-	position: relative;
+	text-align: center;
 }
 
 #site-header .right a {
 	display: block;
-	position: absolute;
-	top:0; left:0; right:0; height: 100%;
+	line-height:64px;
+	min-height:64px;
 	color: #fff;
 	text-shadow: 0 0 2px #000;
 	letter-spacing: 0.06em;
-	font-weight: 400;
 	font-family: 'Open Sans', sans-serif;
 	text-align: center;
+}
+
+#site-header .right a:hover {
+	background: rgba(255,255,255,0.2);
 }
