@@ -77,3 +77,8 @@ h1 { font-size: 150%; }
 #site-header .right a:hover {
 	background: rgba(255,255,255,0.2);
 }
+
+#loginForm {
+	vertical-align: center;
+	width: 100%;
+}

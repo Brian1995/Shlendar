@@ -19,6 +19,8 @@ class LoginElement extends PageElement {
 		$form = new XMLElement('form');
 		$form->addAttribute('action', $this->submitUrl);
 		$form->addAttribute('method', 'post');
+		$form->addAttribute('id', 'loginForm');
+		$form->addAttribute('class', 'blured');
 		$user = new XMLElement('input');
 		$user->addAttribute('type', 'text');
 		$user->addAttribute('name', 'username');
