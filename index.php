@@ -15,13 +15,15 @@ $dbConnection->connect();
 $header = new PageHeader();
 $header->setLogo(new PageImage(URL::urlFromRelativePath('img/logo.png'), $url_start));
 $content = new PageSplit();
-
+$content->setProperty('id', 'pageContent');
+		
 switch ($action) {
 	case 'login':
 		$header->setTitle(new PageText('Login'));
 		$url = new URL($url_start);
 		$url->setQueryParameter('action', 'login_exec');
 		$content->setCenter(new LoginElement($url));
+		
 		break;
 	case 'login_exec':
 		Session::execLogin($dbConnection);

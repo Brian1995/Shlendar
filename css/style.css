@@ -79,6 +79,23 @@ h1 { font-size: 150%; }
 }
 
 #loginForm {
-	vertical-align: center;
+	display: inline-block;
+	padding: 2em;
+	border: 1px solid rgba(255,255,255,0.5);
+}
+
+#loginForm input {
+	padding: 0.4em;
+	background: rgba(255,255,255,0.2);
+	-webkit-box-shadow:0 0 4px -2px rgba(0,0,0,0.8);
+	box-shadow:0 0 4px -2px rgba(0,0,0,0.5);
+}
+
+#pageContent {
 	width: 100%;
+}
+
+#pageContent > div > .center {
+	padding: 2em;
+	text-align: center;
 }

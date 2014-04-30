@@ -16,11 +16,12 @@ class LoginElement extends PageElement {
 	}
 	
 	public function toXML() {
+		$div = new XMLElement('div');
+		$div->addAttribute('id', 'loginForm');
+		$div->addAttribute('class', 'blured');
 		$form = new XMLElement('form');
 		$form->addAttribute('action', $this->submitUrl);
 		$form->addAttribute('method', 'post');
-		$form->addAttribute('id', 'loginForm');
-		$form->addAttribute('class', 'blured');
 		$user = new XMLElement('input');
 		$user->addAttribute('type', 'text');
 		$user->addAttribute('name', 'username');
@@ -40,6 +41,8 @@ class LoginElement extends PageElement {
 		$form->addChild($passwordLabel);
 		$form->addChild($password);
 		$form->addChild($submit);
-		return $form;
+		
+		$div->addChild($form);
+		return $div;
 	}
 }
