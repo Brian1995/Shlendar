@@ -19,7 +19,9 @@ $content = new PageSplit();
 switch ($action) {
 	case 'login':
 		$header->setTitle(new PageText('Login'));
-		$content->setCenter(new LoginElement());
+		$url = new URL($url_start);
+		$url->setQueryParameter('action', 'login_exec');
+		$content->setCenter(new LoginElement($url));
 		break;
 	case 'login_exec':
 		Session::execLogin($dbConnection);

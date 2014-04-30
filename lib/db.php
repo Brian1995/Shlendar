@@ -23,8 +23,8 @@ class DatabaseConnection {
 	}
 	
 	public function connect() {
-		$link = mysql_connect($this->server, $this->user, $this->password, false);
-		return ($link && mysql_select_db($this->schema, $link));
+		$this->link = mysql_connect($this->server, $this->user, $this->password, false);
+		return ($this->link && mysql_select_db($this->schema, $this->link));
 	}
 	
 	public function query($query) {
@@ -35,6 +35,8 @@ class DatabaseConnection {
 			$a[] = mysql_real_escape_string($args[$i]);
 		}
 		$finalQuery = vsprintf($query, $a);
+		var_dump($this->link);
+		var_dump($finalQuery);
 		return mysql_query($finalQuery, $this->link);
 	}
 	

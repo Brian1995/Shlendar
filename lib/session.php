@@ -53,7 +53,7 @@ class Session {
 			if (filter_has_var(INPUT_POST, 'username') && filter_has_var(INPUT_POST, 'password')) {
 				$username = filter_input(INPUT_POST, 'username');
 				$password = filter_input(INPUT_POST, 'password');
-				return login($dbConnection, $username, $password);
+				return Session::login($dbConnection, $username, $password);
 			}
 		}
 		return false;
