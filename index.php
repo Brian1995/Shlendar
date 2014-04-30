@@ -19,6 +19,7 @@ $content = new PageSplit();
 switch ($action) {
 	case 'login':
 		$header->setTitle(new PageText('Login'));
+		$content->setCenter(new LoginElement());
 		break;
 	case 'login_exec':
 		Session::execLogin($dbConnection);
