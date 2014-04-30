@@ -11,28 +11,55 @@ class PageSplit extends PageElement {
 	/** @var PageElement|null */
 	private $right;
 	
+	/**
+	 * 
+	 * @return PageElement|null
+	 */
 	public function getLeft() {
 		return $this->left;
 	}
 
+	/**
+	 * 
+	 * @param PageElement|null $left
+	 * @return \PageSplit
+	 */
 	public function setLeft($left) {
 		$this->left = $left;
 		return $this;
 	}
 
+	/**
+	 * 
+	 * @return PageElement|null
+	 */
 	public function getCenter() {
 		return $this->center;
 	}
 
+	/**
+	 * 
+	 * @param PageElement|null $center
+	 * @return \PageSplit
+	 */
 	public function setCenter($center) {
 		$this->center = $center;
 		return $this;
 	}
 
+	/**
+	 * 
+	 * @return PageElement|null
+	 */
 	public function getRight() {
 		return $this->right;
 	}
 
+	/**
+	 * 
+	 * @param PageElement|null $right
+	 * @return \PageSplit
+	 */
 	public function setRight($right) {
 		$this->right = $right;
 		return $this;
