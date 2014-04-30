@@ -8,7 +8,7 @@ require_once 'lib/xml.php';
  *
  * @author bussebr
  */
-class LoginElement extends PageElement{
+class LoginElement extends PageElement {
 	
 	public function __construct() {
 		
