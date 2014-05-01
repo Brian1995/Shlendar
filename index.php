@@ -15,15 +15,16 @@ $dbConnection->connect();
 $header = new PageHeader();
 $header->setLogo(new PageImage(URL::urlFromRelativePath('img/logo.png'), $url_start));
 $content = new PageSplit();
-$content->setProperty('id', 'pageContent');
+$content->setProperty('id', 'page-content');
+
+$titleText = NULL;
 		
 switch ($action) {
 	case 'login':
-		$header->setTitle(new PageText('Login'));
+		$titleText = 'Login';
 		$url = new URL($url_start);
 		$url->setQueryParameter('action', 'login_exec');
-		$content->setCenter(new LoginElement($url));
-		
+		$content->setCenter(new PageLogin($url));
 		break;
 	case 'login_exec':
 		Session::execLogin($dbConnection);
@@ -32,9 +33,10 @@ switch ($action) {
 		Session::logout();
 		break;
 	default:
-		$header->setTitle(new PageText('Startseite'));
+		$titleText = 'Startseite';
 		break;
 }
+$header->setTitle(new PageText($titleText));
 
 
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">' . "\r\n\r\n";
@@ -43,7 +45,7 @@ $root = new XMLElement('html');
 $root->addAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
 $root->addChild($head = new XMLElement('head'));
 $head->addChild($title = new XMLElement('title'));
-$title->addChild(new XMLText('Seitentitel'));
+$title->addChild(new XMLText('Shlendar'.($titleText==NULL ? '' : ' - '.$titleText)));
 $head->addChild($meta_charset = new XMLElement('meta'));
 $meta_charset->addAttribute('http-equiv', 'content-type')->addAttribute('content', 'text/html; charset=utf-8');
 $head->addChild($link_style = new XMLElement('link'));

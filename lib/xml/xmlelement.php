@@ -18,11 +18,13 @@ class XMLElement extends XMLNode {
 	/**
 	 * 
 	 * @param string $name
-	 * @return XMLElement
+	 * @param string|null $id
+	 * @param string|null $class
 	 */
-	function __construct($name) {
+	function __construct($name, $id=NULL, $class=NULL) {
 		$this->name = $name;
-		return $this;
+		if ($id !== NULL) { $this->addAttribute('id', $id); }
+		if ($class !== NULL) { $this->addAttribute('class', $class); }
 	}
 	
 	public function getName() {

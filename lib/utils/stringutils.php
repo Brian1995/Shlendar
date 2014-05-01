@@ -7,7 +7,7 @@ class StringUtils {
 //	}
 	
 	public static function escapeHTML($text) {
-		return htmlentities($text, ENT_QUOTES | ENT_IGNORE);
+		return htmlentities($text, ENT_QUOTES | ENT_IGNORE, 'UTF-8');
 	}
 	
 }

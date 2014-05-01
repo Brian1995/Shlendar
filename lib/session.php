@@ -24,10 +24,18 @@ class Session {
 		return Session::get('logged_in');
 	}
 
+	/**
+	 * 
+	 * @param bool $loginFailed
+	 */
 	public static function setLoginFailed($loginFailed) {
 		Session::set('login_failed', $loginFailed);
 	}
 
+	/**
+	 * 
+	 * @return bool
+	 */
 	public static function loginFailed() {
 		return Session::get('login_failed');
 	}
