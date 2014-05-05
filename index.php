@@ -2,12 +2,12 @@
 
 include_once 'library.php';
 
-
 $logged_in = Session::isLoggedIn();
-$action = url_get_query_parameter(url_full(), 'action');
 
+$url_current = URL::urlFromCurrent();
 $url_start = URL::urlFromRelativePath('index.php');
 $url_start->setQueryParameter('action', NULL);
+$action = $url_current->getQueryParameter('action');
 
 $dbConnection = new DatabaseConnection();
 $dbConnection->connect();
@@ -34,6 +34,10 @@ switch ($action) {
 		break;
 	default:
 		$titleText = 'Startseite';
+		$viewDate = new Date($url_current->getQueryParameter('viewDate'));
+		$calendar = new PageCalendar();
+		$calendar->setViewDate($viewDate);
+		$content->setLeft($calendar);
 		break;
 }
 $header->setTitle(new PageText($titleText));

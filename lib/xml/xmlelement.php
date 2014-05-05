@@ -84,7 +84,7 @@ class XMLElement extends XMLNode {
 		if (is_null($this->attributes)) {
 			return NULL;
 		}
-		return isset($this->attributes[$name]) ? $this->attributes[$name] : NULL;
+		return isset($this->attributes[$name]) ? $this->attributes[$name]->getValue() : NULL;
 	}
 	
 	/**

@@ -4,6 +4,7 @@ require_once 'lib/xml.php';
 
 require_once 'lib/pageelements/pageelement.php';
 
+require_once 'lib/pageelements/pagecalendar.php';
 require_once 'lib/pageelements/pageheader.php';
 require_once 'lib/pageelements/pageimage.php';
 require_once 'lib/pageelements/pagelink.php';
