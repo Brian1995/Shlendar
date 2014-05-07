@@ -98,24 +98,47 @@ abstract class PageElement {
  */
 abstract class PageContainer extends PageElement {
 
-	private $children;
+	/**
+	 *
+	 * @var ArrayList
+	 */
+	protected $children;
 
 	public function __construct() {
 		$this->children = new ArrayList();
 	}
 
+	/**
+	 * 
+	 * @param PageElement $element
+	 * @param integer $index
+	 */
 	public function addChild($element, $index = -1) {
 		$this->children->add($element, $index);
 	}
 
+	/**
+	 * 
+	 * @param integer $index
+	 * @return PageElement
+	 */
 	public function getChild($index) {
 		return $this->children->get($index);
 	}
 
+	/**
+	 * 
+	 * @param integer $index
+	 * @return PageElement
+	 */
 	public function removeChild($index) {
 		return $this->children->remove($index);
 	}
 
+	/**
+	 * 
+	 * @return integer
+	 */
 	public function getChildCount() {
 		return $this->children->size();
 	}

@@ -86,7 +86,7 @@ h1 { font-size: 150%; }
 }
 
 /* LOGIN **********************************************************************/
-#page-content > div > div.center {
+.login #page-content > div > div.center {
 	text-align: center;
 	padding: 2em 0;
 }
@@ -186,4 +186,16 @@ h1 { font-size: 150%; }
 
 #login-submit input:focus {
 	opacity: 0.8;
+}
+
+/* PAGE CONTENT */
+#page-content > div > .left {
+	width: 5%;
+	padding-top: 2em;
+}
+
+/* SIDEBAR ********************************************************************/
+#sidebar-actions {
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	border-left: 0;
 }

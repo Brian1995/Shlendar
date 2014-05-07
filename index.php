@@ -16,6 +16,7 @@ $header = new PageHeader();
 $header->setLogo(new PageImage(URL::urlFromRelativePath('img/logo.png'), $url_start));
 $content = new PageSplit();
 $content->setProperty('id', 'page-content');
+$sidebar = new PageSidebar('actions');
 
 $titleText = NULL;
 		
@@ -34,10 +35,13 @@ switch ($action) {
 		break;
 	default:
 		$titleText = 'Startseite';
+		$content->setLeft($sidebar);
+		$content->setCenter(new PageText('xxx'));
+		
 		$viewDate = new Date($url_current->getQueryParameter('viewDate'));
 		$calendar = new PageCalendar();
 		$calendar->setViewDate($viewDate);
-		$content->setLeft($calendar);
+		$sidebar->addChild($calendar);
 		break;
 }
 $header->setTitle(new PageText($titleText));
@@ -57,7 +61,7 @@ $link_style->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')
 $head->addChild($link_font = new XMLElement('link'));
 $link_font->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')->addAttribute('href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300');
 $root->addChild($body = new XMLElement('body'));
-$body->addAttribute('class', 'sharp');
+$body->addAttribute('class', 'sharp '.$action);
 $body->addChild($page = new XMLElement('div'));
 $page->addAttribute('id', 'page');
 $page->addChild($header->toXML());

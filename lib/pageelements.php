@@ -9,5 +9,6 @@ require_once 'lib/pageelements/pageheader.php';
 require_once 'lib/pageelements/pageimage.php';
 require_once 'lib/pageelements/pagelink.php';
 require_once 'lib/pageelements/pagelogin.php';
+require_once 'lib/pageelements/pagesidebar.php';
 require_once 'lib/pageelements/pagesplit.php';
 require_once 'lib/pageelements/pagetext.php';
