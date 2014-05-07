@@ -33,11 +33,18 @@ class Date extends DateTime {
 	
 //== construction ==============================================================
 	
-	public function __construct($time = NULL, $timeZone = NULL) {
-		if ($timeZone !== NULL) {
-			parent::__construct($time, self::ensureTimezone($timeZone));
+	/**
+	 * Creates a new Date object. If timeZone is obmitted the default timezone 
+	 * will be used. If time is obmitted the current time "now" will be used.
+	 * 
+	 * @param string $time a string representing the time
+	 * @param string|DateTimeZone $timeZone the timezone
+	 */
+	public function __construct($time = "now", $timeZone = NULL) {
+		if ($timeZone === NULL) {
+			parent::__construct($time, date_default_timezone_get());
 		} else {
-			parent::__construct($time, NULL);
+			parent::__construct($time, self::ensureTimezone($timeZone));
 		}
 	}
 	
