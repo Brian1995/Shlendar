@@ -177,13 +177,47 @@ class Date extends DateTime {
 	 * @return \Date
 	 */
 	public function setMonth($month)   { parent::setDate($this->getYear(), $month, $this->getDay()); return $this; }
+
+	/**
+	 * @param integer $day
+	 * @return \Date
+	 */
 	public function setDay($day)       { parent::setDate($this->getYear(), $this->getMonth(), $day); return $this; }
+
+	/**
+	 * @param integer $hour
+	 * @return \Date
+	 */
 	public function setHour($hour)     { parent::setTime($hour, $this->getMinute(), $this->getSecond()); return $this; }
+
+	/**
+	 * @param integer $minute
+	 * @return \Date
+	 */
 	public function setMinute($minute) { parent::setTime($this->getHour(), $minute, $this->getSecond()); return $this; }
+
+	/**
+	 * @param integer $second
+	 * @return \Date
+	 */
 	public function setSecond($second) { parent::setTime($this->getHour(), $this->getMinute(), $second); return $this; }
+
+	/**
+	 * @param integer $unixtimestamp
+	 * @return \Date
+	 */	
 	public function setTimestamp($unixtimestamp) { parent::setTimestamp($unixtimestamp); return $this; }
+	
+	/**
+	 * @param string|DateTimeZone $timezone
+	 * @return \Date
+	 */
 	public function setTimezone($timezone) { parent::setTimezone(self::ensureTimezone($timezone)); return $this; }
 	
+	/**
+	 * 
+	 * @return boolean
+	 */
 	public function isWeekday() { 
 		return $this->getDayOfWeek() != self::SATURDAY && $this->getDayOfWeek() != self::SUNDAY;
 	}
