@@ -199,3 +199,17 @@ h1 { font-size: 150%; }
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	border-left: 0;
 }
+
+
+
+#calendar-item {    
+    background:url('../img/background3.jpg') fixed; background-size: cover;
+}
+
+#calendar-item:hover {
+    background:url('../img/background-blured3.jpg') fixed; background-size: cover;
+}
+
+#calendar-item > h3 {
+    font-color: #ffffff;
+}

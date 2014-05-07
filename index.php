@@ -41,7 +41,12 @@ switch ($action) {
 		$viewDate = new Date($url_current->getQueryParameter('viewDate'));
 		$calendar = new PageCalendar();
 		$calendar->setViewDate($viewDate);
+                
+                $calendars = new PageCalendarList($dbConnection);
+                
 		$sidebar->addChild($calendar);
+                $sidebar->addChild($calendars);
+                
 		break;
 }
 $header->setTitle(new PageText($titleText));

@@ -35,8 +35,6 @@ class DatabaseConnection {
 			$a[] = mysql_real_escape_string($args[$i]);
 		}
 		$finalQuery = vsprintf($query, $a);
-		var_dump($this->link);
-		var_dump($finalQuery);
 		return mysql_query($finalQuery, $this->link);
 	}
 	
@@ -54,6 +52,7 @@ class DatabaseConnection {
 		for ($i = 0; $i < $rowCount; $i++) {
 			$a[$i] = DatabaseConnection::fetchRow($result);
 		}
+                return $a;
 	}
 }
 
