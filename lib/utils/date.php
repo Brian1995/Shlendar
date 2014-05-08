@@ -40,9 +40,12 @@ class Date extends DateTime {
 	 * @param string $time a string representing the time
 	 * @param string|DateTimeZone $timeZone the timezone
 	 */
-	public function __construct($time = "now", $timeZone = NULL) {
+	public function __construct($time = 'now', $timeZone = NULL) {
 		if ($timeZone === NULL) {
-			parent::__construct($time, date_default_timezone_get());
+                    var_dump($time);
+                    var_dump($timeZone);
+                    var_dump(date_default_timezone_get());
+                    parent::__construct($time, date_default_timezone_get());
 		} else {
 			parent::__construct($time, self::ensureTimezone($timeZone));
 		}

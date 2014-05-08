@@ -200,16 +200,26 @@ h1 { font-size: 150%; }
 	border-left: 0;
 }
 
-
-
-#calendar-item {    
+#calendar-item:hover {    
     background:url('../img/background3.jpg') fixed; background-size: cover;
+    border-bottom: 1px solid white;
 }
 
-#calendar-item:hover {
+#calendar-item {
     background:url('../img/background-blured3.jpg') fixed; background-size: cover;
+    border-bottom: 1px solid white;
 }
 
 #calendar-item > h3 {
-    font-color: #ffffff;
+    color: #ffffff;
+}
+
+#choose-calendar {
+    display:block;
+    background: url('../img/login.png');
+    width: 128px;
+    height: 128px;
+    color: transparent;
+    opacity: 0.5;
+    margin: auto;
 }

@@ -17,23 +17,7 @@ class PageCalendarList extends PageContainer{
         $this->userID = Session::getUserID();
     }
     
-    
-    
     public function toXML() {
-        /**
-         * SELECT   id, name, owner_id 
-         * FROM group_calendar_relations as gcr
-         * WHERE user_id = Session::getUserID()
-         * JOIN calendars as c ON c.id = gcr.calendar_id
-         * 
-         * SELECT 
-         * FROM
-         *      (SELECT g.id 
-         *      FROM group_user_relations gur
-         *      WHERE gur.user_id = Session::getUserID())   
-         * JOIN (SELECT );
-         */
-        
         $result = $this->dbConnection->query('
             SELECT c.id, c.name, c.owner_id 
             FROM ( 
@@ -50,13 +34,13 @@ class PageCalendarList extends PageContainer{
             ');    
        
         $calendarList = new XMLElement('div');
+        
         for ($i = 0; $i < mysql_num_rows($result); $i++) {
             $a = $this->dbConnection->fetchRow($result);
-            $item = new PageCalendarListItem($a[1], $a[2]);
+            $item = new PageCalendarListItem($a[0], $a[1], $a[2]);
             $calendarList->addChild($item->toXML());
         }
        
         return $calendarList;
     }
-    
 }

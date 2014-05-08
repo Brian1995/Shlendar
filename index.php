@@ -38,13 +38,18 @@ switch ($action) {
 		$content->setLeft($sidebar);
 		$content->setCenter(new PageText('xxx'));
 		
-		$viewDate = new Date($url_current->getQueryParameter('viewDate'));
-		$calendar = new PageCalendar();
-		$calendar->setViewDate($viewDate);
+//                $date = $url_current->getQueryParameter('viewDate');
+//                if($date == NULL){
+//                    var_dump("is null");
+//                    $date = 'now';
+//                }
+//		$viewDate = new Date($date, date_default_timezone_get());
+//		$calendar = new PageCalendar();
+//		$calendar->setViewDate($viewDate);
                 
                 $calendars = new PageCalendarList($dbConnection);
                 
-		$sidebar->addChild($calendar);
+//		$sidebar->addChild($calendar);
                 $sidebar->addChild($calendars);
                 
 		break;
