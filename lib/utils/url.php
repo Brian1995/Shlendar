@@ -4,6 +4,9 @@ require_once 'lib/external/http_build_url.php';
 
 class URL {
 	
+	private static $BASE_URL = NULL;
+	private static $HTTPS_ENFORCED = FALSE;
+	
 	private $scheme;
 	private $host;
     private $port;
@@ -46,21 +49,33 @@ class URL {
 		throw new InvalidArgumentException('not parseable url (url=\''.$urlString.'\'');
 	}
 	
+	/**
+	 * 
+	 * @return URL
+	 * @throws Exception
+	 */
 	public static function urlFromCurrent() {
-		$https = filter_input(INPUT_SERVER, 'HTTPS');
-		if ($https) {
-			$protocol = 'https';
-		} else {
-			$protocol = 'http';
-		}
-		$httpHost = filter_input(INPUT_SERVER, 'HTTP_HOST');
+		$https      = filter_input(INPUT_SERVER, 'HTTPS');
+		$httpHost   = filter_input(INPUT_SERVER, 'HTTP_HOST');
 		$requestURI = filter_input(INPUT_SERVER, 'REQUEST_URI');
+		$protocol   = $https ? 'https' : 'http';
 		if ($httpHost && $requestURI) {
 			$urlString = $protocol.'://'.$httpHost.$requestURI;
 			return URL::urlFromString($urlString);
 		} else {
 			throw new Exception('could note dertermine host or request uri');
 		}
+	}
+	
+	public static function urlFromBase() {
+		return self::urlFromString(self::$BASE_URL);
+	}
+	
+	public static function setBasePath($basePath) {
+		$https    = filter_input(INPUT_SERVER, 'HTTPS');
+		$httpHost = filter_input(INPUT_SERVER, 'HTTP_HOST');
+		$protocol = $https ? 'https' : 'http';
+		self::$BASE_URL = $protocol.'://'.$httpHost.'/'.$basePath.'/';
 	}
 	
 	/**
@@ -76,6 +91,14 @@ class URL {
 		$newUrl = new URL($url);
 		$newUrl->setPathRelativeToCurrentPath($relativePath);
 		return $newUrl;
+	}
+	
+	public static function setHttpsEnforced($enforced) {
+		self::$HTTPS_ENFORCED = $enforced;
+	}
+	
+	public static function isHttpsEnforced() {
+		return self::$HTTPS_ENFORCED;
 	}
 	
 	public function getScheme() {
@@ -224,7 +247,7 @@ class URL {
 	
 	public function __toString() {
 		$parts = array();
-		$parts['scheme'] = $this->scheme;
+		$parts['scheme'] = self::$HTTPS_ENFORCED ? 'https' : $this->scheme;
 		$parts['host'] = $this->host;
 		$parts['port'] = $this->port;
 		$parts['user'] = $this->user;
