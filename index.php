@@ -1,6 +1,17 @@
 <?php
 
-include_once 'library.php';
+require_once 'lib/db.php';
+require_once 'lib/pageelements.php';
+require_once 'lib/utils.php';
+require_once 'lib/xml.php';
+
+mb_internal_encoding("UTF-8");
+setlocale(LC_ALL, 'de_DE.utf-8');
+URL::setBasePath('projekt');
+session_start();
+
+$dbConnection = new DatabaseConnection();
+$dbConnection->connect();
 
 $logged_in = Session::isLoggedIn();
 
@@ -8,9 +19,6 @@ $url_current = URL::urlFromCurrent();
 $url_start = URL::urlFromRelativePath('index.php');
 $url_start->setQueryParameter('action', NULL);
 $action = $url_current->getQueryParameter('action');
-
-$dbConnection = new DatabaseConnection();
-$dbConnection->connect();
 
 $header = new PageHeader();
 $header->setLogo(new PageImage(URL::urlFromRelativePath('img/logo.png'), $url_start));
@@ -38,12 +46,11 @@ switch ($action) {
 		$content->setLeft($sidebar);
 		$content->setCenter(new PageText('xxx'));
 		
-		$date = $url_current->getQueryParameter('viewDate');
 		$calendar = new PageCalendar();
-		$calendar->setViewDate($viewDate);
-                
+		$calendar->setViewDate(new Date($url_current->getQueryParameter('viewDate')));
+		
         $calendars = new PageCalendarList($dbConnection);
-                
+		
 		$sidebar->addChild($calendar);
 		$sidebar->addChild($calendars);
                 
