@@ -1,7 +1,5 @@
 <?php
 
-require_once 'lib/xml.php';
-
 class PageHeader extends PageElement {
 	
 	/** @var PageImage */

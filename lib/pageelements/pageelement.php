@@ -1,7 +1,5 @@
 <?php
 
-require_once 'lib/xml.php';
-
 /**
  * Base class for all page elements.
  */

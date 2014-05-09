@@ -1,7 +1,5 @@
 <?php
 
-require_once 'lib/xml.php';
-
 class PageText extends PageElement {
 	
 	private $text;

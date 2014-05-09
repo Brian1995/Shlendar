@@ -1,7 +1,6 @@
 <?php
 
 require_once 'lib/session.php';
-require_once 'lib/xml.php';
 
 /**
  * Description of loginelement

@@ -1,7 +1,6 @@
 <?php
 
 require_once 'lib/utils.php';
-require_once 'lib/xml.php';
 
 class PageLink extends PageElement {
 	
