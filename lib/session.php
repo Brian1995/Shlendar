@@ -89,12 +89,12 @@ class Session {
 		Session::set('view_date', $viewDate);
 	}
 
-	public static function execLogin($dbConnection) {
+	public static function execLogin(DatabaseConnection $dbConnection, $loginUrl=NULL, $failedUrl=NULL) {
 		if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_DEFAULT) === 'POST') {
 			if (filter_has_var(INPUT_POST, 'username') && filter_has_var(INPUT_POST, 'password')) {
 				$username = filter_input(INPUT_POST, 'username');
 				$password = filter_input(INPUT_POST, 'password');
-				return Session::login($dbConnection, $username, $password);
+				return Session::login($dbConnection, $username, $password, $loginUrl, $failedUrl);
 			}
 		}
 		return false;
@@ -106,7 +106,7 @@ class Session {
 	 * @param string $username
 	 * @param string $password
 	 */
-	public static function login(DatabaseConnection $dbConnection, $username, $password) {
+	public static function login(DatabaseConnection $dbConnection, $username, $password, $loginUrl, $failedUrl) {
 		$result = $dbConnection->query(
 				"SELECT id, username, password FROM users WHERE username='%s' AND password = '%s'", $username, $password);
 		if (!$result) {
@@ -118,22 +118,32 @@ class Session {
 			Session::setUserName($username);
 			Session::setUserID($row['id']);
 			Session::setLoginFailed(false);
-			$url = URL::urlFromCurrent();
-			$url->setQueryParameter('action', NULL);
-			$url->redirect();
+			if ($loginUrl === NULL) {
+				$loginUrl = URL::urlFromCurrent();
+				$loginUrl->setQueryParameter('action', NULL);
+			}
+			$loginUrl->redirect();
 		} else {
 			Session::setLoginFailed(true);
-			$url = URL::urlFromCurrent();
-			$url->setQueryParameter('action', 'login');
-			$url->redirect();
+			if ($failedUrl === NULL) {
+				$failedUrl = URL::urlFromCurrent();
+				$failedUrl->setQueryParameter('action', 'login');
+			}
+			$failedUrl->redirect();
 		}
 	}
 
-	public static function logout() {
+	/**
+	 * 
+	 * @param URL|null $logoutUrl
+	 */
+	public static function logout($logoutUrl=NULL) {
 		session_destroy();
-		$url = URL::urlFromRelativePath('index.php');
-		$url->setQueryParameter('action', NULL);
-		$url->redirect();
+		if ($logoutUrl === NULL) {
+			$logoutUrl = URL::urlFromRelativePath('index.php');
+			$logoutUrl->setQuery(NULL);
+		}
+		$logoutUrl->redirect();
 	}
 
 }
