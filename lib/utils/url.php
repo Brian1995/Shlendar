@@ -73,8 +73,9 @@ class URL {
 		if ($url === NULL) {
 			$url = URL::urlFromCurrent();
 		}
-		$url->setPathRelativeToCurrentPath($relativePath);
-		return $url;
+		$newUrl = new URL($url);
+		$newUrl->setPathRelativeToCurrentPath($relativePath);
+		return $newUrl;
 	}
 	
 	public function getScheme() {
