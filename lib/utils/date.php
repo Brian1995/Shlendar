@@ -42,13 +42,9 @@ class Date extends DateTime {
 	 */
 	public function __construct($time = 'now', $timeZone = NULL) {
 		if ($timeZone === NULL) {
-                    var_dump($time);
-                    var_dump($timeZone);
-                    var_dump(date_default_timezone_get());
-                    parent::__construct($time, date_default_timezone_get());
-		} else {
-			parent::__construct($time, self::ensureTimezone($timeZone));
+			$timeZone = self::ensureTimezone(date_default_timezone_get());
 		}
+		parent::__construct($time, self::ensureTimezone($timeZone));
 	}
 	
 	protected static function ensureTimezone($object) {

@@ -1,9 +1,7 @@
 <?php
 
-require_once 'lib/calendar.php';
 require_once 'lib/db.php';
 require_once 'lib/pageelements.php';
-require_once 'lib/render.php';
 require_once 'lib/utils.php';
 require_once 'lib/xml.php';
 
