@@ -53,33 +53,6 @@ class Session {
 		Session::set('user_name', $userName);
 	}
 
-	/**
-	 * 
-	 * @return string
-	 */
-	public static function getUserName() {
-		return Session::get('user_name');
-	}
-	
-	/**
-	 * 
-	 * @return Date
-	 */
-	public static function getCurrentDate() {
-		return Date::now();
-	}
-	
-	/**
-	 * 
-	 * @return Date
-	 */
-	public static function getViewDate() {
-		$date = Session::get('view_date');
-		if ($date === NULL) {
-			return Session::getCurrentDate();
-		}
-		return $date;
-	}
 	
 	/**
 	 * 
