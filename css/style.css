@@ -1,4 +1,4 @@
-* { border:0px; padding:0; margin:0; font-weight:normal; font-size:100%; text-decoration:none; }
+* { border:0px; padding:0; margin:0; font-weight:300; font-size:100%; text-decoration:none; }
 
 body { min-height:100%; font-family: 'Open Sans', sans-serif; }
 
@@ -69,6 +69,7 @@ h1 { font-size: 150%; }
 	line-height:64px;
 	min-height:64px;
 	color: #fff;
+	font-weight: 400;
 	text-shadow: 0 0 2px #000;
 	letter-spacing: 0.06em;
 	text-align: center;
@@ -152,6 +153,7 @@ h1 { font-size: 150%; }
 
 #login-user > div, #login-pass > div {
 	letter-spacing: 0.05em;
+	font-weight: 400;
 	text-shadow: 0 0 2px rgba(0,0,0,0.8);
 }
 
@@ -209,6 +211,10 @@ h1 { font-size: 150%; }
 	display: none;
 }
 
+#sidebar-calendar {
+	
+}
+
 #sidebar-calendar-header {
 	width:100%;
 }
@@ -219,12 +225,13 @@ h1 { font-size: 150%; }
 
 #sidebar-calendar-header .previous a {
 	display: block;
-	padding: 0.3em 0.5em;
+	padding: 0.1em 0.3em;
+	border: 1px solid transparent;
 	color: #fff;
 }
 
 #sidebar-calendar-header .previous a:hover {
-	background: rgba(0,20,50,0.4);
+	background: rgba(255,255,255,0.2);
 }
 
 #sidebar-calendar-header .next {
@@ -233,17 +240,20 @@ h1 { font-size: 150%; }
 
 #sidebar-calendar-header .next a {
 	display: block;
-	padding: 0.3em 0.5em;
+	padding: 0.1em 0.3em;
+	border: 1px solid transparent;
 	color: #fff;
 }
 
 #sidebar-calendar-header .next a:hover {
-	background: rgba(0,20,50,0.4);
+	background: rgba(255,255,255,0.2);
 }
 
 #sidebar-calendar-header .title {
 	width: 98%;
 	text-align: center;
+	font-weight: 400;
+	font-size: 90%;
 	color: #fff;
 	white-space: nowrap;
 }
@@ -253,11 +263,37 @@ h1 { font-size: 150%; }
 	text-align: center;
 }
 
+#sidebar-calendar-entries .dayrow {
+	font-size: 80%;
+	color: rgba(255,255,255,1.0);
+}
+
+#sidebar-calendar-entries .dayrow .cell {
+	font-weight: 400;
+	padding: 0.2em;
+	background: rgba(255,255,255, 0.1);
+}
+
 #sidebar-calendar-entries a {
 	display: block;
+	font-weight: 400;
+	font-size: 90%;
 	color: rgba(255,255,255,0.6);
-	border:1px solid transparent;
 	padding: 0.1em 0.3em;
+}
+
+#sidebar-calendar-entries a:hover {
+	border:1px solid rgba(255,255,255,0.5);
+	background: rgba(255,255,255,0.2);
+	margin: -1px;
+}
+
+#sidebar-calendar-entries .weekend a {
+	background: rgba(255,255,255,0.05);
+}
+
+#sidebar-calendar-entries .weekend a:hover {
+	background: rgba(255,255,255,0.2);
 }
 
 #sidebar-calendar-entries .current-month a {
@@ -265,12 +301,6 @@ h1 { font-size: 150%; }
 }
 
 #sidebar-calendar-entries .current a {
-	background: rgba(255,255,255,0.2);
-}
-
-#sidebar-calendar-entries a:hover {
-	border:1px solid rgba(255,255,255,0.5);
-	-background: rgba(0,20,50,0.4);
 	background: rgba(255,255,255,0.2);
 }
 

@@ -82,12 +82,22 @@ class PageCalendar extends PageElement {
 			
 		$table = new XMLElement('div', 'sidebar-calendar-entries', 'table');
 		
+		// add weekday header row
+		$row = new XMLElement('div', NULL, 'row dayrow');
+		$table->addChild($row);
+		for ($x=0; $x<7; $x++) {
+			$cell = new XMLElement('div', NULL, 'cell day day'.$x);
+			$cell->addChild(new XMLText($day->copy()->addDays($x)->toShortDayName()));
+			$row->addChild($cell);
+		}
+		
 		for ($y=0; $y<6; $y++) {
 			$row = new XMLElement('div', NULL, 'row entryrow');
 			$table->addChild($row);
 			for ($x=0; $x<7; $x++) {
 				$cell = new XMLElement('div', NULL, 'cell');
 				$class = $cell->getAttribute('class');
+				$class .= ' day'.$x;
 				if ($day->isSameDay($currentDate)) {
 					$class .= ' current';
 				}

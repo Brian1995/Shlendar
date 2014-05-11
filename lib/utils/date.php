@@ -264,11 +264,21 @@ class Date extends DateTime {
 	}
 	
 	/**
+	 * Returns the date part as a string of the format YYYY-MM-DD.
 	 * 
 	 * @return string
 	 */
 	public function toDateString() {
 		return $this->format('Y-m-d');
+	}
+	
+	/**
+	 * Returns the localized abbreviation of the days name.
+	 * 
+	 * @return string
+	 */
+	public function toShortDayName() {
+		return $this->formatLocalized('%a');
 	}
 	
 	/**
