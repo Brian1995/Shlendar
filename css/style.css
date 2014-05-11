@@ -2,8 +2,8 @@
 
 body { min-height:100%; font-family: 'Open Sans', sans-serif; }
 
-.sharp  { background:url('../img/background3.jpg') fixed; background-size: cover; }
-.blured { background:url('../img/background-blured3.jpg') fixed; background-size: cover; }
+.sharp  { background:url('../img/background.jpg') fixed; background-size: cover; }
+.blured { background:url('../img/background-blured.jpg') fixed; background-size: cover; }
 .round  { border-radius: 4px; -webkit-border-radius: 4px; }
 
 .table   { display: table; }
@@ -24,12 +24,11 @@ h1 { font-size: 150%; }
 #site-header {
 	width: 100%;
 	border-bottom: 1px solid rgba(255,255,255,0.5);
-	-webkit-box-shadow: 0 -3px 3px 3px rgba(0,0,0,1);
-	box-shadow: 0 -3px 3px 3px rgba(0,0,0,1);
+	-webkit-box-shadow: 0 -3px 3px 2px rgba(0,0,0,1);
+	box-shadow: 0 -3px 3px 2px rgba(0,0,0,1);
 }
 
 #site-header > div {
-	background: rgba(0,0,0,0.0);
 	color: #000;
 }
 
@@ -57,7 +56,7 @@ h1 { font-size: 150%; }
 	display: block;
 	padding: 0.2em;
 	color:#fff;
-	text-shadow: 0 0 2px #000;
+	text-shadow: 0 0 2px rgba(0,0,0,0.7);
 	letter-spacing: 0.1em;
 }
 
@@ -96,8 +95,9 @@ h1 { font-size: 150%; }
 	margin: 0 auto;
 	padding: 1em;
 	border: 1px solid rgba(255,255,255,0.5);
-	-webkit-box-shadow: 0 0 3px 0 rgba(0,0,0,1);
-	box-shadow: 0 0 3px 0 rgba(0,0,0,1);
+	-border-radius: 4px;
+	-webkit-box-shadow: 0 0 3px 0 rgba(0,0,0,0.4);
+	box-shadow: 0 0 3px 0 rgba(0,0,0,0.4);
 }
 
 #login-failed {
@@ -152,7 +152,7 @@ h1 { font-size: 150%; }
 
 #login-user > div, #login-pass > div {
 	letter-spacing: 0.05em;
-	text-shadow: 0 0 2px #000;
+	text-shadow: 0 0 2px rgba(0,0,0,0.8);
 }
 
 #login-user input, #login-pass input {
@@ -190,7 +190,8 @@ h1 { font-size: 150%; }
 
 /* PAGE CONTENT */
 #page-content > div > .left {
-	width: 5%;
+	width: 1%;
+	min-width: 13em;
 	padding-top: 2em;
 }
 
@@ -198,6 +199,79 @@ h1 { font-size: 150%; }
 #sidebar-actions {
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	border-left: 0;
+	-border-radius: 0 4px 4px 0;
+	padding: 0.7em;
+	-webkit-box-shadow: 0 0 3px 0 rgba(0,0,0,0.4);
+	box-shadow: 0 0 3px 0 rgba(0,0,0,0.4);
+}
+
+#sidebar-actions h1, #sidebar-actions h2 {
+	display: none;
+}
+
+#sidebar-calendar-header {
+	width:100%;
+}
+
+#sidebar-calendar-header .previous {
+	width: 1%;
+}
+
+#sidebar-calendar-header .previous a {
+	display: block;
+	padding: 0.3em 0.5em;
+	color: #fff;
+}
+
+#sidebar-calendar-header .previous a:hover {
+	background: rgba(0,20,50,0.4);
+}
+
+#sidebar-calendar-header .next {
+	width: 1%;
+}
+
+#sidebar-calendar-header .next a {
+	display: block;
+	padding: 0.3em 0.5em;
+	color: #fff;
+}
+
+#sidebar-calendar-header .next a:hover {
+	background: rgba(0,20,50,0.4);
+}
+
+#sidebar-calendar-header .title {
+	width: 98%;
+	text-align: center;
+	color: #fff;
+	white-space: nowrap;
+}
+
+#sidebar-calendar-entries {
+	width: 100%;
+	text-align: center;
+}
+
+#sidebar-calendar-entries a {
+	display: block;
+	color: rgba(255,255,255,0.6);
+	border:1px solid transparent;
+	padding: 0.1em 0.3em;
+}
+
+#sidebar-calendar-entries .current-month a {
+	color: #fff;
+}
+
+#sidebar-calendar-entries .current a {
+	background: rgba(255,255,255,0.2);
+}
+
+#sidebar-calendar-entries a:hover {
+	border:1px solid rgba(255,255,255,0.5);
+	-background: rgba(0,20,50,0.4);
+	background: rgba(255,255,255,0.2);
 }
 
 #calendar-item:hover {    

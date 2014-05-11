@@ -19,6 +19,8 @@ class PageSidebar extends PageContainer {
 	
 	public function toXML() {
 		$sidebar = new XMLElement('div', 'sidebar-'.$this->name, 'sidebar blured');
+		$sidebar->addChild($headline = new XMLElement('h1'));
+		$headline->addChild(new XMLText('Navigation'));
 		for ($index = 0; $index < $this->getChildCount(); $index++) {
 			$sidebar->addChild($container = new XMLElement('div', NULL, 'sidebar-container'));
 			$content = $this->getChild($index);

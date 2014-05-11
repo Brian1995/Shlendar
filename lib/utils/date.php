@@ -228,6 +228,16 @@ class Date extends DateTime {
 	public function isSameDay(Date $date) {
 		return $this->toDateString() == $date->toDateString();
 	}
+	
+	/**
+	 * Returns TRUE if both dates have the same month and year value.
+	 * 
+	 * @param Date $date
+	 * @return boolean
+	 */
+	public function isSameMonth(Date $date) {
+		return $this->getMonth() == $date->getMonth() && $this->getYear() == $date->getYear();
+	}
 
 	
 //== formating =================================================================

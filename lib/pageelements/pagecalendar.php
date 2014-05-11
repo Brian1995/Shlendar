@@ -79,8 +79,7 @@ class PageCalendar extends PageElement {
 		$navNext->addChild($linkNext->toXML());
 		
 		$navTitle->addChild(new XMLText($viewDate->formatLocalized('%B %Y')));
-		
-		
+			
 		$table = new XMLElement('div', 'sidebar-calendar-entries', 'table');
 		
 		for ($y=0; $y<6; $y++) {
@@ -88,9 +87,17 @@ class PageCalendar extends PageElement {
 			$table->addChild($row);
 			for ($x=0; $x<7; $x++) {
 				$cell = new XMLElement('div', NULL, 'cell');
+				$class = $cell->getAttribute('class');
 				if ($day->isSameDay($currentDate)) {
-					$cell->setAttribute('class', $cell->getAttribute('class').' current');
+					$class .= ' current';
 				}
+				if ($day->isSameMonth($firstOfMonth)) {
+					$class .= ' current-month';
+				}
+				if ($day->isWeekend()) {
+					$class .= ' weekend';
+				}
+				$cell->setAttribute('class', $class);
 				$url = URL::urlFromCurrent();
 				$url->setQueryParameter('viewDate', $day->toDateString());
 				$link = new PageLink(new PageText($day->formatLocalized('%e')), $url);
@@ -99,6 +106,9 @@ class PageCalendar extends PageElement {
 				$row->addChild($cell);
 			}
 		}
+		$calendarHeadline = new XMLElement('h2');
+		$calendarHeadline->addChild(new XMLText('Kalender'));
+		$calendar->addChild($calendarHeadline);
 		$calendar->addChild($nav);
 		$calendar->addChild($table);
 		return $calendar;
