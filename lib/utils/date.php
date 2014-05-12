@@ -42,13 +42,9 @@ class Date extends DateTime {
 	 */
 	public function __construct($time = 'now', $timeZone = NULL) {
 		if ($timeZone === NULL) {
-                    var_dump($time);
-                    var_dump($timeZone);
-                    var_dump(date_default_timezone_get());
-                    parent::__construct($time, date_default_timezone_get());
-		} else {
-			parent::__construct($time, self::ensureTimezone($timeZone));
+			$timeZone = self::ensureTimezone(date_default_timezone_get());
 		}
+		parent::__construct($time, self::ensureTimezone($timeZone));
 	}
 	
 	protected static function ensureTimezone($object) {
@@ -232,6 +228,16 @@ class Date extends DateTime {
 	public function isSameDay(Date $date) {
 		return $this->toDateString() == $date->toDateString();
 	}
+	
+	/**
+	 * Returns TRUE if both dates have the same month and year value.
+	 * 
+	 * @param Date $date
+	 * @return boolean
+	 */
+	public function isSameMonth(Date $date) {
+		return $this->getMonth() == $date->getMonth() && $this->getYear() == $date->getYear();
+	}
 
 	
 //== formating =================================================================
@@ -258,11 +264,21 @@ class Date extends DateTime {
 	}
 	
 	/**
+	 * Returns the date part as a string of the format YYYY-MM-DD.
 	 * 
 	 * @return string
 	 */
 	public function toDateString() {
 		return $this->format('Y-m-d');
+	}
+	
+	/**
+	 * Returns the localized abbreviation of the days name.
+	 * 
+	 * @return string
+	 */
+	public function toShortDayName() {
+		return $this->formatLocalized('%a');
 	}
 	
 	/**
