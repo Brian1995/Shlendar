@@ -28,8 +28,17 @@ class URL {
 		}
 	}
 
-	private static function set(&$var, $parts, $name) {
-		$var = isset($parts[$name]) ? $parts[$name] : NULL;
+	private static function set(&$var, $parts, $name, $parse=FALSE) {
+		if ($parse) {
+			if (isset($parts[$name])) {
+				$var = array();
+				parse_str($parts[$name], $var);
+			} else {
+				$var = NULL;
+			}
+		} else {
+			$var = isset($parts[$name]) ? $parts[$name] : NULL;
+		}
 	}
 	
 	public static function urlFromString($urlString) {
@@ -42,7 +51,7 @@ class URL {
 			URL::set($url->user, $parts, 'user');
 			URL::set($url->pass, $parts, 'pass');
 			URL::set($url->path, $parts, 'path');
-			URL::set($url->query, $parts, 'query');
+			URL::set($url->query, $parts, 'query', TRUE);
 			URL::set($url->fragment, $parts, 'fragment');
 			return $url;
 		}
@@ -172,12 +181,7 @@ class URL {
 	 */
 	public function getQueryParameter($name) {
 		$query = $this->getQuery();
-		if ($query === NULL) {
-			return NULL;
-		}
-		$a = array();
-		parse_str($query, $a);
-		return isset($a[$name]) ? $a[$name] : NULL;
+		return $query === NULL ? NULL : isset($query[$name]) ? $query[$name] : NULL;
 	}
 	
 	/**
@@ -191,24 +195,22 @@ class URL {
 		if ($name === NULL) {
 			throw new InvalidArgumentException("name can't null");
 		}
-		$query = $this->getQuery();
-		if ($query === NULL) {
-			if (!($value === NULL)) {
-				$query = array();
-				$query[$name] = $value;
-				$this->setQuery($query);
+		if ($this->query === NULL) {
+			if ($value !== NULL) {
+				$this->query = array();
+				$this->query[$name] = $value;
 			}
 			return NULL;
 		}
-		$a = array();
-		parse_str($query, $a);
-		$old = isset($a[$name]) ? $a[$name] : NULL;
-		if ($value === NULL && !($old === NULL)) {
-			unset($a[$name]);
+		$old = isset($this->query[$name]) ? $this->query[$name] : NULL;
+		if ($value === NULL && $old !== NULL) {
+			unset($this->query[$name]);
+			if (count($this->query) == 0) {
+				$this->query = NULL;
+			}
 		} else {
-			$a[$name] = $value;
+			$this->query[$name] = $value;
 		}
-		$this->setQuery(http_build_query($a));
 		return $old;
 	}
 	
