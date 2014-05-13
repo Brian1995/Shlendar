@@ -23,7 +23,6 @@ $action = $url_current->getQueryParameter('action');
 $header = new PageHeader();
 $header->setLogo(new PageImage(URL::urlFromRelativePath('img/logo.png'), $url_start));
 $content = new PageSplit();
-$content->setProperty('id', 'page-content');
 $sidebar = new PageSidebar('actions');
 
 $titleText = NULL;
@@ -69,15 +68,16 @@ $title->addChild(new XMLText('Shlendar'.($titleText==NULL ? '' : ' - '.$titleTex
 $head->addChild($meta_charset = new XMLElement('meta'));
 $meta_charset->addAttribute('http-equiv', 'content-type')->addAttribute('content', 'text/html; charset=utf-8');
 $head->addChild($link_style = new XMLElement('link'));
-$link_style->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')->addAttribute('href', 'css/style.css');
+$link_style->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')->addAttribute('href', 'css/style.php');
 $head->addChild($link_font = new XMLElement('link'));
 $link_font->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')->addAttribute('href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300');
 $root->addChild($body = new XMLElement('body'));
-$body->addAttribute('class', 'sharp '.$action);
+$body->addAttribute('class', ''.$action);
 $body->addChild($page = new XMLElement('div'));
 $page->addAttribute('id', 'page');
 $page->addChild($header->toXML());
-$page->addChild($content->toXML());
+$page->addChild($pageContent = new XMLElement('div', 'page-content'));
+$pageContent->addChild($content->toXML());
 
 
 $printer = new XMLPrinter();

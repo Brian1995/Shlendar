@@ -1,12 +1,27 @@
 * { border:0px; padding:0; margin:0; font-weight:300; font-size:100%; text-decoration:none; }
 
-body { min-height:100%; font-family: 'Open Sans', sans-serif; }
+html { 
+	height: 100%; 
+}
 
-.sharp  { background:url('../img/background.jpg') fixed; background-size: cover; }
+body { 
+	height:100%;
+}
+
+#page { 
+	display: table;
+	min-height: 100%; 
+	font-family: 'Open Sans', sans-serif; 
+}
+
+
+
+
+.sharp  {  }
 .blured { background:url('../img/background-blured.jpg') fixed; background-size: cover; }
 .round  { border-radius: 4px; -webkit-border-radius: 4px; }
 
-.table   { display: table; }
+/*.table   { display: table; }
 .row     { display: table-row; }
 .cell    { display: table-cell; }
 .vcenter { vertical-align: middle; }
@@ -83,6 +98,7 @@ h1 { font-size: 150%; }
 
 #page-content {
 	width:100%;
+	height: auto;
 }
 
 /* LOGIN **********************************************************************/
@@ -194,17 +210,14 @@ h1 { font-size: 150%; }
 #page-content > div > .left {
 	width: 1%;
 	min-width: 13em;
-	padding-top: 2em;
 }
 
 /* SIDEBAR ********************************************************************/
 #sidebar-actions {
-	border: 1px solid rgba(255, 255, 255, 0.5);
-	border-left: 0;
-	-border-radius: 0 4px 4px 0;
+	border-right: 1px solid rgba(255, 255, 255, 0.5);
 	padding: 0.7em;
-	-webkit-box-shadow: 0 0 3px 0 rgba(0,0,0,0.4);
-	box-shadow: 0 0 3px 0 rgba(0,0,0,0.4);
+	--webkit-box-shadow: 0 0 3px 0 rgba(0,0,0,0.4);
+	-box-shadow: 0 0 3px 0 rgba(0,0,0,0.4);
 }
 
 #sidebar-actions h1, #sidebar-actions h2 {

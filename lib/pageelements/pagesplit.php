@@ -65,26 +65,24 @@ class PageSplit extends PageElement {
 
 	public function toXML() {
 		$table = new XMLElement('div');
-		$table->setAttribute('class', 'table');
 		$properties = $this->getProperties();
 		foreach ($properties as $name => $value) {
 			$table->addAttribute($name, $value);
 		}
 		$table->addChild($row = new XMLElement('div'));
-		$row->setAttribute('class', 'row');
 		if ($this->left !== NULL) {
 			$row->addChild($left = new XMLElement('div'));
-			$left->setAttribute('class', 'cell left');
+			$left->setAttribute('class', 'left');
 			$left->addChild($this->left->toXML());
 		}
 		if ($this->center !== NULL) {
 			$row->addChild($center = new XMLElement('div'));
-			$center->setAttribute('class', 'cell center');
+			$center->setAttribute('class', 'center');
 			$center->addChild($this->center->toXML());
 		}
 		if ($this->right !== NULL) {
 			$row->addChild($right = new XMLElement('div'));
-			$right->setAttribute('class', 'cell right');
+			$right->setAttribute('class', 'right');
 			$right->addChild($this->right->toXML());
 		}
 		return $table;
