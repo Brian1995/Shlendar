@@ -1,9 +1,8 @@
 <?php
 
-require_once 'lib/db.php';
-require_once 'lib/pageelements.php';
 require_once 'lib/utils.php';
 require_once 'lib/xml.php';
+require_once 'lib/pageelements.php';
 
 mb_internal_encoding("UTF-8");
 setlocale(LC_ALL, 'de_DE.utf-8');
@@ -23,6 +22,7 @@ $action = $url_current->getQueryParameter('action');
 $header = new PageHeader();
 $header->setLogo(new PageImage(URL::urlFromRelativePath('img/logo.png'), $url_start));
 $content = new PageSplit();
+$content->setProperty('id', 'content');
 $sidebar = new PageSidebar('actions');
 
 $titleText = NULL;
@@ -60,25 +60,26 @@ $header->setTitle(new PageText($titleText));
 
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">' . "\r\n\r\n";
 
-$root = new XMLElement('html');
-$root->addAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
-$root->addChild($head = new XMLElement('head'));
-$head->addChild($title = new XMLElement('title'));
-$title->addChild(new XMLText('Shlendar'.($titleText==NULL ? '' : ' - '.$titleText)));
-$head->addChild($meta_charset = new XMLElement('meta'));
-$meta_charset->addAttribute('http-equiv', 'content-type')->addAttribute('content', 'text/html; charset=utf-8');
-$head->addChild($link_style = new XMLElement('link'));
-$link_style->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')->addAttribute('href', 'css/style.php');
-$head->addChild($link_font = new XMLElement('link'));
-$link_font->addAttribute('rel', 'stylesheet')->addAttribute('type', 'text/css')->addAttribute('href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300');
-$root->addChild($body = new XMLElement('body'));
-$body->addAttribute('class', ''.$action);
-$body->addChild($page = new XMLElement('div'));
-$page->addAttribute('id', 'page');
-$page->addChild($header->toXML());
-$page->addChild($pageContent = new XMLElement('div', 'page-content'));
-$pageContent->addChild($content->toXML());
+$rootNode      = new XMLElement('html', 'xmlns', 'http://www.w3.org/1999/xhtml');
+$headNode      = new XMLElement('head');
+$titleNode     = new XMLElement('title');
+$titleTextNode = new XMLText('Shlendar'.($titleText==NULL ? '' : ' - '.$titleText));
+$charsetNode   = new XMLElement('meta', 'http-equiv', 'content-type', 'content', 'text/html; charset=utf-8');
+$styleNode     = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'css/style.php');
+$fontNode      = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300');
+$bodyNode      = new XMLElement('body', 'class', ''.$action);
+$footerNode    = new XMLElement('footer');
 
+$rootNode->addChild($headNode);
+	$headNode->addChild($titleNode);
+		$titleNode->addChild($titleTextNode);
+	$headNode->addChild($charsetNode);
+	$headNode->addChild($styleNode);
+	$headNode->addChild($fontNode);
+$rootNode->addChild($bodyNode);
+	$bodyNode->addChild($header->toXML());
+	$bodyNode->addChild($content->toXML());
+	$bodyNode->addChild($footerNode);
 
 $printer = new XMLPrinter();
-echo $printer->createString($root);
+echo $printer->createString($rootNode);

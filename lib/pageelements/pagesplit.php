@@ -71,18 +71,15 @@ class PageSplit extends PageElement {
 		}
 		$table->addChild($row = new XMLElement('div'));
 		if ($this->left !== NULL) {
-			$row->addChild($left = new XMLElement('div'));
-			$left->setAttribute('class', 'left');
+			$row->addChild($left = new XMLElement('div', 'class', 'left'));
 			$left->addChild($this->left->toXML());
 		}
 		if ($this->center !== NULL) {
-			$row->addChild($center = new XMLElement('div'));
-			$center->setAttribute('class', 'center');
+			$row->addChild($center = new XMLElement('div', 'class', 'center'));
 			$center->addChild($this->center->toXML());
 		}
 		if ($this->right !== NULL) {
-			$row->addChild($right = new XMLElement('div'));
-			$right->setAttribute('class', 'right');
+			$row->addChild($right = new XMLElement('div', 'class', 'right'));
 			$right->addChild($this->right->toXML());
 		}
 		return $table;

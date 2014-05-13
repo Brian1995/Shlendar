@@ -45,21 +45,15 @@ class PageHeader extends PageElement {
 	}
 	
 	public function toXML() {
-		$header = new XMLElement('header');
-		$header->addAttribute('id', 'site-header');
-		$header->addChild($headerContainer = new XMLElement('div'));
+		$header = new XMLElement('header', 'id', 'site-header');
 
-		$left = new XMLElement('div');
-		$left->addAttribute('class', 'logo');
-		$headerContainer->addChild($left);
-
-		$center = new XMLElement('div');
-		$center->addAttribute('class', 'title');
-		$headerContainer->addChild($center);
+		$left   = new XMLElement('div', 'class', 'logo');
+		$center = new XMLElement('div', 'class', 'title');
+		$right = new XMLElement('div', 'class', 'login');
 		
-		$right = new XMLElement('div');
-		$right->addAttribute('class', 'login');
-		$headerContainer->addChild($right);
+		$header->addChild($left);
+		$header->addChild($center);
+		$header->addChild($right);
 		
 		if ($this->getLogo() !== NULL) {
 			$left->addChild($this->getLogo()->toXML());

@@ -59,7 +59,9 @@ class PageLink extends PageElement {
 		}
 		if (!is_null($this->content)) {
 			$content = $this->content->toXML();
-			$a->addChild($content);
+			$span = new XMLElement('span');
+			$span->addChild($content);
+			$a->addChild($span);
 		}
 		return $a;
 	}
