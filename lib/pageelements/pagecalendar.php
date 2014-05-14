@@ -63,10 +63,9 @@ class PageCalendar extends PageElement {
 		$calendar = new XMLElement('div', 'id', 'sidebar-calendar');
 		
 		$nav = new XMLElement('div', 'id', 'sidebar-calendar-header');
-		$nav->addChild($navrow = new XMLElement('div'));
-		$navrow->addChild($navPrevious = new XMLElement('div', 'class', 'previous'));
-		$navrow->addChild($navTitle    = new XMLElement('div', 'class', 'title'));
-		$navrow->addChild($navNext     = new XMLElement('div', 'class', 'next'));
+		$nav->addChild($navPrevious = new XMLElement('div', 'class', 'previous'));
+		$nav->addChild($navTitle    = new XMLElement('div', 'class', 'title'));
+		$nav->addChild($navNext     = new XMLElement('div', 'class', 'next'));
 		
 		$urlPrevious = URL::urlFromCurrent();
 		$urlPrevious->setQueryParameter('viewDate', $viewDate->copy()->addMonths(-1)->toDateString());
@@ -78,7 +77,8 @@ class PageCalendar extends PageElement {
 		$linkNext = new PageLink(new PageText('>>'), $urlNext);
 		$navNext->addChild($linkNext->toXML());
 		
-		$navTitle->addChild(new XMLText($viewDate->formatLocalized('%B %Y')));
+		$navTitle->addChild($navTitleH3 = new XMLElement('h3'));
+		$navTitleH3->addChild(new XMLText($viewDate->formatLocalized('%B %Y')));
 			
 		$table = new XMLElement('div', 'id', 'sidebar-calendar-entries');
 		
