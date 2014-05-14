@@ -2,8 +2,8 @@
 
 header("Content-type: text/css");
 
-const BACKGROUND_SHARP  = "url('../img/background3.jpg')        fixed; background-size: cover";
-const BACKGROUND_BLURED = "url('../img/background-blured3.jpg') fixed; background-size: cover";
+const BACKGROUND_SHARP  = "url('../img/background4.jpg')        fixed; background-size: cover";
+const BACKGROUND_BLURED = "url('../img/background-blured4.jpg') fixed; background-size: cover";
 const BACKGROUND_HOVER  = "rgba(255,255,255,0.2)";
 const BORDER_CONTAINER  = "1px solid rgba(255,255,255,0.2)";
 const BORDER_HOVER      = "1px solid rgba(255,255,255,0.6)";
