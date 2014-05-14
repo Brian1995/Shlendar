@@ -2,8 +2,8 @@
 
 header("Content-type: text/css");
 
-const BACKGROUND_SHARP  = "url('../img/background4.jpg')        fixed; background-size: cover";
-const BACKGROUND_BLURED = "url('../img/background-blured4.jpg') fixed; background-size: cover";
+const BACKGROUND_SHARP  = "url('../img/background3.jpg')        fixed; background-size: cover";
+const BACKGROUND_BLURED = "url('../img/background-blured3.jpg') fixed; background-size: cover";
 const BACKGROUND_HOVER  = "rgba(255,255,255,0.2)";
 const BORDER_CONTAINER  = "1px solid rgba(255,255,255,0.2)";
 const BORDER_HOVER      = "1px solid rgba(255,255,255,0.6)";
@@ -34,6 +34,7 @@ body {
 header {
 	display: flex;
 	flex-flow: row nowrap;
+	justify-content: space-between;
 	align-items: stretch;
 	background: <?=BACKGROUND_BLURED?>;
 	border-bottom: <?=BORDER_CONTAINER?>;
@@ -55,9 +56,9 @@ footer {
 }
 
 /* header */
-header .logo  { display: flex; align-items: center; border-right: 1px solid transparent; }
-header .title { flex: 1; display: flex; align-items: center; }
-header .login { }
+header .logo  { order: 1; display: flex; align-items: center; border-right: 1px solid transparent; }
+header .title { order: 2; display: flex; align-items: center; }
+header .login { order: 3; }
 
 header .logo a { display: block; height: 64px; width:64px; background: url('../img/logo.png'); }
 header .logo p { <?=FONT_HEADLINE?> font-size: 200%; color:#fff; text-shadow: 0 0 2px rgba(0,0,0,1); padding-right: 0.5em; }
