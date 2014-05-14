@@ -82,29 +82,30 @@ header .login a:hover { background: rgba(255,255,255,0.2); border-left: 1px soli
 #sidebar-calendar h2 { display: none; }
 
 #sidebar-calendar-header { display: flex; }
-#sidebar-calendar-header .previous {}
+#sidebar-calendar-header .previous { display: flex; align-items: center; justify-content: center; }
 #sidebar-calendar-header .title    { display: flex; align-items: center; justify-content: center; flex: 1; }
-#sidebar-calendar-header .next     {}
+#sidebar-calendar-header .next     { display: flex; align-items: center; justify-content: center; }
 
 #sidebar-calendar-header .previous a { 
 	display: flex; align-items: center; justify-content: center; 
-	height: 100%; width: 100%; padding: 0.2em; box-sizing: border-box;
-	color: #fff; border: 1px solid transparent;
+	height: 24px; width: 24px; padding: 0.2em; box-sizing: border-box;
+	color: #fff;
+	background: url('../img/previous24.png'); opacity: 0.6;
 }
-#sidebar-calendar-header .previous a:hover {
-	border: 1px solid rgba(255,255,255,0.6); background: rgba(0,0,0,0.1);
-}
+#sidebar-calendar-header .previous a:hover { opacity: 1.0; }
+#sidebar-calendar-header .previous a span { display: none; }
+
 #sidebar-calendar-header .title h3 { 
 	color: #fff; padding: 0.4em; 
 }
 #sidebar-calendar-header .next a { 
 	display: flex; align-items: center; justify-content: center; 
-	height: 100%; width: 100%; padding: 0.2em; box-sizing: border-box; 
-	color: #fff; border: 1px solid transparent;
+	height: 24px; width: 24px; padding: 0.2em; box-sizing: border-box; 
+	color: #fff;
+	background: url('../img/next24.png'); opacity: 0.6;
 }
-#sidebar-calendar-header .next a:hover {
-	border: 1px solid rgba(255,255,255,0.6); background: rgba(0,0,0,0.1);
-}
+#sidebar-calendar-header .next a:hover { opacity: 1.0; }
+#sidebar-calendar-header .next a span { display: none; }
 
 #sidebar-calendar-entries { display: table; }
 #sidebar-calendar-entries > div { display: table-row; }
