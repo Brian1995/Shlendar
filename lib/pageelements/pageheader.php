@@ -1,31 +1,12 @@
 <?php
 
+require_once 'lib/utils.php';
+
 class PageHeader extends PageElement {
-	
-	/** @var PageImage */
-	private $logo;
 	
 	/** @var PageElement */
 	private $title;
 	
-	/**
-	 * 
-	 * @return PageImage|null
-	 */
-	public function getLogo() {
-		return $this->logo;
-	}
-
-	/**
-	 * 
-	 * @param PageImage|null $logo
-	 * @return \PageHeader
-	 */
-	public function setLogo($logo) {
-		$this->logo = $logo;
-		return $this;
-	}
-
 	/**
 	 * 
 	 * @return PageElement|null
@@ -55,9 +36,14 @@ class PageHeader extends PageElement {
 		$header->addChild($center);
 		$header->addChild($right);
 		
-		if ($this->getLogo() !== NULL) {
-			$left->addChild($this->getLogo()->toXML());
-		}
+		$logoURL = URL::urlFromCurrent();
+		$logoURL->setPath(URL::urlFromBase()->getPath());
+		$logoURL->setPathRelativeToCurrentPath('index.php');
+		$left->addChild($logoLink = new XMLElement('a', 'href', $logoURL));
+		$logoLink->addChild(new XMLElement('span'));
+		$left->addChild($logoText = new XMLElement('p'));
+		$logoText->addChild(new XMLText('Shlendar'));
+		
 		if ($this->getTitle() !== NULL) {
 			$h1 = new XMLElement('h1');
 			$center->addChild($h1);

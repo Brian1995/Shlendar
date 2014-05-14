@@ -20,7 +20,6 @@ $url_start->setQueryParameter('action', NULL);
 $action = $url_current->getQueryParameter('action');
 
 $header = new PageHeader();
-$header->setLogo(new PageImage(URL::urlFromRelativePath('img/logo.png'), $url_start));
 $content = new PageSplit();
 $content->setProperty('id', 'content');
 $sidebar = new PageSidebar('actions');
@@ -66,7 +65,9 @@ $titleNode     = new XMLElement('title');
 $titleTextNode = new XMLText('Shlendar'.($titleText==NULL ? '' : ' - '.$titleText));
 $charsetNode   = new XMLElement('meta', 'http-equiv', 'content-type', 'content', 'text/html; charset=utf-8');
 $styleNode     = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'css/style.php');
-$fontNode      = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300');
+$fontNode      = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://fonts.googleapis.com/css?family=Ubuntu:400,300');
+$iconsNode     = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css');
+
 $bodyNode      = new XMLElement('body', 'class', ''.$action);
 $footerNode    = new XMLElement('footer');
 
@@ -76,6 +77,7 @@ $rootNode->addChild($headNode);
 	$headNode->addChild($charsetNode);
 	$headNode->addChild($styleNode);
 	$headNode->addChild($fontNode);
+	$headNode->addChild($iconsNode);
 $rootNode->addChild($bodyNode);
 	$bodyNode->addChild($header->toXML());
 	$bodyNode->addChild($content->toXML());

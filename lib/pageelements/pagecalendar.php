@@ -69,12 +69,12 @@ class PageCalendar extends PageElement {
 		
 		$urlPrevious = URL::urlFromCurrent();
 		$urlPrevious->setQueryParameter('viewDate', $viewDate->copy()->addMonths(-1)->toDateString());
-		$linkPrevious = new PageLink(new PageText('<<'), $urlPrevious);
+		$linkPrevious = new PageLink(new PageFontIcon('caret-left', PageFontIcon::LARGER, TRUE), $urlPrevious);
 		$navPrevious->addChild($linkPrevious->toXML());
 
 		$urlNext = URL::urlFromCurrent();
 		$urlNext->setQueryParameter('viewDate', $viewDate->copy()->addMonths(1)->toDateString());
-		$linkNext = new PageLink(new PageText('>>'), $urlNext);
+		$linkNext = new PageLink(new PageFontIcon('caret-right', PageFontIcon::LARGER, TRUE), $urlNext);
 		$navNext->addChild($linkNext->toXML());
 		
 		$navTitle->addChild($navTitleH3 = new XMLElement('h3'));
