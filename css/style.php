@@ -14,8 +14,8 @@ const FONT_PARAGRAPH    = "font-family: 'Ubuntu', sans-serif; font-weight:400;";
 ?>
 <style>
 	
-*{border:0px;padding:0px;margin:0px;font-size:100%;font-weight:normal;text-decoration:none;}
-*{border:0px;padding:0px;margin:0px;font-size:100%;font-weight:normal;text-decoration:none;}
+*{border:0px;padding:0px;margin:0px;font-size:100%;font-weight:inherit;text-decoration:none;}
+*{border:0px;padding:0px;margin:0px;font-size:100%;font-weight:inherit;text-decoration:none;}
 
 h1, h2, h3, h4, h5, h6 { <?=FONT_HEADLINE?> }
 
@@ -56,13 +56,14 @@ footer {
 }
 
 /* header */
-header .logo  { order: 1; display: flex; align-items: center; border-right: 1px solid transparent; }
-header .title { order: 2; display: flex; align-items: center; }
-header .login { order: 3; }
+header .logo  { display: flex; align-items: center; border-right: 1px solid transparent; }
+header .title { display: flex; align-items: center; }
+header .login { }
 
-header .logo a { display: block; height: 64px; width:64px; background: url('../img/logo.png'); }
-header .logo p { <?=FONT_HEADLINE?> font-size: 200%; color:#fff; text-shadow: 0 0 2px rgba(0,0,0,1); padding-right: 0.5em; }
-header .logo:hover { background: <?=BACKGROUND_HOVER?>; border-right: <?=BORDER_CONTAINER?>; }
+header .logo a { display: flex; align-items: center; border-right: 1px solid transparent; }
+header .logo a > span { <?=FONT_HEADLINE?> font-size: 200%; display:table-cell; vertical-align: middle; height: 64px; padding-left:70px; padding-right: 0.5em; background: url('../img/logo.png') no-repeat; }
+header .logo a > span > span { color:#fff; text-shadow: 0 0 2px rgba(0,0,0,1); }
+header .logo a:hover { background: <?=BACKGROUND_HOVER?>; border-right: <?=BORDER_CONTAINER?>; }
 header .title h1 { text-align: center; width:100%; color: #fff; font-size: 140%; font-style: italic; text-shadow: 0 0 2px rgba(0,0,0,1); }
 header .login a { display: flex; height: 100%; align-items: center; padding: 0 1em; color: #fff; text-shadow: 0 0 2px rgba(0,0,0,1); border-left: 1px solid transparent; }
 header .login a:hover { background: <?=BACKGROUND_HOVER?>; border-left: <?=BORDER_CONTAINER?>; }
@@ -78,7 +79,7 @@ header .login a:hover { background: <?=BACKGROUND_HOVER?>; border-left: <?=BORDE
 	padding: 2em 0;
 }
 
-#content > div > .left {
+#content > div > .left, #content > div > .center, #content > div > .right {
 	background: <?=BACKGROUND_BLURED?>;
 	border: <?=BORDER_CONTAINER?>;
 	-webkit-box-shadow: 0 0 3px -1px rgba(0,0,0,1);
@@ -89,6 +90,7 @@ header .login a:hover { background: <?=BACKGROUND_HOVER?>; border-left: <?=BORDE
 .sidebar-actions h1 { display: none; }
 .sidebar-container { padding: 0.5em; }
 
+/* sidebar calendar */
 #sidebar-calendar { font-size: 85%; border: 1px solid rgba(255,255,255,0.2);}
 #sidebar-calendar h2 { display: none; }
 
@@ -123,6 +125,11 @@ header .login a:hover { background: <?=BACKGROUND_HOVER?>; border-left: <?=BORDE
 #sidebar-calendar-entries .cell.weekend { background: rgba(0,0,0,0.2); }
 #sidebar-calendar-entries .cell a:hover { border: <?=BORDER_HOVER?>; background: <?=BACKGROUND_HOVER?>; }
 
+/* login */
+#login { display: inline-flex; flex-flow: column nowrap; padding: 0.5em; }
+#login-failed { }
+#login-form { display: flex; flex-flow: row wrap; justify-content: center; align-items: flex-end; }
+#login-form .input { flex: 1; }
 
 
 </style>

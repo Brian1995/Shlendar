@@ -39,10 +39,11 @@ class PageHeader extends PageElement {
 		$logoURL = URL::urlFromCurrent();
 		$logoURL->setPath(URL::urlFromBase()->getPath());
 		$logoURL->setPathRelativeToCurrentPath('index.php');
+		$logoURL->setQueryParameter('action', NULL);
 		$left->addChild($logoLink = new XMLElement('a', 'href', $logoURL));
-		$logoLink->addChild(new XMLElement('span'));
-		$left->addChild($logoText = new XMLElement('p'));
-		$logoText->addChild(new XMLText('Shlendar'));
+		$logoLink->addChild($logoSpan = new XMLElement('span'));
+		$logoSpan->addChild($logoSpan2 = new XMLElement('span'));
+		$logoSpan2->addChild($logoText = new XMLText('Shlendar'));
 		
 		if ($this->getTitle() !== NULL) {
 			$h1 = new XMLElement('h1');
