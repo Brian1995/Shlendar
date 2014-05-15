@@ -126,10 +126,13 @@ header .login a:hover { background: <?=BACKGROUND_HOVER?>; border-left: <?=BORDE
 #sidebar-calendar-entries .cell a:hover { border: <?=BORDER_HOVER?>; background: <?=BACKGROUND_HOVER?>; }
 
 /* login */
-#login { display: inline-flex; flex-flow: column nowrap; padding: 0.5em; }
+#login { display: flex; flex-flow: column nowrap; padding: 0.5em; }
 #login-failed { }
-#login-form { display: flex; flex-flow: row wrap; justify-content: center; align-items: flex-end; }
-#login-form .input { flex: 1; }
+#login-form { display: flex; flex-flow: row wrap; justify-content: center; align-items: flex-end; width: 15em; }
+#login-form .input { flex: 1 0 15em; box-sizing: border-box; }
+#login-form .input input { width: 100%; }
+#login-form .submit { flex: 1 0 5em; }
+
 
 
 </style>

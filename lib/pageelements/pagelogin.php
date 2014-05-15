@@ -37,6 +37,9 @@ class PageLogin extends PageElement {
 		
 		$submit = new XMLElement('input', 'type', 'submit');
 		
+		$login->addChild($loginHeader = new XMLElement('h2'));
+		$loginHeader->addChild(new XMLText('Login'));
+		
 		if (Session::loginFailed()) {
 			$failed = new XMLElement('div', 'id', 'login-failed');
 			$failedText1 = new XMLElement('p', 'id', 'login-failed-text1');

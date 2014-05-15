@@ -13,6 +13,7 @@ class URL {
     private $user;
     private $pass;
     private $path;
+	/** @var array|null */
     private $query;
     private $fragment;
 
@@ -134,6 +135,10 @@ class URL {
 		return $this->path;
 	}
 
+	/**
+	 * 
+	 * @return array|null
+	 */
 	public function getQuery() {
 		return $this->query;
 	}
@@ -166,6 +171,10 @@ class URL {
 		$this->path = $path;
 	}
 
+	/**
+	 * 
+	 * @param array|null $query
+	 */
 	public function setQuery($query) {
 		$this->query = $query;
 	}

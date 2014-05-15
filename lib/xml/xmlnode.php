@@ -1,14 +1,12 @@
 <?php
 
-require_once 'lib/xml/xmlleaf.php';
-
 abstract class XMLNode extends XMLLeaf {
 	
 	/**
 	 *
 	 * @var ArrayList
 	 */
-	private $children = NULL;
+	protected $children = NULL;
 
 	/**
 	 * 

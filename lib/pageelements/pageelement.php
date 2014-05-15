@@ -82,6 +82,39 @@ abstract class PageElement {
 	public function getProperties() {
 		return $this->properties === NULL ? array() : $this->properties;
 	}
+	
+	/**
+	 * Adds all properties from pageElement as attributes to xmlElement.
+	 * 
+	 * If includeList is present, only named attributes from that list will 
+	 * be taken into account.
+	 * 
+	 * If excludeList is present, all named attributes from that list will 
+	 * be ignored.
+	 * 
+	 * @param XMLElement $xmlElement
+	 *        The XMLElement to add the attributes to.
+	 * @param PageElement $pageElement 
+	 *        The PageElement from which the properties are taken.
+	 * @param array $includeList
+	 *        A string array containing the names of the attributes that might 
+	 *        be converted to attributes.
+	 * @param array $excludeList
+	 *        A string array containing the names of the attributes that will 
+	 *        not be converted to attributes.
+	 */
+	public static function addAttributesToXMLElement(XMLElement &$xmlElement, PageElement &$pageElement, array $includeList=NULL, array $excludeList=NULL) {
+		if ($includeList === NULL) {
+			$properties = $pageElement->getProperties();
+		} else {
+			$properties = array_filter($pageElement->getProperties(), function($p) use (&$includeList) { return in_array($p, $includeList); });
+		}
+		foreach ($properties as $name => $value) {
+			if (!in_array($name, $excludeList)) {
+				$xmlElement->setAttribute($name, $value);
+			}
+		}
+	}
 
 	/**
 	 * 

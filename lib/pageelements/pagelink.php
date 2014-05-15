@@ -53,11 +53,8 @@ class PageLink extends PageElement {
 	 */
 	public function toXML() {
 		$a = new XMLElement('a');
-		$properties = $this->getProperties();
-		foreach ($properties as $name => $value) {
-			$a->addAttribute($name, $value);
-		}
-		if (!is_null($this->content)) {
+		self::addAttributesToXMLElement($a, $this);
+		if ($this->content !== NULL) {
 			$content = $this->content->toXML();
 			$span = new XMLElement('span');
 			$span->addChild($content);

@@ -1,19 +1,16 @@
 <?php
 
-require_once 'lib/utils.php';
-require_once 'lib/xml/xmlnode.php';
-
 class XMLElement extends XMLNode {
 	
 	/**
 	 * @var string
 	 */
-	private $name;
+	protected $name;
 	
 	/**
 	 * @var array
 	 */
-	private $attributes = NULL;
+	protected $attributes = NULL;
 		
 //	/**
 //	 * 
