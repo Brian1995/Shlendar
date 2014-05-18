@@ -69,12 +69,12 @@ class PageCalendar extends PageElement {
 		
 		$urlPrevious = URL::urlFromCurrent();
 		$urlPrevious->setQueryParameter('viewDate', $viewDate->copy()->addMonths(-1)->toDateString());
-		$linkPrevious = new PageLink(new PageFontIcon('caret-left', PageFontIcon::LARGER, TRUE), $urlPrevious);
+		$linkPrevious = new PageLink(new PageFontIcon('chevron-left', PageFontIcon::NORMAL, TRUE), $urlPrevious);
 		$navPrevious->addChild($linkPrevious->toXML());
 
 		$urlNext = URL::urlFromCurrent();
 		$urlNext->setQueryParameter('viewDate', $viewDate->copy()->addMonths(1)->toDateString());
-		$linkNext = new PageLink(new PageFontIcon('caret-right', PageFontIcon::LARGER, TRUE), $urlNext);
+		$linkNext = new PageLink(new PageFontIcon('chevron-right', PageFontIcon::NORMAL, TRUE), $urlNext);
 		$navNext->addChild($linkNext->toXML());
 		
 		$navTitle->addChild($navTitleH3 = new XMLElement('h3'));
@@ -100,6 +100,9 @@ class PageCalendar extends PageElement {
 				$class .= ' day'.$x;
 				if ($day->isSameDay($currentDate)) {
 					$class .= ' current';
+				}
+				if ($day->isSameDay($viewDate)) {
+					$class .= ' selected';
 				}
 				if ($day->isSameMonth($firstOfMonth)) {
 					$class .= ' current-month';

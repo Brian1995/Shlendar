@@ -83,6 +83,15 @@ abstract class PageElement {
 		return $this->properties === NULL ? array() : $this->properties;
 	}
 	
+	public function setProperties() {
+		$argumentCount = func_num_args();
+		$arguments = func_get_args();
+		for ($i = 0; $i < $argumentCount; $i += 2) {
+			$this->setProperty($arguments[$i], $arguments[$i+1]);
+		}
+		return $this;
+	}
+	
 	/**
 	 * Adds all properties from pageElement as attributes to xmlElement.
 	 * 

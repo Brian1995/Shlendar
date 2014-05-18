@@ -117,5 +117,13 @@ class Session {
 		}
 		$logoutUrl->redirect();
 	}
+	
+	public static function fixMimeType() {
+		if (stristr(filter_input(INPUT_SERVER, "HTTP_ACCEPT"),"application/xhtml+xml")) {
+			header("Content-type: application/xhtml+xml");
+		} else { 
+			header("Content-type: text/html"); 
+		}
+	}
 
 }
