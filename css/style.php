@@ -60,7 +60,7 @@ header .logo .text { <?=FONT_HEADLINE?> font-size: 2em; padding-right: 0.5em; }
 
 header .header-actions a { display: flex; align-items: center; }
 header .header-actions a:hover { <?=$C_HEADER_HOVER?> }
-header .header-actions a span { display: block; <?=FONT_HEADLINE?> font-size:1.25em; padding: 0.5em; }
+header .header-actions a span { display: block; <?=FONT_HEADLINE?> font-size:1.2em; padding: 0.5em; }
 
 /** MAIN **********************************************************************/
 main { display: flex; }
@@ -74,8 +74,13 @@ main { display: flex; }
 
 /** SIDEBAR CALENDAR **********************************************************/
 #sidebar-calendar { padding: 0.5em; margin: 0 auto; margin-top: 0.5em; max-width:20em; }
-#sidebar-calendar-header { display: flex; flex-flow: row nowrap; justify-content: space-between; padding: 0 0.5em; }
-#sidebar-calendar-header .title { flex: 0 1 auto; }
+#sidebar-calendar-header { display: table; padding: 0 0.5em; width:100%; box-sizing: border-box; }
+#sidebar-calendar-header .previous { display: table-cell; width:49%; text-align: left; }
+#sidebar-calendar-header .title    { display: table-cell; width:2%; white-space: nowrap; }
+#sidebar-calendar-header .next     { display: table-cell; width:49%; text-align: right; }
+#sidebar-calendar-header a { display: block; height: 100%; width: 100%; }
+#sidebar-calendar-header .previous a:hover { background: <?=GRAY_LIGHTER?>; background: linear-gradient(to right, rgba(236,240,241,1) 0%,rgba(236,240,241,0) 100%); }
+#sidebar-calendar-header .next     a:hover { background: <?=GRAY_LIGHTER?>; background: linear-gradient(to left, rgba(236,240,241,1) 0%,rgba(236,240,241,0) 100%); }
 #sidebar-calendar-entries { display: table; width: 100%; box-sizing: border-box; text-align: center; padding: 0 0.5em; }
 #sidebar-calendar-entries > div { display: table-row; }
 #sidebar-calendar-entries > div > div { display: table-cell;  }
@@ -85,6 +90,13 @@ main { display: flex; }
 #sidebar-calendar-entries .current-month.selected a { color: <?=WHITE?>; background: <?=ORANGE?>; }
 #sidebar-calendar-entries > div > div > a:hover { background: <?=GRAY_LIGHTER?>; }
 #sidebar-calendar-entries .dayrow { text-transform: uppercase; <?=FONT_HEADLINE?> font-size:0.8em; }
+
+/** SIDEBAR ACTIONS ***********************************************************/
+#sidebar-actions { font-size: 0.9em; padding: 0.5em 0; }
+#sidebar-actions .container { display: table; margin: 0 auto; }
+#sidebar-actions .action { display: flex; }
+#sidebar-actions .action a { display: block; width: 100%; height: 100%; padding: 0.5em; }
+#sidebar-actions .action a:hover { background: <?=GRAY_LIGHTER?>; }
 
 /** FOOTER ********************************************************************/
 footer { <?=$C_FOOTER?> height: 200px; }

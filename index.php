@@ -83,9 +83,15 @@ switch ($action) {
 		$calendar = new PageCalendar();
 		$calendar->setViewDate(new Date($url_current->getQueryParameter('viewDate')));
 		
+		$sidebarActions = new PageStack('div', 'id', 'sidebar-actions');
+		$sidebarActions->addChild($sidebarActionsContainer = new PageStack('div', 'class', 'container'));
+		$sidebarActionsContainer->addChild(new PageAction('manage-calendars', 'Kalender verwalten', new PageFontIcon('calendar-o', PageFontIcon::LARGER, TRUE)));
+		$sidebarActionsContainer->addChild(new PageAction('manage-groups', 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::LARGER, TRUE)));
+		
         $calendars = new PageCalendarList($dbConnection);
 		
 		$sidebar->addChild($calendar);
+		$sidebar->addChild($sidebarActions);
 		$sidebar->addChild($calendars);
                 
 		break;
