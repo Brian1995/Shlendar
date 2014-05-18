@@ -11,14 +11,18 @@ class PageFontIcon extends PageElement {
 	private $fixedWidth;
 	
 	function __construct($name, $size=NORMAL, $fixedWidth=FALSE) {
+		parent::__construct('i');
 		$this->name = $name;
 		$this->size = $size;
 		$this->fixedWidth = $fixedWidth;
 	}
 	
+		
 	public function toXML() {
+		$element = parent::toXML();
 		$class = 'fa fa-'.$this->name.($this->size === NULL ? '' : ' '.$this->size).($this->fixedWidth ? ' fa-fw' : '');
-		return new XMLElement('i', 'class', $class);
+		$element->setAttribute('class', $class);
+		return $element;
 	}
 
 }

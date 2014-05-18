@@ -12,12 +12,14 @@ class PageLogin extends PageElement {
 	private $submitUrl;
 	
 	public function __construct($submitUrl) {
+		parent::__construct('div');
+		$this->setProperty('id', 'login');
 		$this->submitUrl = $submitUrl;
 	}
 	
 	public function toXML() {
 		
-		$login  = new XMLElement('div', 'id', 'login');
+		$login = parent::toXML();
 		$form = new XMLElement('form', 'id', 'login-form', 'action', $this->submitUrl, 'method', 'post');
 		
 		$divLeft  = new XMLElement('div', 'class', 'input');

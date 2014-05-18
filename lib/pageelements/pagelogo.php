@@ -17,6 +17,8 @@ class PageLogo extends PageElement {
 	 * @param URL|null $linkUrl
 	 */
 	function __construct($logoText=NULL, $linkUrl=NULL) {
+		parent::__construct('div');
+		$this->setProperty('class', 'logo');
 		$this->setLogoText($logoText);
 		$this->setLinkUrl($linkUrl);
 	}
@@ -62,7 +64,7 @@ class PageLogo extends PageElement {
 	 * @return XMLElement
 	 */
 	public function toXML() {
-		$container = new XMLElement('div', 'class', 'logo');
+		$container = parent::toXML();
 		if ($this->linkUrl === NULL) {
 			$parent = $container;
 		} else {

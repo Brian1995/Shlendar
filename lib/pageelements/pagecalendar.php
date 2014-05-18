@@ -14,6 +14,12 @@ class PageCalendar extends PageElement {
 	 */
 	private $viewDate = NULL;
 	
+	function __construct() {
+		parent::__construct('div');
+		$this->setProperty('id', 'sidebar-calendar');
+	}
+
+	
 	/**
 	 * 
 	 * @return Date
@@ -51,6 +57,8 @@ class PageCalendar extends PageElement {
 	}
 	
 	public function toXML() {
+		$calendar = parent::toXML();
+		
 		$currentDate  = $this->getCurrentDate();
 		$viewDate     = $this->getViewDate();
 		$firstOfMonth = $viewDate->copy()->setToFirstWeekdayOfMonth(Date::MONDAY);
@@ -59,8 +67,6 @@ class PageCalendar extends PageElement {
 			$topLeftDate->setToPreviousWeekday();
 		}
 		$day = $topLeftDate->copy();
-		
-		$calendar = new XMLElement('div', 'id', 'sidebar-calendar');
 		
 		$nav = new XMLElement('div', 'id', 'sidebar-calendar-header');
 		$nav->addChild($navPrevious = new XMLElement('div', 'class', 'previous'));

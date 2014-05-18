@@ -2,42 +2,64 @@
 
 class PageImage extends PageElement {
 	
-	private $imageURL;
-	private $link;
-	
+	/**
+	 * 
+	 * @param URL $imageURL
+	 * @param URL $link
+	 */
 	function __construct($imageURL, $link=NULL) {
-		$this->imageURL = $imageURL;
-		$this->link = $link;
+		parent::__construct('img');
+		$this->setImageURL($imageURL);
+		$this->setLink($link);
 	}
 	
+	/**
+	 * 
+	 * @return URL|null
+	 */
 	public function getImageURL() {
-		return $this->imageURL;
+		return $this->getProperty('src');
 	}
 
+	/**
+	 * 
+	 * @param URL|null $imageURL
+	 * @return \PageImage
+	 */
 	public function setImageURL($imageURL) {
-		$this->imageURL = $imageURL;
+		$this->setProperty('src', $imageURL);
 		return $this;
 	}
 
+	/**
+	 * 
+	 * @return URL|null
+	 */
 	public function getLink() {
-		return $this->link;
+		return $this->getProperty('href');
 	}
-
+	
+	/**
+	 * 
+	 * @param URL|null $link
+	 * @return \PageImage
+	 */
 	public function setLink($link) {
-		$this->link = $link;
+		$this->setProperty('href', $link);
 		return $this;
 	}
 	
+	protected function getExcludeList() {
+		return array('href');
+	}
+
 	public function toXML() {
-		if ($this->getImageURL() !== NULL) {
-			$img = new XMLElement('img', 'src', $this->getImageURL());
-			if ($this->getLink() !== NULL) {
-				$a = new XMLElement('a', 'href', $this->getLink());
-				$a->addChild($img);
-				return $a;
-			} 
-			return $img;
-		}
-		return NULL;
+		$img = parent::toXML();
+		if ($this->getLink() !== NULL) {
+			$a = new XMLElement('a', 'href', $this->getLink());
+			$a->addChild($img);
+			return $a;
+		} 
+		return $img;
 	}
 }
