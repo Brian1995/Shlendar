@@ -147,9 +147,15 @@ abstract class PageElement {
 		} else {
 			$properties = array_filter($this->getProperties(), function($p) use (&$includeList) { return in_array($p, $includeList); });
 		}
-		foreach ($properties as $name => $value) {
-			if (!in_array($name, $excludeList)) {
+		if ($excludeList === NULL) {
+			foreach ($properties as $name => $value) {
 				$xmlElement->setAttribute($name, $value);
+			}
+		} else {
+			foreach ($properties as $name => $value) {
+				if (!in_array($name, $excludeList)) {
+					$xmlElement->setAttribute($name, $value);
+				}
 			}
 		}
 	}

@@ -48,11 +48,11 @@ header .header-actions { display: flex; }
 header .logo a { display: flex; align-items: center; }
 header .logo a:hover { <?=$C_HEADER_HOVER?> }
 header .logo .icon { width: 64px; height: 64px; background: url('../img/logo.png'); }
-header .logo .text { <?=$FONT_HEADLINE?> font-size: 2em; padding-right: 0.5em; }
+header .logo .text { <?=FONT_HEADLINE?> font-size: 2em; padding-right: 0.5em; }
 
 header .header-actions a { display: flex; align-items: center; }
 header .header-actions a:hover { <?=$C_HEADER_HOVER?> }
-header .header-actions a span { display: block; <?=$FONT_HEADLINE?> font-size:1.25em; padding: 0.5em; }
+header .header-actions a span { display: block; <?=FONT_HEADLINE?> font-size:1.25em; padding: 0.5em; }
 
 /** MAIN **********************************************************************/
 main { display: flex; }
