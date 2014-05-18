@@ -25,7 +25,7 @@ const RED_DARK       = 'rgba(192, 57, 43,1.0)';
 const FONT_HEADLINE  = "font-family: 'Open Sans', sans-serif; font-weight:300;";
 const FONT_PARAGRAPH = "font-family: 'Open Sans', sans-serif; font-weight:400;";
 
-$C_BASE         = "background: rgba(255,255,255,1.0); color: rgba( 70, 70, 70,1.0);";
+$C_BASE         = "background: ".WHITE."; color: ".GRAY_DARKER.";";
 $C_HEADER       = "background: rgba( 44, 62, 80,1.0); color: rgba(255,255,255,1.0);";
 $C_HEADER_HOVER = "background: rgba( 52, 73, 94,1.0); color: rgba(255,255,255,1.0);";
 $C_FOOTER       = "background: rgba( 44, 62, 80,1.0); color: rgba(255,255,255,1.0);";
