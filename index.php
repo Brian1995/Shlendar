@@ -8,7 +8,7 @@ mb_internal_encoding("UTF-8");
 setlocale(LC_ALL, 'de_DE.utf-8');
 URL::setBasePath('projekt');
 session_start();
-Session::fixMimeType();
+//Session::fixMimeType();
 
 $dbConnection = new DatabaseConnection('localhost', 'projekt', 'projekt', 'projekt');
 $dbConnection->connect();
