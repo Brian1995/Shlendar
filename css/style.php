@@ -2,17 +2,25 @@
 
 header("Content-type: text/css");
 
-const WHITE        = 'rgba(255,255,255,1.0)';
-
-const GRAY_LIGHTER = 'rgba(236,240,241,1.0)';
-const GRAY_LIGHT   = 'rgba(189,195,199,1.0)';
-const GRAY_DARK    = 'rgba(149,165,166,1.0)';
-const GRAY_DARKER  = 'rgba(127,140,141,1.0)';
-
-const BLUE_DARK    = 'rgba( 52, 73, 94,1.0)';
-const BLUE_DARKER  = 'rgba( 44, 62, 80,1.0)';
-
-const ORANGE       = 'rgba(230,126, 34,1.0)';
+const BLUE_LIGHTER   = 'rgba( 52,152,219,1.0)';
+const BLUE_LIGHT     = 'rgba( 41,128,185,1.0)';
+const BLUE_DARK      = 'rgba( 52, 73, 94,1.0)';
+const BLUE_DARKER    = 'rgba( 44, 62, 80,1.0)';
+const GRAY_LIGHTER   = 'rgba(236,240,241,1.0)';
+const GRAY_LIGHT     = 'rgba(189,195,199,1.0)';
+const GRAY_DARK      = 'rgba(149,165,166,1.0)';
+const GRAY_DARKER    = 'rgba(127,140,141,1.0)';
+const ORANGE         = 'rgba(230,126, 34,1.0)';
+const ORANGE_DARK    = 'rgba(211, 84,  0,1.0)';
+const PURPLE         = 'rgba(155, 89,182,1.0)';
+const PURPLE_DARK    = 'rgba(142, 68,173,1.0)';
+const TURQUOISE      = 'rgba( 26,188,156,1.0)';
+const TURQUOISE_DARK = 'rgba( 22,160,133,1.0)';
+const WHITE          = 'rgba(255,255,255,1.0)';
+const YELLOW         = 'rgba(241,196, 15,1.0)';
+const YELLOW_DARK    = 'rgba(243,156, 18,1.0)';
+const RED            = 'rgba(231, 76, 60,1.0)';
+const RED_DARK       = 'rgba(192, 57, 43,1.0)';
 
 const FONT_HEADLINE  = "font-family: 'Open Sans', sans-serif; font-weight:300;";
 const FONT_PARAGRAPH = "font-family: 'Open Sans', sans-serif; font-weight:400;";
