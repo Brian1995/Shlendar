@@ -132,7 +132,13 @@ switch ($action) {
 		if ($logged_in) { 
 			addSidebarActions();
 			addSidebarCalendarList();
-		}                
+		}
+		if ($logged_in) {
+			$content->addChild(new PageText("Willkommen ".Session::getUserName()));
+		} else {
+			$content->addChild(new PageText("Willkommen bei Shlendar"));
+		}
+		
 		break;
 }
 

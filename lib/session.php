@@ -49,9 +49,12 @@ class Session {
 	}
 
 	public static function setUserName($userName) {
-		Session::set('user_name', $userName);
+		self::set('user_name', $userName);
 	}
 
+	public static function getUserName() {
+		return self::get('user_name');
+	}
 	
 	/**
 	 * 
