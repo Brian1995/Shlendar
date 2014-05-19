@@ -31,13 +31,18 @@ class PageCalendarList extends PageContainer{
                 ON gcr.group_id = groups.group_id 
                 ) as t 
             JOIN calendars as c ON c.id = t.calendar_id;", Session::getUserID());
-        $calendarList = new XMLElement('div');
+        
+        $container = new XMLElement('div');
+        $container->addAttribute('class', 'container');
         $rowCount = $this->dbConnection->countRows($result);
         while($a = mysql_fetch_row($result)) {
             $item = new PageCalendarListItem($a[0], $a[1]);
-            $calendarList->addChild($item->toXML());
+            $container->addChild($item->toXML());
         }
-       
+        
+        $calendarList = new XMLElement('div');
+        $calendarList->addAttribute('id', 'sidebar-actions');
+        $calendarList->addChild($container);
         return $calendarList;
     }
 }

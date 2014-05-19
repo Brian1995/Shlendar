@@ -98,6 +98,10 @@ main { display: flex; }
 #sidebar-actions .action a { display: block; width: 100%; height: 100%; padding: 0.5em; }
 #sidebar-actions .action a:hover { background: <?=GRAY_LIGHTER?>; }
 
+/** SIDEBAR CALENDAR LIST *****************************************************/
+#sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
+#sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
+
 /** FOOTER ********************************************************************/
 footer { <?=$C_FOOTER?> height: 200px; }
 

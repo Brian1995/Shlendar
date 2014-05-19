@@ -26,6 +26,7 @@ class PageCalendarListItem {
         $link->addChild($text);
         
         $listItem = new XMLElement('div');
+        $listItem->addAttribute('class', 'action');
         $listItem->addChild($link);
         $listItem->addAttribute('id', 'calendar-item');
         return $listItem;
