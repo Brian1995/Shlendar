@@ -116,6 +116,7 @@ switch ($action) {
 	case 'manage-calendars':
 		ensureLogin();
 		addSidebarCalendar();
+		break;
     case 'listAppointments':
 		ensureLogin();
         $calendar = $url_current->getQueryParameter('calendar');
