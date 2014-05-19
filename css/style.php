@@ -120,6 +120,9 @@ main { display: flex; }
 #login-form button { flex: 1 0 auto; display: block; margin: 0.4em 0; padding: 0.2em; border: 1px solid <?=GREEN_DARK?>; background: <?=GREEN_DARK?>; color: <?=WHITE?>; border-radius: 3px; cursor: pointer; }
 #login-form button:hover { background: <?=GREEN?>; }
 
+/** SIDEBAR CALENDAR LIST *****************************************************/
+#sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
+#sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
 
 /** FOOTER ********************************************************************/
 footer { <?=$C_FOOTER?> height: 200px; }

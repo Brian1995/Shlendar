@@ -18,6 +18,7 @@ $logged_in = Session::isLoggedIn();
 $url_current = URL::urlFromCurrent();
 $url_base    = URL::urlFromBase();
 $url_start   = new URL($url_current);
+
 $url_start->setPathRelativeToCurrentPath('index.php');
 $url_start->setQuery($url_current->getQuery());
 $url_start->setQueryParameter('action', NULL);
@@ -25,31 +26,36 @@ $url_start->setQueryParameter('action', NULL);
 $action = $url_current->getQueryParameter('action');
 
 /** MAIN STRUCTURE ************************************************************/
-$body   = new PageStack('body');   $body->setProperties('class', ''.$action);
-$header = new PageStack('header'); $header->setProperties('id', 'header');
-$main   = new PageStack('main');   $main->setProperties('id', 'main');
-$footer = new PageStack('footer'); $footer->setProperties('id', 'footer');
+$body = new PageStack('body');
+$body->setProperties('class', '' . $action);
+$header = new PageStack('header');
+$header->setProperties('id', 'header');
+$main = new PageStack('main');
+$main->setProperties('id', 'main');
+$footer = new PageStack('footer');
+$footer->setProperties('id', 'footer');
 
 $body->addChild($header);
 $body->addChild($main);
 $body->addChild($footer);
 
-$mainColumns = new PageStack('div'); $mainColumns->setProperties('id', 'main-columns');
+$mainColumns = new PageStack('div');
+$mainColumns->setProperties('id', 'main-columns');
 $main->addChild($mainColumns);
 
 $sidebar = new PageStack('div'); $sidebar->setProperties('id', 'sidebar');
 $content = new PageStack('div'); $content->setProperties('id', 'content');
 
-/* PAGE HEADER ****************************************************************/
+/* PAGE HEADER *************************************************************** */
 $header->addChild(new PageLogo('Shlendar', $url_start));
 $header->addChild($topActions = new PageStack());
 $topActions->setProperty('class', 'header-actions');
 if ($logged_in) {
-	$topLoginActionText = 'Ausloggen';
-	$topLoginActionAction = 'logout';
+    $topLoginActionText = 'Ausloggen';
+    $topLoginActionAction = 'logout';
 } else {
-	$topLoginActionText = 'Einloggen';
-	$topLoginActionAction = 'login';
+    $topLoginActionText = 'Einloggen';
+    $topLoginActionAction = 'login';
 }
 $topLoginActionUrl = new URL($url_start);
 $topLoginActionUrl->setQuery(NULL);
@@ -92,7 +98,7 @@ function addSidebarCalendarList() {
 /* CONTENT ********************************************************************/
 
 $titleText = NULL;
-		
+
 switch ($action) {
 	case 'login':
 		$titleText = 'Login';
@@ -110,6 +116,16 @@ switch ($action) {
 	case 'manage-calendars':
 		ensureLogin();
 		addSidebarCalendar();
+    case 'listAppointments':
+		ensureLogin();
+        $calendar = $url_current->getQueryParameter('calendar');
+        $app = new PageAppointmentList($dbConnection, $calendar);
+        $content->addChild($app);
+        
+		addSidebarCalendar();
+		addSidebarActions();
+		addSidebarCalendarList();        
+        break;
 	default:
 		addSidebarCalendar();
 		if ($logged_in) { 
@@ -127,22 +143,22 @@ if ($content->hasChildren()) { $mainColumns->addChild($content); }
 echo '<?xml version="1.0" encoding="UTF-8" ?>' . "\r\n";
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\r\n\r\n";
 
-$rootNode      = new XMLElement('html', 'xmlns', 'http://www.w3.org/1999/xhtml');
-$headNode      = new XMLElement('head');
-$titleNode     = new XMLElement('title');
-$titleTextNode = new XMLText('Shlendar'.($titleText==NULL ? '' : ' - '.$titleText));
-$charsetNode   = new XMLElement('meta', 'http-equiv', 'content-type', 'content', 'text/html; charset=utf-8');
-$styleNode     = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'css/style.php');
-$fontNode      = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext');
-$iconsNode     = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css');
+$rootNode = new XMLElement('html', 'xmlns', 'http://www.w3.org/1999/xhtml');
+$headNode = new XMLElement('head');
+$titleNode = new XMLElement('title');
+$titleTextNode = new XMLText('Shlendar' . ($titleText == NULL ? '' : ' - ' . $titleText));
+$charsetNode = new XMLElement('meta', 'http-equiv', 'content-type', 'content', 'text/html; charset=utf-8');
+$styleNode = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'css/style.php');
+$fontNode = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext');
+$iconsNode = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css');
 
 $rootNode->addChild($headNode);
-	$headNode->addChild($titleNode);
-		$titleNode->addChild($titleTextNode);
-	$headNode->addChild($charsetNode);
-	$headNode->addChild($styleNode);
-	$headNode->addChild($fontNode);
-	$headNode->addChild($iconsNode);
+$headNode->addChild($titleNode);
+$titleNode->addChild($titleTextNode);
+$headNode->addChild($charsetNode);
+$headNode->addChild($styleNode);
+$headNode->addChild($fontNode);
+$headNode->addChild($iconsNode);
 $rootNode->addChild($body->toXML());
 
 $printer = new XMLPrinter();
