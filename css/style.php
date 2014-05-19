@@ -10,6 +10,8 @@ const GRAY_LIGHTER   = 'rgba(236,240,241,1.0)';
 const GRAY_LIGHT     = 'rgba(189,195,199,1.0)';
 const GRAY_DARK      = 'rgba(149,165,166,1.0)';
 const GRAY_DARKER    = 'rgba(127,140,141,1.0)';
+const GREEN          = 'rgba( 46,204,113,1.0)';
+const GREEN_DARK     = 'rgba( 39,174, 96,1.0)';
 const ORANGE         = 'rgba(230,126, 34,1.0)';
 const ORANGE_DARK    = 'rgba(211, 84,  0,1.0)';
 const PURPLE         = 'rgba(155, 89,182,1.0)';
@@ -21,15 +23,20 @@ const YELLOW         = 'rgba(241,196, 15,1.0)';
 const YELLOW_DARK    = 'rgba(243,156, 18,1.0)';
 const RED            = 'rgba(231, 76, 60,1.0)';
 const RED_DARK       = 'rgba(192, 57, 43,1.0)';
+const CONTENT_TEXT   = 'rgba( 80, 80, 75,1.0)';
 
 const FONT_HEADLINE  = "font-family: 'Open Sans', sans-serif; font-weight:300;";
-const FONT_PARAGRAPH = "font-family: 'Open Sans', sans-serif; font-weight:400;";
+const FONT_PARAGRAPH = "font-family: 'Open Sans', sans-serif; font-weight:300;";
+const FONT_IMPORTANT = "font-family: 'Open Sans', sans-serif; font-weight:400;";
 
 $C_BASE         = "background: ".WHITE."; color: ".GRAY_DARKER.";";
 $C_HEADER       = "background: rgba( 44, 62, 80,1.0); color: rgba(255,255,255,1.0);";
 $C_HEADER_HOVER = "background: rgba( 52, 73, 94,1.0); color: rgba(255,255,255,1.0);";
 $C_FOOTER       = "background: rgba( 44, 62, 80,1.0); color: rgba(255,255,255,1.0);";
 $C_SIDEBAR      = "background: rgba(189,195,199,1.0); color: rgba( 44, 62, 80,1.0);";
+$C_CONTENT      = "background: transparent; color: ".CONTENT_TEXT.";";
+$C_CONTENT_HEAD = "background: transparent; color: ".BLUE_DARKER.";";
+$C_WARNING      = "background: ".RED."; color: ".WHITE.";";
 
 ?>
 <style>
@@ -65,8 +72,8 @@ header .header-actions a span { display: block; <?=FONT_HEADLINE?> font-size:1.2
 /** MAIN **********************************************************************/
 main { display: flex; }
 #main-columns { flex: 1 0 auto; display: flex; flex-flow: row wrap; align-content: flex-start; }
-#sidebar { flex: 1 1 auto; }
-#content { flex: 100000 1 auto; min-width: 320px; }
+#sidebar { flex: 1 0 auto; }
+#content { flex: 100000 1 240px; min-width: 240px; }
 
 /** SIDEBAR *******************************************************************/
 #sidebar { <?=$C_SIDEBAR?> }
@@ -97,6 +104,22 @@ main { display: flex; }
 #sidebar-actions .action { display: flex; }
 #sidebar-actions .action a { display: block; width: 100%; height: 100%; padding: 0.5em; }
 #sidebar-actions .action a:hover { background: <?=GRAY_LIGHTER?>; }
+
+/** CONTENT *******************************************************************/
+#content { padding: 1em 2em; <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> }
+#content h2 { padding-bottom: 0.7em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
+/** LOGIN *********************************************************************/
+
+#login-failed { padding: 0.5em; margin-bottom: 0.7em; <?=$C_WARNING?> <?=FONT_IMPORTANT?> display: table; }
+#login-failed-text1 { margin-bottom: 0.5em; font-style: italic; }
+#login-failed-text2 { font-size: 0.8em; }
+#login-form { display: inline-flex; flex-flow: column wrap; }
+#login-user, #login-pass { flex: 1 0 auto; display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: center; }
+#login-user > div, #login-pass > div { flex: 1 0 5em; margin-left: 0; }
+#login-user > input, #login-pass > input { flex: 1 0 auto; border: 1px solid <?=GRAY_LIGHT?>; background: <?=GRAY_LIGHTER?>; margin: 0.4em 0; padding:0.2em; border-radius: 3px; }
+#login-form button { flex: 1 0 auto; display: block; margin: 0.4em 0; padding: 0.2em; border: 1px solid <?=GREEN_DARK?>; background: <?=GREEN_DARK?>; color: <?=WHITE?>; border-radius: 3px; cursor: pointer; }
+#login-form button:hover { background: <?=GREEN?>; }
+
 
 /** FOOTER ********************************************************************/
 footer { <?=$C_FOOTER?> height: 200px; }

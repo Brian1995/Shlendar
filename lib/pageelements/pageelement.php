@@ -252,6 +252,18 @@ abstract class PageContainer extends PageElement {
 	public function getChildCount() {
 		return $this->children->size();
 	}
+	
+	/**
+	 * Returns TRUE if this container has at least one child element, FALSE 
+	 * otherwise.
+	 * 
+	 * @return boolean 
+	 *         TRUE if this container has at least one child element, FALSE 
+	 *         otherwise.
+	 */
+	public function hasChildren() {
+		return $this->getChildCount() > 0;
+	}
 
 	public function toXML() {
 		$element = parent::toXML();

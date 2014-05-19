@@ -8,7 +8,7 @@ mb_internal_encoding("UTF-8");
 setlocale(LC_ALL, 'de_DE.utf-8');
 URL::setBasePath('projekt');
 session_start();
-//Session::fixMimeType();
+Session::fixMimeType();
 
 $dbConnection = new DatabaseConnection('localhost', 'projekt', 'projekt', 'projekt');
 $dbConnection->connect();
@@ -17,7 +17,7 @@ $logged_in = Session::isLoggedIn();
 
 $url_current = URL::urlFromCurrent();
 $url_base    = URL::urlFromBase();
-$url_start   = new URL($url_base);
+$url_start   = new URL($url_current);
 $url_start->setPathRelativeToCurrentPath('index.php');
 $url_start->setQuery($url_current->getQuery());
 $url_start->setQueryParameter('action', NULL);
@@ -39,8 +39,6 @@ $main->addChild($mainColumns);
 
 $sidebar = new PageStack('div'); $sidebar->setProperties('id', 'sidebar');
 $content = new PageStack('div'); $content->setProperties('id', 'content');
-$mainColumns->addChild($sidebar);
-$mainColumns->addChild($content);
 
 /* PAGE HEADER ****************************************************************/
 $header->addChild(new PageLogo('Shlendar', $url_start));
@@ -60,6 +58,37 @@ $topLoginAction = new PageLink(new PageText($topLoginActionText), $topLoginActio
 $topLoginAction->setProperty('id', 'header-actions-login');
 $topActions->addChild($topLoginAction);
 
+/* HELPERS ********************************************************************/
+function ensureLogin() {
+	if (!Session::isLoggedIn()) {
+		global $url_start;
+		$url_start->redirect(); // TODO Should redirect to login page?
+		exit(0);
+	}
+}
+
+function addSidebarCalendar() {
+	global $sidebar, $url_current;
+	$calendar = new PageCalendar();
+	$calendar->setViewDate(new Date($url_current->getQueryParameter('viewDate')));	
+	$sidebar->addChild($calendar);
+}
+
+function addSidebarActions() {
+	global $sidebar;
+	$sidebarActions = new PageStack('div', 'id', 'sidebar-actions');
+	$sidebarActions->addChild($sidebarActionsContainer = new PageStack('div', 'class', 'container'));
+	$sidebarActionsContainer->addChild(new PageAction('manage-calendars', 'Kalender verwalten', new PageFontIcon('calendar-o', PageFontIcon::LARGER, TRUE)));
+	$sidebarActionsContainer->addChild(new PageAction('manage-groups', 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::LARGER, TRUE)));	
+	$sidebar->addChild($sidebarActions);
+}
+
+function addSidebarCalendarList() {
+	global $sidebar, $dbConnection;
+	$calendars = new PageCalendarList($dbConnection);
+	$sidebar->addChild($calendars);
+}
+
 /* CONTENT ********************************************************************/
 
 $titleText = NULL;
@@ -67,9 +96,10 @@ $titleText = NULL;
 switch ($action) {
 	case 'login':
 		$titleText = 'Login';
-		$url = new URL($url_start);
+		$url = URL::urlFromRelativePath("index.php", URL::urlFromBase());
 		$url->setQueryParameter('action', 'login_exec');
 		$content->addChild(new PageLogin($url));
+		addSidebarCalendar();
 		break;
 	case 'login_exec':
 		Session::execLogin($dbConnection);
@@ -77,27 +107,23 @@ switch ($action) {
 	case 'logout':
 		Session::logout();
 		break;
+	case 'manage-calendars':
+		ensureLogin();
+		addSidebarCalendar();
 	default:
-		$titleText = 'Startseite';
-		
-		$calendar = new PageCalendar();
-		$calendar->setViewDate(new Date($url_current->getQueryParameter('viewDate')));
-		
-		$sidebarActions = new PageStack('div', 'id', 'sidebar-actions');
-		$sidebarActions->addChild($sidebarActionsContainer = new PageStack('div', 'class', 'container'));
-		$sidebarActionsContainer->addChild(new PageAction('manage-calendars', 'Kalender verwalten', new PageFontIcon('calendar-o', PageFontIcon::LARGER, TRUE)));
-		$sidebarActionsContainer->addChild(new PageAction('manage-groups', 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::LARGER, TRUE)));
-		
-        $calendars = new PageCalendarList($dbConnection);
-		
-		$sidebar->addChild($calendar);
-		$sidebar->addChild($sidebarActions);
-		$sidebar->addChild($calendars);
-                
+		addSidebarCalendar();
+		if ($logged_in) { 
+			addSidebarActions();
+			addSidebarCalendarList();
+		}                
 		break;
 }
 
 /* PAGE CONSTRUCTION **********************************************************/
+
+if ($sidebar->hasChildren()) { $mainColumns->addChild($sidebar); }
+if ($content->hasChildren()) { $mainColumns->addChild($content); }
+
 echo '<?xml version="1.0" encoding="UTF-8" ?>' . "\r\n";
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\r\n\r\n";
 
