@@ -33,8 +33,7 @@ class PageCalendarList extends PageContainer{
             JOIN calendars as c ON c.id = t.calendar_id;", Session::getUserID());
         $calendarList = new XMLElement('div');
         $rowCount = $this->dbConnection->countRows($result);
-        for ($i = 0; $i < $rowCount; $i++) {
-            $a = $this->dbConnection->fetchRow($result);
+        while($a = mysql_fetch_row($result)) {
             $item = new PageCalendarListItem($a[0], $a[1]);
             $calendarList->addChild($item->toXML());
         }
