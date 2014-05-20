@@ -1,8 +1,5 @@
 <?php
 
-require_once 'lib/xml/xmlleaf.php';
-require_once 'lib/utils.php';
-
 class XMLText extends XMLLeaf {
 	
 	/**

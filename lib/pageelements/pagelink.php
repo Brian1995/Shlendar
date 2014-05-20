@@ -11,6 +11,7 @@ class PageLink extends PageElement {
 	private $content;
 	
 	public function __construct($content=NULL, $url=NULL) {
+		parent::__construct('a');
 		$this->setContent($content);
 		$this->setHref($url);
 	}
@@ -52,12 +53,8 @@ class PageLink extends PageElement {
 	 * @return XMLElement 
 	 */
 	public function toXML() {
-		$a = new XMLElement('a');
-		$properties = $this->getProperties();
-		foreach ($properties as $name => $value) {
-			$a->addAttribute($name, $value);
-		}
-		if (!is_null($this->content)) {
+		$a = parent::toXML();
+		if ($this->content !== NULL) {
 			$content = $this->content->toXML();
 			$span = new XMLElement('span');
 			$span->addChild($content);

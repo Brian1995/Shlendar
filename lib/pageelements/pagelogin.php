@@ -12,20 +12,18 @@ class PageLogin extends PageElement {
 	private $submitUrl;
 	
 	public function __construct($submitUrl) {
+		parent::__construct('div');
+		$this->setProperty('id', 'login');
 		$this->submitUrl = $submitUrl;
 	}
 	
 	public function toXML() {
 		
-		$login  = new XMLElement('div', 'id', 'login');
+		$login = parent::toXML();
 		$form = new XMLElement('form', 'id', 'login-form', 'action', $this->submitUrl, 'method', 'post');
-		
-		$divLeft  = new XMLElement('div', 'class', 'input');
-		$divRight = new XMLElement('div', 'class', 'submit');
-		
+				
 		$divUser   = new XMLElement('div', 'id', 'login-user');
 		$divPass   = new XMLElement('div', 'id', 'login-pass');
-		$divSubmit = new XMLElement('div', 'id', 'login-submit');
 		
 		$userLabel = new XMLElement('div');
 		$userLabel->addChild(new XMLText('Benutzer'));
@@ -35,7 +33,15 @@ class PageLogin extends PageElement {
 		$passwordLabel->addChild(new XMLText("Passwort"));
 		$password = new XMLElement('input', 'type', 'password', 'name', 'password');
 		
-		$submit = new XMLElement('input', 'type', 'submit');
+		$submitIcon = new PageFontIcon('sign-in', PageFontIcon::NORMAL, TRUE);
+		$submitText = new PageText('Anmelden');
+		
+		$submit = new XMLElement('button', 'type', 'submit', 'name' , 'submit-button', 'value', 'val');
+		$submit->addChild($submitIcon->toXML());
+		$submit->addChild($submitText->toXML());
+		
+		$login->addChild($loginHeader = new XMLElement('h2'));
+		$loginHeader->addChild(new XMLText('Login'));
 		
 		if (Session::loginFailed()) {
 			$failed = new XMLElement('div', 'id', 'login-failed');
@@ -50,16 +56,13 @@ class PageLogin extends PageElement {
 		}
 		
 		$login->addChild($form);
-			$form->addChild($divLeft);
-				$divLeft->addChild($divUser);
-					$divUser->addChild($userLabel);
-					$divUser->addChild($user);
-				$divLeft->addChild($divPass);
-					$divPass->addChild($passwordLabel);
-					$divPass->addChild($password);
-			$form->addChild($divRight);
-				$divRight->addChild($divSubmit);
-					$divSubmit->addChild($submit);
+			$form->addChild($divUser);
+				$divUser->addChild($userLabel);
+				$divUser->addChild($user);
+			$form->addChild($divPass);
+				$divPass->addChild($passwordLabel);
+				$divPass->addChild($password);
+			$form->addChild($submit);
 		
 		return $login;
 	}

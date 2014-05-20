@@ -1,20 +1,29 @@
 <?php
 
-require_once 'lib/utils.php';
-require_once 'lib/xml/xmlnode.php';
-
 class XMLElement extends XMLNode {
 	
 	/**
 	 * @var string
 	 */
-	private $name;
+	protected $name;
 	
 	/**
 	 * @var array
 	 */
-	private $attributes = NULL;
+	protected $attributes = NULL;
 		
+//	/**
+//	 * 
+//	 * @param string $name
+//	 * @param string|null $id
+//	 * @param string|null $class
+//	 */
+//	function __construct($name, $id=NULL, $class=NULL) {
+//		$this->name = $name;
+//		if ($id !== NULL) { $this->addAttribute('id', $id); }
+//		if ($class !== NULL) { $this->addAttribute('class', $class); }
+//	}
+	
 	public function __construct($name) {
 		$this->name = $name;
 		$argumentCount = func_num_args();

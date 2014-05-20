@@ -13,6 +13,7 @@ class URL {
     private $user;
     private $pass;
     private $path;
+	/** @var array|null */
     private $query;
     private $fragment;
 
@@ -134,6 +135,10 @@ class URL {
 		return $this->path;
 	}
 
+	/**
+	 * 
+	 * @return array|null
+	 */
 	public function getQuery() {
 		return $this->query;
 	}
@@ -166,6 +171,10 @@ class URL {
 		$this->path = $path;
 	}
 
+	/**
+	 * 
+	 * @param array|null $query
+	 */
 	public function setQuery($query) {
 		$this->query = $query;
 	}
@@ -185,9 +194,13 @@ class URL {
 	}
 	
 	/**
+	 * Sets a query parameter. If a previous query parameter with the same name 
+	 * exists it will be overriden and the old value will be returned. Setting 
+	 * the value of a query parameter to NULL will remove the existing query 
+	 * parameter.
 	 * 
 	 * @param string $name
-	 * @param string $value
+	 * @param string|null $value
 	 * @return string|null
 	 * @throws InvalidArgumentException
 	 */
@@ -203,10 +216,12 @@ class URL {
 			return NULL;
 		}
 		$old = isset($this->query[$name]) ? $this->query[$name] : NULL;
-		if ($value === NULL && $old !== NULL) {
-			unset($this->query[$name]);
-			if (count($this->query) == 0) {
-				$this->query = NULL;
+		if ($value === NULL) {
+			if ($old !== NULL) {
+				unset($this->query[$name]);
+				if (count($this->query) == 0) {
+					$this->query = NULL;
+				}
 			}
 		} else {
 			$this->query[$name] = $value;

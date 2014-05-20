@@ -49,9 +49,12 @@ class Session {
 	}
 
 	public static function setUserName($userName) {
-		Session::set('user_name', $userName);
+		self::set('user_name', $userName);
 	}
 
+	public static function getUserName() {
+		return self::get('user_name');
+	}
 	
 	/**
 	 * 
@@ -116,6 +119,14 @@ class Session {
 			$logoutUrl->setQuery(NULL);
 		}
 		$logoutUrl->redirect();
+	}
+	
+	public static function fixMimeType() {
+		if (stristr(filter_input(INPUT_SERVER, "HTTP_ACCEPT"),"application/xhtml+xml")) {
+			header("Content-type: application/xhtml+xml");
+		} else { 
+			header("Content-type: text/html"); 
+		}
 	}
 
 }

@@ -19,7 +19,7 @@ class PageCalendarList extends PageContainer{
     
     public function toXML() {
         $result = $this->dbConnection->query("
-            SELECT c.id, c.name, c.owner_id 
+            SELECT c.id, c.name 
             FROM ( 
                 SELECT gcr.calendar_id 
                 FROM group_calendar_relations as gcr 
@@ -31,15 +31,18 @@ class PageCalendarList extends PageContainer{
                 ON gcr.group_id = groups.group_id 
                 ) as t 
             JOIN calendars as c ON c.id = t.calendar_id;", Session::getUserID());
-       
-        $calendarList = new XMLElement('div');
+        
+        $container = new XMLElement('div');
+        $container->addAttribute('class', 'container');
         $rowCount = $this->dbConnection->countRows($result);
-        for ($i = 0; $i < $rowCount; $i++) {
-            $a = $this->dbConnection->fetchRow($result);
-            $item = new PageCalendarListItem($a[0], $a[1], $a[2]);
-            $calendarList->addChild($item->toXML());
+        while($a = mysql_fetch_row($result)) {
+            $item = new PageCalendarListItem($a[0], $a[1]);
+            $container->addChild($item->toXML());
         }
-       
+        
+        $calendarList = new XMLElement('div');
+        $calendarList->addAttribute('id', 'sidebar-actions');
+        $calendarList->addChild($container);
         return $calendarList;
     }
 }

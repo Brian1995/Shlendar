@@ -14,6 +14,12 @@ class PageCalendar extends PageElement {
 	 */
 	private $viewDate = NULL;
 	
+	function __construct() {
+		parent::__construct('div');
+		$this->setProperty('id', 'sidebar-calendar');
+	}
+
+	
 	/**
 	 * 
 	 * @return Date
@@ -51,6 +57,8 @@ class PageCalendar extends PageElement {
 	}
 	
 	public function toXML() {
+		$calendar = parent::toXML();
+		
 		$currentDate  = $this->getCurrentDate();
 		$viewDate     = $this->getViewDate();
 		$firstOfMonth = $viewDate->copy()->setToFirstWeekdayOfMonth(Date::MONDAY);
@@ -60,8 +68,6 @@ class PageCalendar extends PageElement {
 		}
 		$day = $topLeftDate->copy();
 		
-		$calendar = new XMLElement('div', 'id', 'sidebar-calendar');
-		
 		$nav = new XMLElement('div', 'id', 'sidebar-calendar-header');
 		$nav->addChild($navPrevious = new XMLElement('div', 'class', 'previous'));
 		$nav->addChild($navTitle    = new XMLElement('div', 'class', 'title'));
@@ -69,12 +75,12 @@ class PageCalendar extends PageElement {
 		
 		$urlPrevious = URL::urlFromCurrent();
 		$urlPrevious->setQueryParameter('viewDate', $viewDate->copy()->addMonths(-1)->toDateString());
-		$linkPrevious = new PageLink(new PageFontIcon('caret-left', PageFontIcon::LARGER, TRUE), $urlPrevious);
+		$linkPrevious = new PageLink(new PageFontIcon('chevron-left', PageFontIcon::NORMAL, TRUE), $urlPrevious);
 		$navPrevious->addChild($linkPrevious->toXML());
 
 		$urlNext = URL::urlFromCurrent();
 		$urlNext->setQueryParameter('viewDate', $viewDate->copy()->addMonths(1)->toDateString());
-		$linkNext = new PageLink(new PageFontIcon('caret-right', PageFontIcon::LARGER, TRUE), $urlNext);
+		$linkNext = new PageLink(new PageFontIcon('chevron-right', PageFontIcon::NORMAL, TRUE), $urlNext);
 		$navNext->addChild($linkNext->toXML());
 		
 		$navTitle->addChild($navTitleH3 = new XMLElement('h3'));
@@ -100,6 +106,9 @@ class PageCalendar extends PageElement {
 				$class .= ' day'.$x;
 				if ($day->isSameDay($currentDate)) {
 					$class .= ' current';
+				}
+				if ($day->isSameDay($viewDate)) {
+					$class .= ' selected';
 				}
 				if ($day->isSameMonth($firstOfMonth)) {
 					$class .= ' current-month';
