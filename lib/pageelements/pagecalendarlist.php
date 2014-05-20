@@ -12,12 +12,13 @@ class PageCalendarList extends PageContainer{
     private $userID;
     
     public function __construct($dbConnection) {
+		parent::__construct();
         $this->dbConnection = $dbConnection;
         $this->userID = Session::getUserID();
     }
     
     public function toXML() {
-        $result = $this->dbConnection->query('
+        $result = $this->dbConnection->query("
             SELECT c.id, c.name, c.owner_id 
             FROM ( 
                 SELECT gcr.calendar_id 
@@ -25,16 +26,15 @@ class PageCalendarList extends PageContainer{
                 JOIN ( 
                     SELECT gur.group_id 
                     FROM group_user_relations as gur 
-                    WHERE gur.user_id = '.Session::getUserID().
-                    ') as groups 
+                    WHERE gur.user_id = '%s'
+                    ) as groups 
                 ON gcr.group_id = groups.group_id 
                 ) as t 
-            JOIN calendars as c ON c.id = t.calendar_id 
-            ');    
+            JOIN calendars as c ON c.id = t.calendar_id;", Session::getUserID());
        
         $calendarList = new XMLElement('div');
-        
-        for ($i = 0; $i < mysql_num_rows($result); $i++) {
+        $rowCount = $this->dbConnection->countRows($result);
+        for ($i = 0; $i < $rowCount; $i++) {
             $a = $this->dbConnection->fetchRow($result);
             $item = new PageCalendarListItem($a[0], $a[1], $a[2]);
             $calendarList->addChild($item->toXML());

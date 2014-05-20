@@ -15,16 +15,15 @@ class XMLElement extends XMLNode {
 	 */
 	private $attributes = NULL;
 		
-	/**
-	 * 
-	 * @param string $name
-	 * @param string|null $id
-	 * @param string|null $class
-	 */
-	function __construct($name, $id=NULL, $class=NULL) {
+	public function __construct($name) {
 		$this->name = $name;
-		if ($id !== NULL) { $this->addAttribute('id', $id); }
-		if ($class !== NULL) { $this->addAttribute('class', $class); }
+		$argumentCount = func_num_args();
+		$arguments = func_get_args();
+		for ($i = 1; $i < $argumentCount; $i += 2) {
+			$attributeName = $arguments[$i];
+			$attributeValue = $arguments[$i+1];
+			$this->addAttribute($attributeName, $attributeValue);
+		}
 	}
 	
 	public function getName() {

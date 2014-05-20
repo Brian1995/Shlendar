@@ -60,42 +60,42 @@ class PageCalendar extends PageElement {
 		}
 		$day = $topLeftDate->copy();
 		
-		$calendar = new XMLElement('div', 'sidebar-calendar');
+		$calendar = new XMLElement('div', 'id', 'sidebar-calendar');
 		
-		$nav = new XMLElement('div', 'sidebar-calendar-header', 'table');
-		$nav->addChild($navrow = new XMLElement('div', NULL, 'row'));
-		$navrow->addChild($navPrevious = new XMLElement('div', NULL, 'cell previous'));
-		$navrow->addChild($navTitle = new XMLElement('div', NULL, 'cell title'));
-		$navrow->addChild($navNext = new XMLElement('div', NULL, 'cell next'));
+		$nav = new XMLElement('div', 'id', 'sidebar-calendar-header');
+		$nav->addChild($navPrevious = new XMLElement('div', 'class', 'previous'));
+		$nav->addChild($navTitle    = new XMLElement('div', 'class', 'title'));
+		$nav->addChild($navNext     = new XMLElement('div', 'class', 'next'));
 		
 		$urlPrevious = URL::urlFromCurrent();
 		$urlPrevious->setQueryParameter('viewDate', $viewDate->copy()->addMonths(-1)->toDateString());
-		$linkPrevious = new PageLink(new PageText('<<'), $urlPrevious);
+		$linkPrevious = new PageLink(new PageFontIcon('caret-left', PageFontIcon::LARGER, TRUE), $urlPrevious);
 		$navPrevious->addChild($linkPrevious->toXML());
 
 		$urlNext = URL::urlFromCurrent();
 		$urlNext->setQueryParameter('viewDate', $viewDate->copy()->addMonths(1)->toDateString());
-		$linkNext = new PageLink(new PageText('>>'), $urlNext);
+		$linkNext = new PageLink(new PageFontIcon('caret-right', PageFontIcon::LARGER, TRUE), $urlNext);
 		$navNext->addChild($linkNext->toXML());
 		
-		$navTitle->addChild(new XMLText($viewDate->formatLocalized('%B %Y')));
+		$navTitle->addChild($navTitleH3 = new XMLElement('h3'));
+		$navTitleH3->addChild(new XMLText($viewDate->formatLocalized('%B %Y')));
 			
-		$table = new XMLElement('div', 'sidebar-calendar-entries', 'table');
+		$table = new XMLElement('div', 'id', 'sidebar-calendar-entries');
 		
 		// add weekday header row
-		$row = new XMLElement('div', NULL, 'row dayrow');
+		$row = new XMLElement('div', 'class', 'dayrow');
 		$table->addChild($row);
 		for ($x=0; $x<7; $x++) {
-			$cell = new XMLElement('div', NULL, 'cell day day'.$x);
+			$cell = new XMLElement('div', 'class', 'day day'.$x);
 			$cell->addChild(new XMLText($day->copy()->addDays($x)->toShortDayName()));
 			$row->addChild($cell);
 		}
 		
 		for ($y=0; $y<6; $y++) {
-			$row = new XMLElement('div', NULL, 'row entryrow');
+			$row = new XMLElement('div', 'class', 'entryrow');
 			$table->addChild($row);
 			for ($x=0; $x<7; $x++) {
-				$cell = new XMLElement('div', NULL, 'cell');
+				$cell = new XMLElement('div', 'class', 'cell');
 				$class = $cell->getAttribute('class');
 				$class .= ' day'.$x;
 				if ($day->isSameDay($currentDate)) {

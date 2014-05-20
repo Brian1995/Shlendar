@@ -30,11 +30,9 @@ class PageImage extends PageElement {
 	
 	public function toXML() {
 		if ($this->getImageURL() !== NULL) {
-			$img = new XMLElement('img');
-			$img->setAttribute('src', $this->getImageURL());
+			$img = new XMLElement('img', 'src', $this->getImageURL());
 			if ($this->getLink() !== NULL) {
-				$a = new XMLElement('a');
-				$a->setAttribute('href', $this->getLink());
+				$a = new XMLElement('a', 'href', $this->getLink());
 				$a->addChild($img);
 				return $a;
 			} 

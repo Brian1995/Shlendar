@@ -1,31 +1,15 @@
 <?php
 
+require_once 'lib/utils.php';
+
 class PageHeader extends PageElement {
-	
-	/** @var PageImage */
-	private $logo;
 	
 	/** @var PageElement */
 	private $title;
 	
-	/**
-	 * 
-	 * @return PageImage|null
-	 */
-	public function getLogo() {
-		return $this->logo;
-	}
-
-	/**
-	 * 
-	 * @param PageImage|null $logo
-	 * @return \PageHeader
-	 */
-	public function setLogo($logo) {
-		$this->logo = $logo;
-		return $this;
-	}
-
+	/** @var string */
+	private $logoText = '';
+	
 	/**
 	 * 
 	 * @return PageElement|null
@@ -44,28 +28,35 @@ class PageHeader extends PageElement {
 		return $this;
 	}
 	
+	public function setLogoText($logoText='') {
+		$this->logoText = $logoText;
+	}
+	
+	public function getLogoText() {
+		return $this->logoText;
+	}
+	
 	public function toXML() {
-		$header = new XMLElement('header');
-		$header->addAttribute('id', 'site-header');
-		$header->addAttribute('class', 'table blured');
-		$header->addChild($headerContainer = new XMLElement('div'));
-		$headerContainer->addAttribute('class', 'row');
+		$header = new XMLElement('header', 'id', 'site-header');
+		$header->addChild($sub = new XMLElement('div'));
 
-		$left = new XMLElement('div');
-		$left->addAttribute('class', 'cell left');
-		$headerContainer->addChild($left);
-
-		$center = new XMLElement('div');
-		$center->addAttribute('class', 'cell center');
-		$headerContainer->addChild($center);
+		$left   = new XMLElement('div', 'class', 'logo');
+		$center = new XMLElement('div', 'class', 'title');
+		$right = new XMLElement('div', 'class', 'login');
 		
-		$right = new XMLElement('div');
-		$right->addAttribute('class', 'cell right');
-		$headerContainer->addChild($right);
+		$sub->addChild($left);
+		$sub->addChild($center);
+		$sub->addChild($right);
 		
-		if ($this->getLogo() !== NULL) {
-			$left->addChild($this->getLogo()->toXML());
-		}
+		$logoURL = URL::urlFromCurrent();
+		$logoURL->setPath(URL::urlFromBase()->getPath());
+		$logoURL->setPathRelativeToCurrentPath('index.php');
+		$logoURL->setQueryParameter('action', NULL);
+		$left->addChild($logoLink = new XMLElement('a', 'href', $logoURL));
+		$logoLink->addChild($logoSpan = new XMLElement('span'));
+		$logoSpan->addChild($logoSpan2 = new XMLElement('span'));
+		$logoSpan2->addChild($logoText = new XMLText($this->logoText));
+		
 		if ($this->getTitle() !== NULL) {
 			$h1 = new XMLElement('h1');
 			$center->addChild($h1);
