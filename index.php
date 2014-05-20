@@ -113,6 +113,14 @@ switch ($action) {
 	case 'logout':
 		Session::logout();
 		break;
+	case 'manage-groups':
+		ensureLogin();
+		addSidebarCalendar();
+		addSidebarActions();
+		addSidebarCalendarList();
+		$groupManagement = new PageGroupManagement();
+		$content->addChild($groupManagement);
+		break;
 	case 'manage-calendars':
 		ensureLogin();
 		addSidebarCalendar();
