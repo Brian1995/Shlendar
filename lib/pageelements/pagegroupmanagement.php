@@ -22,8 +22,11 @@ class PageGroupManagement extends PageElement {
 	
 	private function createGroupList() {
 		$list = new XMLElement('div', 'class', 'group-list');
-		$userId = Session::getUserID();
+		$list->addChild($header = new XMLElement('h2'));
+		$header->addChild(new XMLText('Gruppenzugehörigkeit'));
+		$list->addChild($content = new XMLElement('div', 'class', 'group-list-container'));
 		
+		$userId = Session::getUserID();
 		$result = $this->db->query(
 			"SELECT g.name as name, g.id as id 
 				FROM group_user_relations AS r
@@ -35,7 +38,7 @@ class PageGroupManagement extends PageElement {
 			$count = DatabaseConnection::countRows($result);
 			for ($index = 0; $index < $count; $index++) {
 				$row = DatabaseConnection::fetchRow($result);
-				$list->addChild($this->createGroupElement($row, $index, $userId, $row['id']));
+				$content->addChild($this->createGroupElement($row, $index, $userId, $row['id']));
 			}
 		}
 		return $list;

@@ -108,7 +108,8 @@ main { display: flex; }
 /** CONTENT *******************************************************************/
 #content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> }
 #content > div { margin: 1em; }
-#content > div > h1 { padding-bottom: 0.7em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
+#content h1 { margin-top: 0.7em; margin-bottom: 0.4em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
+#content h2 { margin-top: 0.7em; margin-bottom: 0.4em; font-size: 1.4em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 /** LOGIN *********************************************************************/
 
 #login-failed { padding: 0.5em; margin-bottom: 0.7em; <?=$C_WARNING?> <?=FONT_IMPORTANT?> display: table; }
