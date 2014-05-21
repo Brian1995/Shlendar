@@ -121,7 +121,7 @@ switch ($action) {
 		addSidebarCalendar();
 		addSidebarActions();
 		addSidebarCalendarList();
-		$groupManagement = new PageGroupManagement();
+		$groupManagement = new PageGroupManagement($dbConnection);
 		$content->addChild($groupManagement);
 		break;
 	case 'manage-calendars':
