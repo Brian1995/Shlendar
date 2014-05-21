@@ -106,8 +106,9 @@ main { display: flex; }
 #sidebar-actions .action a:hover { background: <?=GRAY_LIGHTER?>; }
 
 /** CONTENT *******************************************************************/
-#content { padding: 1em 2em; <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> }
-#content h2 { padding-bottom: 0.7em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
+#content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> }
+#content > div { margin: 1em; }
+#content > div > h1 { padding-bottom: 0.7em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 /** LOGIN *********************************************************************/
 
 #login-failed { padding: 0.5em; margin-bottom: 0.7em; <?=$C_WARNING?> <?=FONT_IMPORTANT?> display: table; }
