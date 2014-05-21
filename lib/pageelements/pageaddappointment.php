@@ -20,20 +20,24 @@ class PageAddAppointment extends PageContainer{
 	 * @return boolean
 	 */
 	public static function addApppointment($dbConnection){
-		var_dump("bla");
 		if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_DEFAULT) === 'POST') {
 			if (filter_has_var(INPUT_POST, 'title') && filter_has_var(INPUT_POST, 'fromDate')&& filter_has_var(INPUT_POST, 'toDate')&& filter_has_var(INPUT_POST, 'description')) {
-				$title = filter_input(INPUT_POST, 'title');
-				$from = filter_input(INPUT_POST, 'fromDate');
-				$to = filter_input(INPUT_POST, 'toDate');
+				$title       = filter_input(INPUT_POST, 'title');
+				$from        = filter_input(INPUT_POST, 'fromDate');
+				$to          = filter_input(INPUT_POST, 'toDate');
 				$description = filter_input(INPUT_POST, 'description');
 				$url = URL::urlFromCurrent();
-				var_dump($url);
-				$calendar = $url->getQueryParameter('calendar_id');
-				$dbConnection->query("INSERT INTO appointments as a, a.calendar_id, a.from_date, a.to_date, a.title, a.description"
-						. "VALUE ('%s', '%s', '%s', '%s', '%s');", $calendar, $from, $to, $title, $description);
-				$url->setQueryParameter('action', 'listAppointments');
-				$url->redirect();
+				$calendar = $url->getQueryParameter('calendar');
+				$result = $dbConnection->query(
+					"INSERT INTO appointments (calendar_id, start_date, end_date, title, description)
+					 VALUE ('%s', '%s', '%s', '%s', '%s');"
+					, $calendar, $from, $to, $title, $description);
+				if ($result) {
+					$url->setQueryParameter('action', 'listAppointments');
+					$url->redirect();
+				} else {
+					echo mysql_error();
+				}
 			}
 		}
 		return false;

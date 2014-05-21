@@ -101,7 +101,6 @@ function addSidebarCalendarList() {
 /* CONTENT ******************************************************************* */
 
 $titleText = NULL;
-var_dump($action);
 switch ($action) {
 	case 'login':
 		$titleText = 'Login';
@@ -162,9 +161,7 @@ switch ($action) {
 		$url->redirect();
 		break;
 	case 'addAppointment':
-		var_dump("bla");
 		$i = PageAddAppointment::addApppointment($dbConnection);
-		var_dump($i);
 		break;
 	default:
 		addSidebarCalendar();
@@ -177,7 +174,6 @@ switch ($action) {
 		} else {
 			$content->addChild(new PageText("Willkommen bei Shlendar"));
 		}
-
 		break;
 }
 
