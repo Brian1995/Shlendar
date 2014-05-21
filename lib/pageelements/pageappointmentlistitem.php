@@ -4,7 +4,7 @@
  *
  * @author Brian
  */
-class PageAppointmentListItem {
+class PageAppointmentListItem{
     
     private $id;
     private $calendar_id;
@@ -25,7 +25,7 @@ class PageAppointmentListItem {
     private $description;
     
     function __construct($id, $calendar_id, $start_date, $end_date, $title, $description) {
-        $this->id = $id;
+		$this->id = $id;
         $this->calendar_id = $calendar_id;
         $this->start_date = $start_date;
         $this->end_date = $end_date;
@@ -44,10 +44,16 @@ class PageAppointmentListItem {
         $description = new XMLElement('p');
         $description->addChild(new XMLText($this->description));
         
+		$url = URL::urlFromRelativePath('index.php');
+		$url->setQueryParameter('action', 'deleteAppointment');
+		$url->setQueryParameter('appointment', $this->id);
+		$deleteBtn = new PageLink(new PageText("löschen"), $url);
+		
         $item = new XMLElement('div');
         $item->addChild($title);
         $item->addChild($time);
         $item->addChild($description);
+		$item->addChild($deleteBtn->toXML());
         return $item;
     }
 }
