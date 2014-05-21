@@ -101,7 +101,7 @@ function addSidebarCalendarList() {
 /* CONTENT ******************************************************************* */
 
 $titleText = NULL;
-
+var_dump($action);
 switch ($action) {
 	case 'login':
 		$titleText = 'Login';
@@ -132,8 +132,12 @@ switch ($action) {
 		ensureLogin();
 		$calendar = $url_current->getQueryParameter('calendar');
 		$app = new PageAppointmentList($dbConnection, $calendar);
+		$url = URL::urlFromCurrent();
+		$url->setQueryParameter('action', 'addAppointment');
+		$add = new PageAddAppointment($url);
 		$content->addChild($app);
-
+		$content->addChild($add);
+		
 		addSidebarCalendar();
 		addSidebarActions();
 		addSidebarCalendarList();
@@ -145,6 +149,11 @@ switch ($action) {
 		$result = $dbConnection->query("DELETE FROM appointments WHERE id = '%s';", $id);
 		$url->setQueryParameter('action', 'listAppointments');
 		$url->redirect();
+		break;
+	case 'addAppointment':
+		var_dump("bla");
+		$i = PageAddAppointment::addApppointment($dbConnection);
+		var_dump($i);
 		break;
 	default:
 		addSidebarCalendar();

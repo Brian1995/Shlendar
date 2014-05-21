@@ -4,6 +4,7 @@ require_once 'lib/xml.php';
 
 require_once 'lib/pageelements/pageelement.php';
 	require_once 'lib/pageelements/pageaction.php';
+	require_once 'lib/pageelements/pageaddappointment.php';
 	require_once 'lib/pageelements/pageappointmentlist.php';
 	require_once 'lib/pageelements/pageappointmentlistitem.php';
 	require_once 'lib/pageelements/pagecalendar.php';
