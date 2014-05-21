@@ -16,6 +16,5 @@ require_once 'lib/pageelements/pageelement.php';
 	require_once 'lib/pageelements/pagelink.php';
 	require_once 'lib/pageelements/pagelogin.php';
 	require_once 'lib/pageelements/pagelogo.php';
-	require_once 'lib/pageelements/pagestack.php';
-	require_once 'lib/pageelements/pageheader.php';
 	require_once 'lib/pageelements/pagetext.php';
+	require_once 'lib/pageelements/pagetextcontainer.php';

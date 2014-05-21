@@ -27,11 +27,11 @@ class PageLogin extends PageElement {
 		
 		$userLabel = new XMLElement('div');
 		$userLabel->addChild(new XMLText('Benutzer'));
-		$user = new XMLElement('input', 'type', 'text', 'name', 'username');
+		$user = new XMLElement('input', 'type', 'text', 'name', 'username', 'maxlength', '255');
 		
 		$passwordLabel = new XMLElement('div');
 		$passwordLabel->addChild(new XMLText("Passwort"));
-		$password = new XMLElement('input', 'type', 'password', 'name', 'password');
+		$password = new XMLElement('input', 'type', 'password', 'name', 'password', 'maxlength', '255');
 		
 		$submitIcon = new PageFontIcon('sign-in', PageFontIcon::NORMAL, TRUE);
 		$submitText = new PageText('Anmelden');
@@ -39,10 +39,7 @@ class PageLogin extends PageElement {
 		$submit = new XMLElement('button', 'type', 'submit', 'name' , 'submit-button', 'value', 'val');
 		$submit->addChild($submitIcon->toXML());
 		$submit->addChild($submitText->toXML());
-		
-		$login->addChild($loginHeader = new XMLElement('h2'));
-		$loginHeader->addChild(new XMLText('Login'));
-		
+				
 		if (Session::loginFailed()) {
 			$failed = new XMLElement('div', 'id', 'login-failed');
 			$failedText1 = new XMLElement('p', 'id', 'login-failed-text1');

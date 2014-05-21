@@ -26,31 +26,31 @@ $url_start->setQueryParameter('action', NULL);
 $action = $url_current->getQueryParameter('action');
 
 /** MAIN STRUCTURE *********************************************************** */
-$body = new PageStack('body');
+$body = new PageContainer('body');
 $body->setProperties('class', '' . $action);
-$header = new PageStack('header');
+$header = new PageContainer('header');
 $header->setProperties('id', 'header');
-$main = new PageStack('main');
+$main = new PageContainer('main');
 $main->setProperties('id', 'main');
-$footer = new PageStack('footer');
+$footer = new PageContainer('footer');
 $footer->setProperties('id', 'footer');
 
 $body->addChild($header);
 $body->addChild($main);
 $body->addChild($footer);
 
-$mainColumns = new PageStack('div');
+$mainColumns = new PageContainer('div');
 $mainColumns->setProperties('id', 'main-columns');
 $main->addChild($mainColumns);
 
-$sidebar = new PageStack('div');
+$sidebar = new PageContainer('div');
 $sidebar->setProperties('id', 'sidebar');
-$content = new PageStack('div');
+$content = new PageContainer('div');
 $content->setProperties('id', 'content');
 
 /* PAGE HEADER *************************************************************** */
 $header->addChild(new PageLogo('Shlendar', $url_start));
-$header->addChild($topActions = new PageStack());
+$header->addChild($topActions = new PageContainer());
 $topActions->setProperty('class', 'header-actions');
 if ($logged_in) {
 	$topLoginActionText = 'Ausloggen';
@@ -85,8 +85,8 @@ function addSidebarCalendar() {
 
 function addSidebarActions() {
 	global $sidebar;
-	$sidebarActions = new PageStack('div', 'id', 'sidebar-actions');
-	$sidebarActions->addChild($sidebarActionsContainer = new PageStack('div', 'class', 'container'));
+	$sidebarActions = new PageContainer('div', 'id', 'sidebar-actions');
+	$sidebarActions->addChild($sidebarActionsContainer = new PageContainer('div', 'class', 'container'));
 	$sidebarActionsContainer->addChild(new PageAction('manage-calendars', 'Kalender verwalten', new PageFontIcon('calendar-o', PageFontIcon::LARGER, TRUE)));
 	$sidebarActionsContainer->addChild(new PageAction('manage-groups', 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::LARGER, TRUE)));
 	$sidebar->addChild($sidebarActions);
@@ -181,10 +181,11 @@ switch ($action) {
 			addSidebarCalendarList();
 		}
 		if ($logged_in) {
-			$content->addChild(new PageText("Willkommen " . Session::getUserName()));
+			$titleText = 'Willkommen '.Session::getUserName();
 		} else {
-			$content->addChild(new PageText("Willkommen bei Shlendar"));
+			$titleText = 'Willkommen bei Shlendar';
 		}
+		$content->addChild(new PageTextContainer(PageTextContainer::P, 'Ein fürchterlicher Kalender...'));
 		break;
 }
 
@@ -194,6 +195,7 @@ if ($sidebar->hasChildren()) {
 	$mainColumns->addChild($sidebar);
 }
 if ($content->hasChildren()) {
+	$content->addChild(new PageTextContainer(PageTextContainer::H1, $titleText), 0);
 	$mainColumns->addChild($content);
 }
 

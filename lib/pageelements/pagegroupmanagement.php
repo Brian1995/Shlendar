@@ -13,8 +13,6 @@ class PageGroupManagement extends PageElement {
 	
 	public function toXML() {
 		$element = parent::toXML();
-		$element->addChild($headline = new XMLElement('h1'));
-		$headline->addChild(new XMLText('Gruppen verwalten'));
 		$element->addChild($this->createGroupList());
 		$element->addChild($this->createInsertDialog());
 		return $element;
