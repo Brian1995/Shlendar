@@ -13,11 +13,14 @@ class PageGroupManagement extends PageElement {
 	
 	public function toXML() {
 		$element = parent::toXML();
-		
 		$element->addChild($headline = new XMLElement('h1'));
 		$headline->addChild(new XMLText('Gruppen verwalten'));
-		
-		$element->addChild($list = new XMLElement('div', 'class', 'group-list'));
+		$element->addChild($this->createGroupList());
+		return $element;
+	}
+	
+	private function createGroupList() {
+		$list = new XMLElement('div', 'class', 'group-list');
 		$userId = Session::getUserID();
 		
 		$result = $this->db->query(
@@ -34,8 +37,7 @@ class PageGroupManagement extends PageElement {
 				$list->addChild($this->createGroupElement($row, $index, $userId, $row['id']));
 			}
 		}
-		
-		return $element;
+		return $list;
 	}
 	
 	private function createGroupElement($row, $index, $userId, $groupId) {
@@ -67,9 +69,14 @@ class PageGroupManagement extends PageElement {
 		if (!self::isGroupOwner($db, $userId, $groupId)) {
 			return FALSE;
 		}
-		$r1 = $db->query("DELETE FROM groups WHERE user_id = '%s' AND id = '%s';", $userId, $groupId);
-		$r2 = $db->query("DELETE FROM group_user_relations WHERE group_id = '%s';", $groupId);
-		$r3 = $db->query("DELETE FROM group_calendar_relations WHERE group_id = '%s';", $groupId);
-		return $r1 && $r2 && $r3;
+		$r = $db->query("DELETE FROM groups WHERE user_id = '%s' AND id = '%s';", $userId, $groupId);
+		return $r;
+	}
+	
+	public static function insertGroup(DatabaseConnection $db, $userId, $groupName) {
+		$r1 = $db->query("INSERT INTO groups (user_id, name) VALUES ('%s', '%s');", $userId, $groupName);
+		$groupId = $db->query("SELECT LAST_INSERT_ID();");
+		$r2 = $db->query("INSERT INTO group_user_relations (user_id, group_id) VALUES ('%s', '%s');", $userId, $groupId); // TODO
+		return $r1 && $r2;
 	}
 }
