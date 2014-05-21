@@ -117,22 +117,33 @@ switch ($action) {
 		break;
 	case 'manage-groups':
 		ensureLogin();
+		$titleText = 'Gruppen Verwalten';
 		addSidebarCalendar();
 		addSidebarActions();
 		addSidebarCalendarList();
 		$groupManagement = new PageGroupManagement($dbConnection);
 		$content->addChild($groupManagement);
 		break;
+	case 'insert-group':
+		ensureLogin();
+		$referrer = $url_current->getQueryParameter('referrer');
+		if (PageGroupManagement::insertGroup($dbConnection)) {
+			URL::urlFromString($referrer)->redirect();
+		} else {
+			// TODO error page
+		}
+		break;
 	case 'delete-group':
 		ensureLogin();
 		$userId = Session::getUserID();
 		$groupId = $url_current->getQueryParameter('id');
 		$referrer = $url_current->getQueryParameter('referrer');
-		if (PageGroupManagement::isGroupOwner($dbConnection, $userId, $groupId)) {
-			PageGroupManagement::deleteGroup($dbConnection, $userId, $groupId);
+		if (PageGroupManagement::isGroupOwner($dbConnection, $userId, $groupId) &&
+			PageGroupManagement::deleteGroup($dbConnection, $userId, $groupId)) {
+			URL::urlFromString($referrer)->redirect();
+		} else {
+			// TODO error page
 		}
-		$url = URL::urlFromString($referrer);
-		$url->redirect();
 		break;
 	case 'manage-calendars':
 		ensureLogin();
