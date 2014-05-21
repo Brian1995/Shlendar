@@ -121,6 +121,17 @@ switch ($action) {
 		$groupManagement = new PageGroupManagement($dbConnection);
 		$content->addChild($groupManagement);
 		break;
+	case 'delete-group':
+		ensureLogin();
+		$userId = Session::getUserID();
+		$groupId = $url_current->getQueryParameter('id');
+		$referrer = $url_current->getQueryParameter('referrer');
+		if (PageGroupManagement::isGroupOwner($dbConnection, $userId, $groupId)) {
+			PageGroupManagement::deleteGroup($dbConnection, $userId, $groupId);
+		}
+		$url = URL::urlFromString($referrer);
+		$url->redirect();
+		break;
 	case 'manage-calendars':
 		ensureLogin();
 		addSidebarCalendar();
