@@ -19,7 +19,7 @@ class PageCalendarList extends PageContainer{
     
     public function toXML() {
         $result = $this->dbConnection->query("
-            SELECT c.id, c.name 
+            SELECT DISTINCT c.id, c.name 
             FROM ( 
                 SELECT gcr.calendar_id 
                 FROM group_calendar_relations as gcr 
@@ -30,7 +30,11 @@ class PageCalendarList extends PageContainer{
                     ) as groups 
                 ON gcr.group_id = groups.group_id 
                 ) as t 
-            JOIN calendars as c ON c.id = t.calendar_id;", Session::getUserID());
+            JOIN calendars as c		ON c.id = t.calendar_id
+			UNION DISTINCT 
+				SELECT ca.id, ca.name
+				FROM calendars as ca
+				WHERE ca.user_id = '%s';", Session::getUserID(), Session::getUserID());
         
         $container = new XMLElement('div');
         $container->addAttribute('class', 'container');

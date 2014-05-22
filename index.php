@@ -8,7 +8,7 @@ mb_internal_encoding("UTF-8");
 setlocale(LC_ALL, 'de_DE.utf-8');
 URL::setBasePath('projekt');
 session_start();
-Session::fixMimeType();
+//Session::fixMimeType();
 
 $dbConnection = new DatabaseConnection('localhost', 'projekt', 'projekt', 'projekt');
 $dbConnection->connect();
@@ -16,8 +16,8 @@ $dbConnection->connect();
 $logged_in = Session::isLoggedIn();
 
 $url_current = URL::urlFromCurrent();
-$url_base    = URL::urlFromBase();
-$url_start   = new URL($url_current);
+$url_base = URL::urlFromBase();
+$url_start = new URL($url_current);
 
 $url_start->setPathRelativeToCurrentPath('index.php');
 $url_start->setQuery($url_current->getQuery());
@@ -25,37 +25,39 @@ $url_start->setQueryParameter('action', NULL);
 
 $action = $url_current->getQueryParameter('action');
 
-/** MAIN STRUCTURE ************************************************************/
-$body = new PageStack('body');
+/** MAIN STRUCTURE *********************************************************** */
+$body = new PageContainer('body');
 $body->setProperties('class', '' . $action);
-$header = new PageStack('header');
+$header = new PageContainer('header');
 $header->setProperties('id', 'header');
-$main = new PageStack('main');
+$main = new PageContainer('main');
 $main->setProperties('id', 'main');
-$footer = new PageStack('footer');
+$footer = new PageContainer('footer');
 $footer->setProperties('id', 'footer');
 
 $body->addChild($header);
 $body->addChild($main);
 $body->addChild($footer);
 
-$mainColumns = new PageStack('div');
+$mainColumns = new PageContainer('div');
 $mainColumns->setProperties('id', 'main-columns');
 $main->addChild($mainColumns);
 
-$sidebar = new PageStack('div'); $sidebar->setProperties('id', 'sidebar');
-$content = new PageStack('div'); $content->setProperties('id', 'content');
+$sidebar = new PageContainer('div');
+$sidebar->setProperties('id', 'sidebar');
+$content = new PageContainer('div');
+$content->setProperties('id', 'content');
 
 /* PAGE HEADER *************************************************************** */
 $header->addChild(new PageLogo('Shlendar', $url_start));
-$header->addChild($topActions = new PageStack());
+$header->addChild($topActions = new PageContainer());
 $topActions->setProperty('class', 'header-actions');
 if ($logged_in) {
-    $topLoginActionText = 'Ausloggen';
-    $topLoginActionAction = 'logout';
+	$topLoginActionText = 'Ausloggen';
+	$topLoginActionAction = 'logout';
 } else {
-    $topLoginActionText = 'Einloggen';
-    $topLoginActionAction = 'login';
+	$topLoginActionText = 'Einloggen';
+	$topLoginActionAction = 'login';
 }
 $topLoginActionUrl = new URL($url_start);
 $topLoginActionUrl->setQuery(NULL);
@@ -64,7 +66,8 @@ $topLoginAction = new PageLink(new PageText($topLoginActionText), $topLoginActio
 $topLoginAction->setProperty('id', 'header-actions-login');
 $topActions->addChild($topLoginAction);
 
-/* HELPERS ********************************************************************/
+/* HELPERS ******************************************************************* */
+
 function ensureLogin() {
 	if (!Session::isLoggedIn()) {
 		global $url_start;
@@ -76,16 +79,16 @@ function ensureLogin() {
 function addSidebarCalendar() {
 	global $sidebar, $url_current;
 	$calendar = new PageCalendar();
-	$calendar->setViewDate(new Date($url_current->getQueryParameter('viewDate')));	
+	$calendar->setViewDate(new Date($url_current->getQueryParameter('viewDate')));
 	$sidebar->addChild($calendar);
 }
 
 function addSidebarActions() {
 	global $sidebar;
-	$sidebarActions = new PageStack('div', 'id', 'sidebar-actions');
-	$sidebarActions->addChild($sidebarActionsContainer = new PageStack('div', 'class', 'container'));
+	$sidebarActions = new PageContainer('div', 'id', 'sidebar-actions');
+	$sidebarActions->addChild($sidebarActionsContainer = new PageContainer('div', 'class', 'container'));
 	$sidebarActionsContainer->addChild(new PageAction('manage-calendars', 'Kalender verwalten', new PageFontIcon('calendar-o', PageFontIcon::LARGER, TRUE)));
-	$sidebarActionsContainer->addChild(new PageAction('manage-groups', 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::LARGER, TRUE)));	
+	$sidebarActionsContainer->addChild(new PageAction('manage-groups', 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::LARGER, TRUE)));
 	$sidebar->addChild($sidebarActions);
 }
 
@@ -95,10 +98,9 @@ function addSidebarCalendarList() {
 	$sidebar->addChild($calendars);
 }
 
-/* CONTENT ********************************************************************/
+/* CONTENT ******************************************************************* */
 
 $titleText = NULL;
-
 switch ($action) {
 	case 'login':
 		$titleText = 'Login';
@@ -113,39 +115,89 @@ switch ($action) {
 	case 'logout':
 		Session::logout();
 		break;
+	case 'manage-groups':
+		ensureLogin();
+		$titleText = 'Gruppen Verwalten';
+		addSidebarCalendar();
+		addSidebarActions();
+		addSidebarCalendarList();
+		$groupManagement = new PageGroupManagement($dbConnection);
+		$content->addChild($groupManagement);
+		break;
+	case 'insert-group':
+		ensureLogin();
+		$referrer = $url_current->getQueryParameter('referrer');
+		if (PageGroupManagement::insertGroup($dbConnection)) {
+			URL::urlFromString($referrer)->redirect();
+		} else {
+			// TODO error page
+		}
+		break;
+	case 'delete-group':
+		ensureLogin();
+		$userId = Session::getUserID();
+		$groupId = $url_current->getQueryParameter('id');
+		$referrer = $url_current->getQueryParameter('referrer');
+		if (PageGroupManagement::isGroupOwner($dbConnection, $userId, $groupId) &&
+			PageGroupManagement::deleteGroup($dbConnection, $userId, $groupId)) {
+			URL::urlFromString($referrer)->redirect();
+		} else {
+			// TODO error page
+		}
+		break;
 	case 'manage-calendars':
 		ensureLogin();
 		addSidebarCalendar();
 		break;
-    case 'listAppointments':
+	case 'listAppointments':
 		ensureLogin();
-        $calendar = $url_current->getQueryParameter('calendar');
-        $app = new PageAppointmentList($dbConnection, $calendar);
-        $content->addChild($app);
-        
+		$calendar = $url_current->getQueryParameter('calendar');
+		$app = new PageAppointmentList($dbConnection, $calendar);
+		$url = URL::urlFromCurrent();
+		$url->setQueryParameter('action', 'addAppointment');
+		$add = new PageAddAppointment($url);
+		$content->addChild($app);
+		$content->addChild($add);
+		
 		addSidebarCalendar();
 		addSidebarActions();
-		addSidebarCalendarList();        
-        break;
+		addSidebarCalendarList();
+		break;
+	case 'deleteAppointment':
+		ensureLogin();
+		$url = URL::urlFromCurrent();
+		$id = $url->getQueryParameter('appointment');
+		$result = $dbConnection->query("DELETE FROM appointments WHERE id = '%s';", $id);
+		$url->setQueryParameter('action', 'listAppointments');
+		$url->redirect();
+		break;
+	case 'addAppointment':
+		$i = PageAddAppointment::addApppointment($dbConnection);
+		break;
 	default:
 		addSidebarCalendar();
-		if ($logged_in) { 
+		if ($logged_in) {
 			addSidebarActions();
 			addSidebarCalendarList();
 		}
 		if ($logged_in) {
-			$content->addChild(new PageText("Willkommen ".Session::getUserName()));
+			$titleText = 'Willkommen '.Session::getUserName();
 		} else {
-			$content->addChild(new PageText("Willkommen bei Shlendar"));
+			$titleText = 'Willkommen bei Shlendar';
 		}
-		
+		$content->addChild(new PageTextContainer(PageTextContainer::P, 'Ein fürchterlicher Kalender...'));
 		break;
 }
 
-/* PAGE CONSTRUCTION **********************************************************/
+/* PAGE CONSTRUCTION ********************************************************* */
 
-if ($sidebar->hasChildren()) { $mainColumns->addChild($sidebar); }
-if ($content->hasChildren()) { $mainColumns->addChild($content); }
+if ($sidebar->hasChildren()) {
+	$mainColumns->addChild($sidebar);
+}
+if ($content->hasChildren()) {
+	$content->addChild(new PageTextContainer(PageTextContainer::H1, $titleText), 0);
+	$mainColumns->addChild($content);
+}
 
 echo '<?xml version="1.0" encoding="UTF-8" ?>' . "\r\n";
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\r\n\r\n";

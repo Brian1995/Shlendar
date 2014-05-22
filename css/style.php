@@ -41,8 +41,8 @@ $C_WARNING      = "background: ".RED."; color: ".WHITE.";";
 ?>
 <style>
 	
-*{border:0px;padding:0px;margin:0px;font-size:100%;font-weight:inherit;text-decoration:inherit;color:inherit;background:transparent;}
-*{border:0px;padding:0px;margin:0px;font-size:100%;font-weight:inherit;text-decoration:inherit;color:inherit;background:transparent;}
+*{border:0px;padding:0px;margin:0px;font-size:100%;font-family:inherit;font-weight:inherit;text-decoration:inherit;color:inherit;background:transparent;}
+*{border:0px;padding:0px;margin:0px;font-size:100%;font-family:inherit;font-weight:inherit;text-decoration:inherit;color:inherit;background:transparent;}
 
 h1, h2, h3, h4, h5, h6 { <?=FONT_HEADLINE?> }
 
@@ -60,12 +60,12 @@ header { display: flex; flex-flow: row nowrap; justify-content: space-between; }
 header .logo           { display: flex; }
 header .header-actions { display: flex; }
 
-header .logo a { display: flex; align-items: center; }
+header .logo a { display: flex; align-items: center; transition: all 0.30s ease-in-out; }
 header .logo a:hover { <?=$C_HEADER_HOVER?> }
 header .logo .icon { width: 64px; height: 64px; background: url('../img/logo.png'); }
 header .logo .text { <?=FONT_HEADLINE?> font-size: 2em; padding-right: 0.5em; }
 
-header .header-actions a { display: flex; align-items: center; }
+header .header-actions a { display: flex; align-items: center; transition: all 0.30s ease-in-out; }
 header .header-actions a:hover { <?=$C_HEADER_HOVER?> }
 header .header-actions a span { display: block; <?=FONT_HEADLINE?> font-size:1.2em; padding: 0.5em; }
 
@@ -106,19 +106,26 @@ main { display: flex; }
 #sidebar-actions .action a:hover { background: <?=GRAY_LIGHTER?>; }
 
 /** CONTENT *******************************************************************/
-#content { padding: 1em 2em; <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> }
-#content h2 { padding-bottom: 0.7em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
-/** LOGIN *********************************************************************/
+#content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> }
+#content > div { margin: 1em; }
+#content h1 { margin: 0.7em 0.625em 0.9em 0.625em; margin-bottom: 0.9em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
+#content h2 { margin-top: 0.7em; margin-bottom: 0.9em; font-size: 1.4em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 
+#content input[type=text], #content input[type=password] { padding:0.2em 0.3em; color: <?=BLUE_DARKER?>; border: 1px solid <?=GRAY_LIGHT?>; border-radius: 5px; margin: 0.2em 0; transition: all 0.30s ease-in-out; }
+#content input[type=text]:focus, #content input[type=password]:focus { border: 1px solid <?=GRAY_DARK?>; background: <?=WHITE?>; }
+#content button[type=submit] { <?=FONT_IMPORTANT?> padding:0.2em 0.3em; border: 1px solid <?=GREEN_DARK?>; border-radius: 5px; background: <?=GREEN_DARK?>; color: <?=WHITE?>; cursor: pointer; transition: all 0.30s ease-in-out; }
+#content button[type=submit]:hover { background: <?=GREEN?>; }
+
+/** LOGIN *********************************************************************/
 #login-failed { padding: 0.5em; margin-bottom: 0.7em; <?=$C_WARNING?> <?=FONT_IMPORTANT?> display: table; }
 #login-failed-text1 { margin-bottom: 0.5em; font-style: italic; }
 #login-failed-text2 { font-size: 0.8em; }
-#login-form { display: inline-flex; flex-flow: column wrap; }
-#login-user, #login-pass { flex: 1 0 auto; display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: center; }
-#login-user > div, #login-pass > div { flex: 1 0 5em; margin-left: 0; }
-#login-user > input, #login-pass > input { flex: 1 0 auto; border: 1px solid <?=GRAY_LIGHT?>; background: <?=GRAY_LIGHTER?>; margin: 0.4em 0; padding:0.2em; border-radius: 3px; }
-#login-form button { flex: 1 0 auto; display: block; margin: 0.4em 0; padding: 0.2em; border: 1px solid <?=GREEN_DARK?>; background: <?=GREEN_DARK?>; color: <?=WHITE?>; border-radius: 3px; cursor: pointer; }
-#login-form button:hover { background: <?=GREEN?>; }
+#login-form { display: inline-block; flex-flow: column wrap; align-items: flex-start; }
+#login-user, #login-pass { flex: 1 0 auto; display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin-bottom: 0.2em; }
+#login-user > div, #login-pass > div { flex: 1 0 auto; min-width: 5em; }
+#login-user > input, #login-pass > input { flex: 1 0 auto; padding:0.2em; min-width:3em;}
+#login-user > input:focus, #login-pass > input:focus { }
+#login-form button { flex: 1 0 auto; display: block; margin-top:0.4em; width: 100%;  border-radius: 3px; }
 
 /** SIDEBAR CALENDAR LIST *****************************************************/
 #sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}

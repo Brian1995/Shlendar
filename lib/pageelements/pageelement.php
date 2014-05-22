@@ -3,7 +3,7 @@
 /**
  * Base class for all page elements.
  */
-abstract class PageElement {
+class PageElement {
 	
 	/**
 	 * The name of the tag inside the xml representation.
@@ -23,10 +23,17 @@ abstract class PageElement {
 	 * xml representation with toXML() an element name must be given or the 
 	 * method toXML() must be overriden.
 	 * 
-	 * @param string|null $elementName
+	 * @param string|null $elementType
 	 */
-	public function __construct($elementName=NULL) {
-		$this->elementType = $elementName;
+	public function __construct($elementType=NULL) {
+		$this->elementType = $elementType;
+		$argumentCount = func_num_args();
+		$arguments = func_get_args();
+		for ($i = 1; $i < $argumentCount; $i += 2) {
+			$propertyName  = $arguments[$i];
+			$propertyValue = $arguments[$i+1];
+			$this->setProperty($propertyName, $propertyValue);
+		}
 	}
 	
 	/**
@@ -205,7 +212,7 @@ abstract class PageElement {
 /**
  * Base class for alle page elements that can contain other page elements.
  */
-abstract class PageContainer extends PageElement {
+class PageContainer extends PageElement {
 
 	/**
 	 *
@@ -213,9 +220,16 @@ abstract class PageContainer extends PageElement {
 	 */
 	protected $children;
 
-	public function __construct($elementName=NULL) {
+	public function __construct($elementName='div') {
 		parent::__construct($elementName);
 		$this->children = new ArrayList();
+		$argumentCount = func_num_args();
+		$arguments = func_get_args();
+		for ($i = 1; $i < $argumentCount; $i += 2) {
+			$propertyName  = $arguments[$i];
+			$propertyValue = $arguments[$i+1];
+			$this->setProperty($propertyName, $propertyValue);
+		}
 	}
 
 	/**
