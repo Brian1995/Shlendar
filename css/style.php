@@ -110,29 +110,48 @@ main { display: flex; }
 #sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
 
 /** CONTENT *******************************************************************/
-#content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> }
-#content > div { margin: 1em; }
-#content h1 { margin: 0.7em 0.625em 0.9em 0.625em; margin-bottom: 0.9em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
-#content h2 { margin-top: 0.7em; margin-bottom: 0.9em; font-size: 1.4em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
+#content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> background: <?=GRAY_LIGHTER?> }
+#content > div { display: flex; flex-flow: row wrap; justify-content:flex-start; align-items: baseline; padding: 0.5em; }
+#content > div > div { flex: 1 0 auto; margin: 0.5em; padding: 1em; background: <?=WHITE?>; border: 1px solid <?=GRAY_LIGHT?>; }
+#content h1 { margin: 0.7em 0.625em 0em 0.625em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
+#content h2 { margin-bottom: 0.9em; font-size: 1.4em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 
-#content input[type=text], #content input[type=password] { padding:0.2em 0.3em; color: <?=BLUE_DARKER?>; border: 1px solid <?=GRAY_LIGHT?>; border-radius: 5px; margin: 0.2em 0; transition: all 0.30s ease-in-out; }
+#content input[type=text], #content input[type=password] { font-size: 0.9em; padding:0.1em 0.3em; color: <?=BLUE_DARKER?>; border: 1px solid <?=GRAY_LIGHT?>; border-radius: 5px; margin: 0.2em 0; transition: all 0.30s ease-in-out; }
 #content input[type=text]:focus, #content input[type=password]:focus { border: 1px solid <?=GRAY_DARK?>; background: <?=WHITE?>; }
-#content button[type=submit] { <?=FONT_IMPORTANT?> padding:0.2em 0.3em; border: 1px solid <?=GREEN_DARK?>; border-radius: 5px; background: <?=GREEN_DARK?>; color: <?=WHITE?>; cursor: pointer; transition: all 0.30s ease-in-out; }
-#content button[type=submit]:hover { background: <?=GREEN?>; }
+#content button[type=submit] { <?=FONT_IMPORTANT?> font-size: 0.9em; padding:0.1em 0.3em; border: 1px solid <?=GRAY_DARK?>; border-radius: 5px; background: <?=GRAY_DARK?>; color: <?=WHITE?>; cursor: pointer; transition: all 0.30s ease-in-out; }
+#content button[type=submit]:hover { background: <?=GRAY_DARKER?>; }
+#content button[type=submit].submit { border: 1px solid <?=GREEN_DARK?>; background: <?=GREEN_DARK?>; }
+#content button[type=submit].submit:hover { background: <?=GREEN?>; }
 
 /** LOGIN *********************************************************************/
-#login-failed { padding: 0.5em; margin-bottom: 0.7em; <?=$C_WARNING?> <?=FONT_IMPORTANT?> display: table; }
-#login-failed-text1 { margin-bottom: 0.5em; font-style: italic; }
-#login-failed-text2 { font-size: 0.8em; }
-#login-form { display: inline-block; flex-flow: column wrap; align-items: flex-start; }
-#login-user, #login-pass { flex: 1 0 auto; display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin-bottom: 0.2em; }
-#login-user > div, #login-pass > div { flex: 1 0 auto; min-width: 5em; }
-#login-user > input, #login-pass > input { flex: 1 0 auto; padding:0.2em; min-width:3em;}
-#login-user > input:focus, #login-pass > input:focus { }
-#login-form button { flex: 1 0 auto; display: block; margin-top:0.4em; width: 100%;  border-radius: 3px; }
+#login .login-failed { padding: 0.5em; margin-bottom: 0.7em; <?=$C_WARNING?> <?=FONT_IMPORTANT?> }
+#login .login-failed p:first-child { margin-bottom: 0.5em; font-style: italic; }
+#login .login-failed p:last-child { font-size: 0.8em; }
 
+#login .login-form { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.3em -0.6em; }
+#login .login-userpass { flex: 1 1 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
+#login .login-button { flex: 1 0 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
+
+#login .login-userpass { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.3em -0.6em; }
+#login .login-user { flex: 1 1 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
+#login .login-pass { flex: 1 1 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
+
+#login .login-user { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.2em; }
+#login .login-user > div { flex: 0 0 auto; margin: 0.2em; min-width: 4em; text-align: right; }
+#login .login-user > input { flex: 1 1 auto; margin: 0.2em; }
+
+#login .login-pass { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.2em; }
+#login .login-pass > div { flex: 0 0 auto; margin: 0.2em; min-width: 4em; text-align: right; }
+#login .login-pass > input { flex: 1 1 auto; margin: 0.2em; }
+
+#login .login-button button { width: 100%; }
 
 /** GROUP MANAGEMENT **********************************************************/
+#group-management .group-list-item { display: flex; flex-flow: row wrap; align-items: baseline; justify-content: space-between; border: 1px solid <?=GRAY_LIGHT?>; padding: 0.2em; margin-bottom:-1px; }
+#group-management .group-list-item:first-child { border-radius: 5px 5px 0 0; }
+#group-management .group-list-item:last-child { margin-bottom: 1px; border-radius: 0 0 5px 5px; }
+#group-management .group-list-item-name { flex: 1 0 auto; }
+
 
 /** FOOTER ********************************************************************/
 footer { <?=$C_FOOTER?> height: 200px; }

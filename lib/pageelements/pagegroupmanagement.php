@@ -21,7 +21,7 @@ class PageGroupManagement extends PageElement {
 	private function createGroupList() {
 		$list = new XMLElement('div', 'class', 'group-list');
 		$list->addChild($header = new XMLElement('h2'));
-		$header->addChild(new XMLText('Gruppenzugehörigkeit'));
+		$header->addChild(new XMLText('Gruppen bearbeiten'));
 		$list->addChild($content = new XMLElement('div', 'class', 'group-list-container'));
 		
 		$userId = Session::getUserID();
@@ -44,8 +44,8 @@ class PageGroupManagement extends PageElement {
 	
 	private function createGroupElement($row, $index, $userId, $groupId) {
 		$isGroupOwner = self::isGroupOwner($this->db, $userId, $groupId);
-		$groupItem = new XMLElement('div', 'class', 'groupitem');
-		$groupItem->addChild($name = new XMLElement('div', 'class', 'groupitem-name'));
+		$groupItem = new XMLElement('div', 'class', 'group-list-item');
+		$groupItem->addChild($name = new XMLElement('div', 'class', 'group-list-item-name'));
 		if ($isGroupOwner) {
 			$editUrl = URL::urlFromRelativePath('index.php', URL::urlFromBase());
 			$editUrl->setQueryParameter('action', 'edit-group');
