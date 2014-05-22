@@ -100,10 +100,10 @@ main { display: flex; }
 
 /** SIDEBAR ACTIONS ***********************************************************/
 #sidebar-actions { font-size: 0.9em; padding: 0.5em 0; }
-#sidebar-actions .container { display: table; margin: 0 auto; }
-#sidebar-actions .action { display: flex; }
-#sidebar-actions .action a { display: block; width: 100%; height: 100%; padding: 0.5em; }
+#sidebar-actions .container { }
+#sidebar-actions .action a { display: block; padding-left: 1em; }
 #sidebar-actions .action a:hover { background: <?=GRAY_LIGHTER?>; }
+#sidebar-actions .action a span { line-height: 2em; }
 
 /** CONTENT *******************************************************************/
 #content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> }

@@ -50,12 +50,14 @@ class PageAction extends PageElement {
 		$actionURL->setQuery(URL::urlFromCurrent()->getQuery());
 		$actionURL->setQueryParameter('action', $this->getAction());
 		$link = new XMLElement('a', 'href', $actionURL);
+		$span = new XMLElement('span');
 		$icon = $this->getIcon();
 		if ($icon !== NULL) {
-			$link->addChild($icon->toXML());
+			$span->addChild($icon->toXML());
 		}
 		$labelElement = new PageText($this->getLabel());
-		$link->addChild($labelElement->toXML());
+		$span->addChild($labelElement->toXML());
+		$link->addChild($span);
 		$element->addChild($link);
 		return $element;
 	}
