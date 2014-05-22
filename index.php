@@ -8,7 +8,7 @@ mb_internal_encoding("UTF-8");
 setlocale(LC_ALL, 'de_DE.utf-8');
 URL::setBasePath('projekt');
 session_start();
-//Session::fixMimeType();
+Session::fixMimeType();
 
 $dbConnection = new DatabaseConnection('localhost', 'projekt', 'projekt', 'projekt');
 $dbConnection->connect();
@@ -206,18 +206,17 @@ $rootNode = new XMLElement('html', 'xmlns', 'http://www.w3.org/1999/xhtml');
 $headNode = new XMLElement('head');
 $titleNode = new XMLElement('title');
 $titleTextNode = new XMLText('Shlendar' . ($titleText == NULL ? '' : ' - ' . $titleText));
-$charsetNode = new XMLElement('meta', 'http-equiv', 'content-type', 'content', 'text/html; charset=utf-8');
-$styleNode = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'css/style.php');
-$fontNode = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext');
-$iconsNode = new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css');
 
 $rootNode->addChild($headNode);
 $headNode->addChild($titleNode);
 $titleNode->addChild($titleTextNode);
-$headNode->addChild($charsetNode);
-$headNode->addChild($styleNode);
-$headNode->addChild($fontNode);
-$headNode->addChild($iconsNode);
+
+//$headNode->addChild(new XMLElement('meta', 'http-equiv', 'content-type', 'content', 'text/html; charset=utf-8'));
+$headNode->addChild(new XMLElement('meta', 'name', 'viewport', 'content', 'width=device-width, initial-scale=1'));
+$headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'css/style.php'));
+$headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext'));
+$headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css'));
+
 $rootNode->addChild($body->toXML());
 
 $printer = new XMLPrinter();

@@ -43,16 +43,28 @@ class PageGroupManagement extends PageElement {
 	}
 	
 	private function createGroupElement($row, $index, $userId, $groupId) {
+		$isGroupOwner = self::isGroupOwner($this->db, $userId, $groupId);
 		$groupItem = new XMLElement('div', 'class', 'groupitem');
 		$groupItem->addChild($name = new XMLElement('div', 'class', 'groupitem-name'));
-		$name->addChild(new XMLText($row['name']));
+		if ($isGroupOwner) {
+			$editUrl = URL::urlFromRelativePath('index.php', URL::urlFromBase());
+			$editUrl->setQueryParameter('action', 'edit-group');
+			$editUrl->setQueryParameter('id', $groupId);
+			$editLink = new PageLink(new PageText($row['name']), $editUrl);
+			$name->addChild($editLink->toXML());
+		} else {
+			$name->addChild(new XMLText($row['name']));
+		}
 		
-		if (self::isGroupOwner($this->db, $userId, $groupId)) {
-			$submitUrl = URL::urlFromRelativePath("index.php", URL::urlFromBase());
-			$submitUrl->setQueryParameter('action', 'delete-group');
-			$submitUrl->setQueryParameter('id', $groupId);
-			$submitUrl->setQueryParameter('referrer', URL::urlFromCurrent());
-			$groupItem->addChild($delete = new XMLElement('form', 'class', 'groupitem-delete', 'action', $submitUrl, 'method', 'post'));
+		if ($isGroupOwner) {
+			$groupItem->addChild($edit = new XMLElement('a', 'class', 'groupitem-edit', 'action' ));
+			
+			$deleteUrl = URL::urlFromRelativePath("index.php", URL::urlFromBase());
+			$deleteUrl->setQueryParameter('action', 'delete-group');
+			$deleteUrl->setQueryParameter('id', $groupId);
+			$deleteUrl->setQueryParameter('referrer', URL::urlFromCurrent());
+			
+			$groupItem->addChild($delete = new XMLElement('form', 'class', 'groupitem-delete', 'action', $deleteUrl, 'method', 'post'));
 			$delete->addChild($deleteButton = new XMLElement('button', 'type', 'submit'));
 			$deleteButton->addChild(new XMLText('Löschen'));
 		}

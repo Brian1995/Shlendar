@@ -105,6 +105,10 @@ main { display: flex; }
 #sidebar-actions .action a:hover { background: <?=GRAY_LIGHTER?>; }
 #sidebar-actions .action a span { line-height: 2em; }
 
+/** SIDEBAR CALENDAR LIST *****************************************************/
+#sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
+#sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
+
 /** CONTENT *******************************************************************/
 #content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> }
 #content > div { margin: 1em; }
@@ -127,9 +131,9 @@ main { display: flex; }
 #login-user > input:focus, #login-pass > input:focus { }
 #login-form button { flex: 1 0 auto; display: block; margin-top:0.4em; width: 100%;  border-radius: 3px; }
 
-/** SIDEBAR CALENDAR LIST *****************************************************/
-#sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
-#sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
+
+/** GROUP MANAGEMENT **********************************************************/
+#
 
 /** FOOTER ********************************************************************/
 footer { <?=$C_FOOTER?> height: 200px; }
