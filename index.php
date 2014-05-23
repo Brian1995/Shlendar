@@ -70,8 +70,14 @@ $topActions->addChild($topLoginAction);
 
 function ensureLogin() {
 	if (!Session::isLoggedIn()) {
-		global $url_start;
-		$url_start->redirect(); // TODO Should redirect to login page?
+		global $url_current;
+		$loginUrl = URL::urlFromRelativePath('index.php', URL::urlFromBase());
+		$loginUrl->setQueryParameter('action', 'login');
+		$loginUrl->setQueryParameter('referrer', $url_current);
+		$loginUrl->redirect();
+		
+		//global $url_start;
+		//$url_start->redirect(); // TODO Should redirect to login page?
 		exit(0);
 	}
 }
@@ -106,11 +112,14 @@ switch ($action) {
 		$titleText = 'Login';
 		$url = URL::urlFromRelativePath("index.php", URL::urlFromBase());
 		$url->setQueryParameter('action', 'login_exec');
+		$url->setQueryParameter('referrer', $url_current->getQueryParameter('referrer'));
 		$content->addChild(new PageLogin($url));
 		addSidebarCalendar();
 		break;
 	case 'login_exec':
-		Session::execLogin($dbConnection);
+		$referrer = $url_current->getQueryParameter('referrer');
+		$referrerUrl = $referrer ? URL::urlFromString($referrer) : NULL;
+		Session::execLogin($dbConnection, $referrerUrl);
 		break;
 	case 'logout':
 		Session::logout();

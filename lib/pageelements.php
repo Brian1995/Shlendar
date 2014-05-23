@@ -7,6 +7,7 @@ require_once 'lib/pageelements/pageelement.php';
 	require_once 'lib/pageelements/pageaddappointment.php';
 	require_once 'lib/pageelements/pageappointmentlist.php';
 	require_once 'lib/pageelements/pageappointmentlistitem.php';
+	require_once 'lib/pageelements/pagebutton.php';
 	require_once 'lib/pageelements/pagecalendar.php';
 	require_once 'lib/pageelements/pagecalendarlist.php';
 	require_once 'lib/pageelements/pagecalendarlistitem.php';

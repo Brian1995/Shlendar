@@ -37,12 +37,7 @@ class PageLogin extends PageElement {
 		$passwordLabel->addChild(new XMLText("Passwort"));
 		$password = new XMLElement('input', 'type', 'password', 'name', 'password', 'maxlength', '255');
 		
-		$submitIcon = new PageFontIcon('sign-in', PageFontIcon::NORMAL, TRUE);
-		$submitText = new PageText('Anmelden');
-		
-		$submit = new XMLElement('button', 'type', 'submit', 'name' , 'submit-button', 'value', 'val', 'class', 'submit');
-		$submit->addChild($submitIcon->toXML());
-		$submit->addChild($submitText->toXML());
+		$submit = new PageButton('Anmelden', PageButton::STYLE_SUBMIT, PageFontIcon::create('sign-in', PageFontIcon::NORMAL, TRUE));
 		
 		$submitContainer = new XMLElement('div', 'class', 'login-button');
 				
@@ -66,7 +61,7 @@ class PageLogin extends PageElement {
 						$divPass->addChild($passwordLabel);
 						$divPass->addChild($password);
 				$form->addChild($submitContainer);
-					$submitContainer->addChild($submit);
+					$submitContainer->addChild($submit->toXML());
 		
 		return $login;
 	}

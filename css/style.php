@@ -111,7 +111,7 @@ main { display: flex; }
 
 /** CONTENT *******************************************************************/
 #content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> background: <?=GRAY_LIGHTER?> }
-#content > div { display: flex; flex-flow: row wrap; justify-content:flex-start; align-items: baseline; padding: 0.5em; }
+#content > div { display: flex; flex-flow: row wrap; justify-content:flex-start; align-items: stretch; padding: 0.5em; }
 #content > div > div { flex: 1 0 auto; margin: 0.5em; padding: 1em; background: <?=WHITE?>; border: 1px solid <?=GRAY_LIGHT?>; }
 #content h1 { margin: 0.7em 0.625em 0em 0.625em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 #content h2 { margin-bottom: 0.9em; font-size: 1.4em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
@@ -122,6 +122,10 @@ main { display: flex; }
 #content button[type=submit]:hover { background: <?=GRAY_DARKER?>; }
 #content button[type=submit].submit { border: 1px solid <?=GREEN_DARK?>; background: <?=GREEN_DARK?>; }
 #content button[type=submit].submit:hover { background: <?=GREEN?>; }
+#content button[type=submit].delete { border: 1px solid <?=RED_DARK?>; background: <?=RED_DARK?>; }
+#content button[type=submit].delete:hover { background: <?=RED?>; }
+#content button[type=submit].edit { border: 1px solid <?=BLUE_LIGHT?>; background: <?=BLUE_LIGHT?>; }
+#content button[type=submit].edit:hover { background: <?=BLUE_LIGHTER?>; }
 
 /** LOGIN *********************************************************************/
 #login .login-failed { padding: 0.5em; margin-bottom: 0.7em; <?=$C_WARNING?> <?=FONT_IMPORTANT?> }
@@ -130,27 +134,46 @@ main { display: flex; }
 
 #login .login-form { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.3em -0.6em; }
 #login .login-userpass { flex: 1 1 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
-#login .login-button { flex: 1 0 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
+#login .login-button   { flex: 1 0 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
 
 #login .login-userpass { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.3em -0.6em; }
 #login .login-user { flex: 1 1 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
 #login .login-pass { flex: 1 1 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
 
 #login .login-user { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.2em; }
-#login .login-user > div { flex: 0 0 auto; margin: 0.2em; min-width: 4em; text-align: right; }
+#login .login-user > div   { flex: 0 0 auto; margin: 0.2em; min-width: 4em; text-align: right; }
 #login .login-user > input { flex: 1 1 auto; margin: 0.2em; }
 
 #login .login-pass { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.2em; }
-#login .login-pass > div { flex: 0 0 auto; margin: 0.2em; min-width: 4em; text-align: right; }
+#login .login-pass > div   { flex: 0 0 auto; margin: 0.2em; min-width: 4em; text-align: right; }
 #login .login-pass > input { flex: 1 1 auto; margin: 0.2em; }
 
 #login .login-button button { width: 100%; }
 
 /** GROUP MANAGEMENT **********************************************************/
-#group-management .group-list-item { display: flex; flex-flow: row wrap; align-items: baseline; justify-content: space-between; border: 1px solid <?=GRAY_LIGHT?>; padding: 0.2em; margin-bottom:-1px; }
-#group-management .group-list-item:first-child { border-radius: 5px 5px 0 0; }
-#group-management .group-list-item:last-child { margin-bottom: 1px; border-radius: 0 0 5px 5px; }
-#group-management .group-list-item-name { flex: 1 0 auto; }
+#group-management .group-list-container  { display: flex; flex-flow: column nowrap; align-items: stretch; margin: -0.3em -0.6em; }
+#group-management .group-list-item { flex: 1 0 auto; padding: 0.3em 0.6em; }
+
+#group-management .group-list-item { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.3em -0.6em; }
+#group-management .group-list-item-name { flex: 100000 1 auto; padding: 0.3em 0.6em; font-style: italic; }
+#group-management .button-group         { flex: 1 0 auto; padding: 0.3em 0.6em; }
+
+#group-management .button-group { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.2em; }
+#group-management .groupitem-edit   { flex: 1 0 auto; padding: 0.2em; }
+#group-management .groupitem-delete { flex: 1 0 auto; padding: 0.2em; }
+
+#group-management .groupitem-edit   button { width: 100%; }
+#group-management .groupitem-delete button { width: 100%; }
+
+#group-management .group-insert-form { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.3em -0.6em; }
+#group-management .group-insert-form .group-insert-name-container   { flex: 100000 1 auto; padding: 0.3em 0.6em; }
+#group-management .group-insert-form .group-insert-button-container { flex: 1 1 auto; padding: 0.3em 0.6em; }
+
+#group-management .group-insert-form .group-insert-name-container { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.2em; }
+#group-management .group-insert-form .group-insert-name { flex: 1 0 auto; padding: 0.2em; }
+
+#group-management .group-insert-form .group-insert-button-container { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.2em; }
+#group-management .group-insert-form .submit { flex: 1 0 auto; padding: 0.2em; }
 
 
 /** FOOTER ********************************************************************/

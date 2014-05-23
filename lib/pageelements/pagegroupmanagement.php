@@ -46,27 +46,34 @@ class PageGroupManagement extends PageElement {
 		$isGroupOwner = self::isGroupOwner($this->db, $userId, $groupId);
 		$groupItem = new XMLElement('div', 'class', 'group-list-item');
 		$groupItem->addChild($name = new XMLElement('div', 'class', 'group-list-item-name'));
+		$name->addChild(new XMLText($row['name']));
+				
 		if ($isGroupOwner) {
+			
 			$editUrl = URL::urlFromRelativePath('index.php', URL::urlFromBase());
 			$editUrl->setQueryParameter('action', 'edit-group');
 			$editUrl->setQueryParameter('id', $groupId);
-			$editLink = new PageLink(new PageText($row['name']), $editUrl);
-			$name->addChild($editLink->toXML());
-		} else {
-			$name->addChild(new XMLText($row['name']));
-		}
-		
-		if ($isGroupOwner) {
-			$groupItem->addChild($edit = new XMLElement('a', 'class', 'groupitem-edit', 'action' ));
+			$editUrl->setQueryParameter('referrer', URL::urlFromCurrent());
+			
+			$edit = new XMLElement('form', 'class', 'groupitem-edit', 'action', $editUrl);
+			$editButton = new PageButton('Bearbeiten', PageButton::STYLE_EDIT, PageFontIcon::create('edit', PageFontIcon::NORMAL, TRUE));
 			
 			$deleteUrl = URL::urlFromRelativePath("index.php", URL::urlFromBase());
 			$deleteUrl->setQueryParameter('action', 'delete-group');
 			$deleteUrl->setQueryParameter('id', $groupId);
 			$deleteUrl->setQueryParameter('referrer', URL::urlFromCurrent());
+
+			$delete = new XMLElement('form', 'class', 'groupitem-delete', 'action', $deleteUrl, 'method', 'post');
+			$deleteButton = new PageButton('Löschen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE));
+
+			$buttonGroup = new XMLElement('div', 'class', 'button-group');
 			
-			$groupItem->addChild($delete = new XMLElement('form', 'class', 'groupitem-delete', 'action', $deleteUrl, 'method', 'post'));
-			$delete->addChild($deleteButton = new XMLElement('button', 'type', 'submit'));
-			$deleteButton->addChild(new XMLText('Löschen'));
+			$groupItem->addChild($buttonGroup);
+				$buttonGroup->addChild($edit);
+					$edit->addChild($editButton->toXML());
+				$buttonGroup->addChild($delete);
+					$delete->addChild($deleteButton->toXML());
+			
 		}
 		
 		return $groupItem;
@@ -78,12 +85,22 @@ class PageGroupManagement extends PageElement {
 		$submitUrl->setQueryParameter('referrer', URL::urlFromCurrent());
 		
 		$dialog = new XMLElement('div', 'class', 'group-insert');
-		$dialog->addChild($header = new XMLElement('h2'));
-			$header->addChild(new XMLText('Gruppe erstellen'));
-		$dialog->addChild($form = new XMLElement('form', 'class', 'group-insert-form', 'action', $submitUrl, 'method', 'post'));
-			$form->addChild($groupName    = new XMLElement('input', 'class', 'group-insert-name', 'type', 'text', 'name', 'group-name'));
-			$form->addChild($submitButton = new XMLElement('button', 'class', 'group-insert-submit', 'type', 'submit'));
-				$submitButton->addChild(new XMLText('Erstellen'));
+		$header = new PageTextContainer('h2', 'Gruppe erstellen');
+		
+		$form = new XMLElement('form', 'class', 'group-insert-form', 'action', $submitUrl, 'method', 'post');
+		$groupNameContainer = new XMLElement('div', 'class', 'group-insert-name-container');
+		$groupButtonContainer = new XMLElement('div', 'class', 'group-insert-button-container');
+		
+		$groupName = new XMLElement('input', 'class', 'group-insert-name', 'type', 'text', 'name', 'group-name');
+		$submitButton = new PageButton('Erstellen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square', PageFontIcon::NORMAL, TRUE));
+		
+		$dialog->addChild($header->toXML());
+		$dialog->addChild($form);
+			$form->addChild($groupNameContainer);
+				$groupNameContainer->addChild($groupName);
+			$form->addChild($groupButtonContainer);
+				$groupButtonContainer->addChild($submitButton->toXML());
+			
 		return $dialog;
 	}
 	
