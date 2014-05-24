@@ -8,7 +8,7 @@ mb_internal_encoding("UTF-8");
 setlocale(LC_ALL, 'de_DE.utf-8');
 URL::setBasePath('projekt');
 session_start();
-Session::fixMimeType();
+#Session::fixMimeType();
 
 $dbConnection = new DatabaseConnection('localhost', 'projekt', 'projekt', 'projekt');
 $dbConnection->connect();
@@ -154,6 +154,12 @@ switch ($action) {
 			// TODO error page
 		}
 		break;
+	case 'edit-group':
+		ensureLogin();
+		addSidebarCalendar();
+		addSidebarActions();
+		addSidebarCalendarList();
+		break;
 	case 'manage-calendars':
 		ensureLogin();
 		addSidebarCalendar();
@@ -208,8 +214,9 @@ if ($content->hasChildren()) {
 	$mainColumns->addChild($content);
 }
 
-echo '<?xml version="1.0" encoding="UTF-8" ?>' . "\r\n";
-echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\r\n\r\n";
+/*echo '<?xml version="1.0" encoding="UTF-8" ?>' . "\r\n";
+echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\r\n\r\n"; */
+echo '<!DOCTYPE HTML>';
 
 $rootNode = new XMLElement('html', 'xmlns', 'http://www.w3.org/1999/xhtml');
 $headNode = new XMLElement('head');
@@ -225,6 +232,10 @@ $headNode->addChild(new XMLElement('meta', 'name', 'viewport', 'content', 'width
 $headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'css/style.php'));
 $headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext'));
 $headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css'));
+$headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'js/jquery.datetimepicker.css'));
+$headNode->addChild(new XMLElement('script', 'type', 'text/javascript', 'src', 'js/jquery-2.1.1.js'));
+$headNode->addChild(new XMLElement('script', 'type', 'text/javascript', 'src', 'js/jquery.datetimepicker.js'));
+$headNode->addChild(new XMLElement('script', 'type', 'text/javascript', 'src', 'js/script.js'));
 
 $rootNode->addChild($body->toXML());
 

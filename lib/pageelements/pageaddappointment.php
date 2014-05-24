@@ -50,7 +50,7 @@ class PageAddAppointment extends PageContainer{
 		
 		$fromLabel = new XMLElement('div');
 		$fromLabel->addChild(new XMLText("Von"));
-		$from = new XMLElement('input', 'type', 'text', 'name', 'fromDate');
+		$from = new XMLElement('input', 'type', 'text', 'name', 'fromDate', 'id', 'datetimepicker');
 		
 		$toLabel = new XMLElement('div');
 		$toLabel->addChild(new XMLText("Bis"));

@@ -41,8 +41,8 @@ $C_WARNING      = "background: ".RED."; color: ".WHITE.";";
 ?>
 <style>
 	
-*{border:0px;padding:0px;margin:0px;font-size:100%;font-family:inherit;font-weight:inherit;text-decoration:inherit;color:inherit;background:transparent;}
-*{border:0px;padding:0px;margin:0px;font-size:100%;font-family:inherit;font-weight:inherit;text-decoration:inherit;color:inherit;background:transparent;}
+*{border:0px;padding:0px;margin:0px;font-size:100%;font-family:inherit;font-weight:inherit;text-decoration:inherit;color:inherit;background:transparent;box-sizing:inherit;}
+*{border:0px;padding:0px;margin:0px;font-size:100%;font-family:inherit;font-weight:inherit;text-decoration:inherit;color:inherit;background:transparent;box-sizing:inherit;}
 
 h1, h2, h3, h4, h5, h6 { <?=FONT_HEADLINE?> }
 
@@ -128,17 +128,18 @@ main { display: flex; }
 #content button[type=submit].edit:hover { background: <?=BLUE_LIGHTER?>; }
 
 /** LOGIN *********************************************************************/
+#login { box-sizing: border-box; }
 #login .login-failed { padding: 0.5em; margin-bottom: 0.7em; <?=$C_WARNING?> <?=FONT_IMPORTANT?> }
 #login .login-failed p:first-child { margin-bottom: 0.5em; font-style: italic; }
 #login .login-failed p:last-child { font-size: 0.8em; }
 
 #login .login-form { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.3em -0.6em; }
-#login .login-userpass { flex: 1 1 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
-#login .login-button   { flex: 1 0 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
+#login .login-userpass { flex: 1 1 auto; padding: 0.3em 0.6em; }
+#login .login-button   { flex: 1 0 auto; padding: 0.3em 0.6em; }
 
 #login .login-userpass { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.3em -0.6em; }
-#login .login-user { flex: 1 1 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
-#login .login-pass { flex: 1 1 auto; padding: 0.3em 0.6em; box-sizing: border-box; }
+#login .login-user { flex: 1 1 auto; padding: 0.3em 0.6em; }
+#login .login-pass { flex: 1 1 auto; padding: 0.3em 0.6em; }
 
 #login .login-user { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin:-0.2em; }
 #login .login-user > div   { flex: 0 0 auto; margin: 0.2em; min-width: 4em; text-align: right; }
@@ -151,6 +152,7 @@ main { display: flex; }
 #login .login-button button { width: 100%; }
 
 /** GROUP MANAGEMENT **********************************************************/
+#group-management { box-sizing: border-box; }
 #group-management .group-list-container  { display: flex; flex-flow: column nowrap; align-items: stretch; margin: -0.3em -0.6em; }
 #group-management .group-list-item { flex: 1 0 auto; padding: 0.3em 0.6em; }
 
@@ -165,16 +167,12 @@ main { display: flex; }
 #group-management .groupitem-edit   button { width: 100%; }
 #group-management .groupitem-delete button { width: 100%; }
 
-#group-management .group-insert-form { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.3em -0.6em; }
-#group-management .group-insert-form .group-insert-name-container   { flex: 100000 1 auto; padding: 0.3em 0.6em; }
-#group-management .group-insert-form .group-insert-button-container { flex: 1 1 auto; padding: 0.3em 0.6em; }
+#group-management .group-insert-form { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.2em; }
+#group-management .group-insert-form .group-insert-name-container   { flex: 100000 1 auto; padding: 0.2em; }
+#group-management .group-insert-form .group-insert-button-container { flex: 1 1 auto; padding: 0.2em; }
 
-#group-management .group-insert-form .group-insert-name-container { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.2em; }
-#group-management .group-insert-form .group-insert-name { flex: 1 0 auto; padding: 0.2em; }
-
-#group-management .group-insert-form .group-insert-button-container { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.2em; }
-#group-management .group-insert-form .submit { flex: 1 0 auto; padding: 0.2em; }
-
+#group-management .group-insert-form .group-insert-name { width:100%; }
+#group-management .group-insert-form .submit            { width:100%; }
 
 /** FOOTER ********************************************************************/
 footer { <?=$C_FOOTER?> height: 200px; }
