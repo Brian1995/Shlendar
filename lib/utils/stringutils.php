@@ -10,4 +10,12 @@ class StringUtils {
 		return htmlentities($text, ENT_QUOTES | ENT_IGNORE, 'UTF-8');
 	}
 	
+	public static function startsWith($string, $prefix) {
+		return $prefix === "" || substr($string , 0, strlen($prefix)) === $prefix;
+	}
+	
+	private static function endsWith($string, $suffix) {
+		return $suffix === "" || substr($string, -strlen($suffix)) === $suffix;
+	}
+	
 }

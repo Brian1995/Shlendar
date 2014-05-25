@@ -53,7 +53,6 @@ class PageGroupManagement extends PageElement {
 			$editUrl = URL::urlFromRelativePath('index.php', URL::urlFromBase());
 			$editUrl->setQueryParameter('action', 'edit-group');
 			$editUrl->setQueryParameter('id', $groupId);
-			$editUrl->setQueryParameter('referrer', URL::urlFromCurrent());
 			
 			$edit = new XMLElement('form', 'class', 'groupitem-edit', 'action', $editUrl, 'method', 'post');
 			$editButton = new PageButton('Bearbeiten', PageButton::STYLE_EDIT, PageFontIcon::create('edit', PageFontIcon::NORMAL, TRUE));

@@ -156,9 +156,13 @@ switch ($action) {
 		break;
 	case 'edit-group':
 		ensureLogin();
+		$titleText = 'Gruppe bearbeiten';
 		addSidebarCalendar();
 		addSidebarActions();
 		addSidebarCalendarList();
+		
+		
+		
 		break;
 	case 'manage-calendars':
 		ensureLogin();
@@ -166,6 +170,7 @@ switch ($action) {
 		break;
 	case 'listAppointments':
 		ensureLogin();
+		$titleText = 'Termine';
 		$calendar = $url_current->getQueryParameter('calendar');
 		$app = new PageAppointmentList($dbConnection, $calendar);
 		$url = URL::urlFromCurrent();
