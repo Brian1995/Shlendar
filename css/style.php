@@ -101,7 +101,7 @@ main { display: flex; }
 /** SIDEBAR ACTIONS ***********************************************************/
 #sidebar-actions { font-size: 0.9em; padding: 0.5em 0; }
 #sidebar-actions .container { }
-#sidebar-actions .action a { display: block; padding-left: 1em; }
+#sidebar-actions .action a { display: block; }
 #sidebar-actions .action a:hover { background: <?=GRAY_LIGHTER?>; }
 #sidebar-actions .action a span { line-height: 2em; }
 

@@ -83,7 +83,7 @@ function addSidebarCalendar() {
 function addSidebarActions() {
 	global $sidebar;
 	$sidebarActions = new PageContainer('div', 'id', 'sidebar-actions');
-	$sidebarActions->addChild($sidebarActionsContainer = new PageContainer('div', 'class', 'container'));
+	$sidebarActions->addChild($sidebarActionsContainer = new PageContainer('div', 'class', 'action-container'));
 	$sidebarActionsContainer->addChild(new PageAction('manage-calendars', 'Kalender verwalten', new PageFontIcon('calendar-o', PageFontIcon::NORMAL, TRUE)));
 	$sidebarActionsContainer->addChild(new PageAction('manage-groups', 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::NORMAL, TRUE)));
 	$sidebar->addChild($sidebarActions);
