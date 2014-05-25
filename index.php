@@ -203,7 +203,19 @@ switch ($action) {
         $editor = new PageGroupEditor($dbConnection, $groupId, $userId);
         $content->addChild($editor);
         break;
-
+    
+    case 'edit-calendar':
+        ensureLogin();
+        addSidebarCalendar();
+        addSidebarActions();
+        addSidebarCalendarList();
+        
+        $calendarID = $url_current->getDynamicQueryParameter('id');
+        
+        $editor = new PageCalendarEditor($dbConnection, $calendarID);
+        $content->addChild($editor);
+        break;
+    
     case 'manage-calendars':
         ensureLogin();
         addSidebarCalendar();

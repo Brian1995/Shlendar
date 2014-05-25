@@ -31,6 +31,7 @@ class PageCalendarManagement extends PageElement{
     
     function createListItem($id, $name){
         $element = new XMLElement('div');
+        $element->addAttribute('class', 'calendar-list-container');
         
         $deleteUrl = URL::createStatic();
         $deleteUrl->setDynamicQueryParameter('action', 'delete-calendar');
@@ -41,7 +42,15 @@ class PageCalendarManagement extends PageElement{
         $deleteButton = new PageButton('Löschen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE));
         $delete->addChild($deleteButton->toXML());
         
+        $editUrl = $deleteUrl;
+        $editUrl->setDynamicQueryParameter('action', 'edit-calendar');
+        
+        $edit = new XMLElement('form', 'class', 'calendaritem-edit', 'action', $editUrl, 'method', 'post');
+        $editButton = new PageButton('Bearbeiten', PageButton::STYLE_EDIT, PageFontIcon::create('edit', PageFontIcon::NORMAL, TRUE));
+        $edit->addChild($editButton->toXML());
+        
         $element->addChild(new XMLText($name));
+        $element->addChild($edit);
         $element->addChild($delete);
         
         return $element;

@@ -2,11 +2,16 @@
 $(init);
 
 function init() {
-	jQuery('#datetimepicker').datetimepicker({
+	jQuery('#datetimepicker-from').datetimepicker({
 		mask:true,
 		format:'Y-m-d H:i'
 	});
 	
+        jQuery('#datetimepicker-to').datetimepicker({
+		mask:true,
+		format:'Y-m-d H:i'
+	});
+        
 	$(document).ready(function () { 
 		updateActionItemsAlignment();
 		$(window).resize(function() {

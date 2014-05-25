@@ -174,6 +174,10 @@ main { display: flex; }
 #group-management .group-insert-form .group-insert-name { width:100%; }
 #group-management .group-insert-form .submit            { width:100%; }
 
+/** CALENDAR MANAGEMENT *******************************************************/
+#calendar-management { box-sizing: border-box; }
+#calendar-management .calendar-list-container{ display: flex; flex-flow: column nowrap; align-items: stretch; margin: -0.3em -0.6em; }
+
 /** FOOTER ********************************************************************/
 footer { <?=$C_FOOTER?> height: 200px; }
 
