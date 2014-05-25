@@ -15,15 +15,10 @@ $dbConnection->connect();
 
 $logged_in = Session::isLoggedIn();
 
-$url_current = URL::urlFromCurrent();
-$url_base = URL::urlFromBase();
-$url_start = new URL($url_current);
+$url_current = URL::createCurrent();
+$url_start = URL::createStatic($url_current);
 
-$url_start->setPathRelativeToCurrentPath('index.php');
-$url_start->setQuery($url_current->getQuery());
-$url_start->setQueryParameter('action', NULL);
-
-$action = $url_current->getQueryParameter('action');
+$action = $url_current->getDynamicQueryParameter('action');
 
 /** MAIN STRUCTURE *********************************************************** */
 $body = new PageContainer('body');
@@ -60,8 +55,7 @@ if ($logged_in) {
 	$topLoginActionAction = 'login';
 }
 $topLoginActionUrl = new URL($url_start);
-$topLoginActionUrl->setQuery(NULL);
-$topLoginActionUrl->setQueryParameter('action', $topLoginActionAction);
+$topLoginActionUrl->setDynamicQueryParameter('action', $topLoginActionAction);
 $topLoginAction = new PageLink(new PageText($topLoginActionText), $topLoginActionUrl);
 $topLoginAction->setProperty('id', 'header-actions-login');
 $topActions->addChild($topLoginAction);
@@ -70,14 +64,11 @@ $topActions->addChild($topLoginAction);
 
 function ensureLogin() {
 	if (!Session::isLoggedIn()) {
-		global $url_current;
-		$loginUrl = URL::urlFromRelativePath('index.php', URL::urlFromBase());
-		$loginUrl->setQueryParameter('action', 'login');
-		$loginUrl->setQueryParameter('referrer', $url_current);
+		global $url_current, $url_start;
+		$loginUrl = new URL($url_start);
+		$loginUrl->setDynamicQueryParameter('action', 'login');
+		$loginUrl->setDynamicQueryParameter('referrer', $url_current);
 		$loginUrl->redirect();
-		
-		//global $url_start;
-		//$url_start->redirect(); // TODO Should redirect to login page?
 		exit(0);
 	}
 }
@@ -85,7 +76,7 @@ function ensureLogin() {
 function addSidebarCalendar() {
 	global $sidebar, $url_current;
 	$calendar = new PageCalendar();
-	$calendar->setViewDate(new Date($url_current->getQueryParameter('viewDate')));
+	$calendar->setViewDate(new Date($url_current->getStaticQueryParameter('viewDate')));
 	$sidebar->addChild($calendar);
 }
 
@@ -105,25 +96,29 @@ function addSidebarCalendarList() {
 }
 
 /* CONTENT ******************************************************************* */
-
 $titleText = NULL;
+
 switch ($action) {
+	
 	case 'login':
 		$titleText = 'Login';
-		$url = URL::urlFromRelativePath("index.php", URL::urlFromBase());
-		$url->setQueryParameter('action', 'login_exec');
-		$url->setQueryParameter('referrer', $url_current->getQueryParameter('referrer'));
+		$url = URL::createStatic();
+		$url->setDynamicQueryParameter('action', 'login_exec');
+		$url->setDynamicQueryParameter('referrer', $url_current->getDynamicQueryParameter('referrer'));
 		$content->addChild(new PageLogin($url));
 		addSidebarCalendar();
 		break;
+	
 	case 'login_exec':
-		$referrer = $url_current->getQueryParameter('referrer');
-		$referrerUrl = $referrer ? URL::urlFromString($referrer) : NULL;
+		$referrer = $url_current->getDynamicQueryParameter('referrer');
+		$referrerUrl = $referrer ? URL::create($referrer) : NULL;
 		Session::execLogin($dbConnection, $referrerUrl);
 		break;
+	
 	case 'logout':
 		Session::logout();
 		break;
+	
 	case 'manage-groups':
 		ensureLogin();
 		$titleText = 'Gruppen Verwalten';
@@ -133,27 +128,30 @@ switch ($action) {
 		$groupManagement = new PageGroupManagement($dbConnection);
 		$content->addChild($groupManagement);
 		break;
+	
 	case 'insert-group':
 		ensureLogin();
-		$referrer = $url_current->getQueryParameter('referrer');
+		$referrer = $url_current->getDynamicQueryParameter('referrer');
 		if (PageGroupManagement::insertGroup($dbConnection)) {
-			URL::urlFromString($referrer)->redirect();
+			URL::create($referrer)->redirect();
 		} else {
 			// TODO error page
 		}
 		break;
+		
 	case 'delete-group':
 		ensureLogin();
 		$userId = Session::getUserID();
-		$groupId = $url_current->getQueryParameter('id');
-		$referrer = $url_current->getQueryParameter('referrer');
+		$groupId = $url_current->getDynamicQueryParameter('id');
+		$referrer = $url_current->getDynamicQueryParameter('referrer');
 		if (PageGroupManagement::isGroupOwner($dbConnection, $userId, $groupId) &&
 			PageGroupManagement::deleteGroup($dbConnection, $userId, $groupId)) {
-			URL::urlFromString($referrer)->redirect();
+			URL::create($referrer)->redirect();
 		} else {
 			// TODO error page
 		}
 		break;
+		
 	case 'edit-group':
 		ensureLogin();
 		$titleText = 'Gruppe bearbeiten';
@@ -161,39 +159,47 @@ switch ($action) {
 		addSidebarActions();
 		addSidebarCalendarList();
 		
+		$groupId = $url_current->getDynamicQueryParameter('id');
+		$userId  = Session::getUserID();
 		
-		
+		$editor = new PageGroupEditor($dbConnection, $groupId, $userId);
+		$content->addChild($editor);
 		break;
+	
 	case 'manage-calendars':
 		ensureLogin();
 		addSidebarCalendar();
 		break;
+	
 	case 'listAppointments':
 		ensureLogin();
 		$titleText = 'Termine';
-		$calendar = $url_current->getQueryParameter('calendar');
-		$app = new PageAppointmentList($dbConnection, $calendar);
-		$url = URL::urlFromCurrent();
-		$url->setQueryParameter('action', 'addAppointment');
-		$add = new PageAddAppointment($url);
-		$content->addChild($app);
-		$content->addChild($add);
-		
 		addSidebarCalendar();
 		addSidebarActions();
 		addSidebarCalendarList();
+		
+		$calendar = $url_current->getDynamicQueryParameter('calendar');
+		$app = new PageAppointmentList($dbConnection, $calendar);
+		$url = URL::createStatic();
+		$url->setDynamicQueryParameter('action', 'addAppointment');
+		$add = new PageAddAppointment($url);
+		$content->addChild($app);
+		$content->addChild($add);
 		break;
+	
 	case 'deleteAppointment':
 		ensureLogin();
-		$url = URL::urlFromCurrent();
-		$id = $url->getQueryParameter('appointment');
+		$id = $url_current->getDynamicQueryParameter('appointment');
 		$result = $dbConnection->query("DELETE FROM appointments WHERE id = '%s';", $id);
-		$url->setQueryParameter('action', 'listAppointments');
+		$url = URL::createStatic();
+		$url->setDynamicQueryParameter('action', 'listAppointments');
 		$url->redirect();
 		break;
+	
 	case 'addAppointment':
 		$i = PageAddAppointment::addApppointment($dbConnection);
 		break;
+	
 	default:
 		addSidebarCalendar();
 		if ($logged_in) {

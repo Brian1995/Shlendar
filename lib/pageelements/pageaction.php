@@ -46,9 +46,8 @@ class PageAction extends PageElement {
 
 	public function toXML() {
 		$element = parent::toXML();
-		$actionURL = URL::urlFromRelativePath('index.php', URL::urlFromBase());
-		$actionURL->setQuery(URL::urlFromCurrent()->getQuery());
-		$actionURL->setQueryParameter('action', $this->getAction());
+		$actionURL = URL::createStatic();
+		$actionURL->setDynamicQueryParameter('action', $this->getAction());
 		$link = new XMLElement('a', 'href', $actionURL);
 		$span = new XMLElement('span');
 		$icon = $this->getIcon();

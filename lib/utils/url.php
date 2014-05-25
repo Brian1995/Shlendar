@@ -51,6 +51,49 @@ class URL {
 		}
 	}
 	
+	public static function create($urlString) {
+		$url = new URL();
+		$parts = parse_url($urlString);
+		if ($parts) {
+			URL::set($url->scheme, $parts, 'scheme');
+			URL::set($url->host, $parts, 'host');
+			URL::set($url->port, $parts, 'port');
+			URL::set($url->user, $parts, 'user');
+			URL::set($url->pass, $parts, 'pass');
+			URL::set($url->path, $parts, 'path');
+			URL::set($url->query, $parts, 'query', TRUE);
+			URL::set($url->fragment, $parts, 'fragment');
+			return $url;
+		}
+		throw new InvalidArgumentException('not parseable url (url=\''.$urlString.'\'');		
+	}
+	
+	public static function createCurrent() {
+		$https      = filter_input(INPUT_SERVER, 'HTTPS');
+		$httpHost   = filter_input(INPUT_SERVER, 'HTTP_HOST');
+		$requestURI = filter_input(INPUT_SERVER, 'REQUEST_URI');
+		$protocol   = $https ? 'https' : 'http';
+		if ($httpHost && $requestURI) {
+			$urlString = $protocol.'://'.$httpHost.$requestURI;
+			return self::create($urlString);
+		} else {
+			throw new Exception('could note dertermine host or request uri');
+		}
+	}
+	
+	public static function createStatic($url=NULL) {
+		$u = $url === NULL ? self::createCurrent() : new URL($url);
+		$u->removeAllNonStaticQueryParameters();
+		return $u;
+	}
+	
+	public static function createClean($url=NULL) {
+		$u = $url === NULL ? self::createCurrent() : new URL($url);
+		$u->removeAllQueryParameters();
+		return $u;
+	}
+	
+	
 	public static function urlFromString($urlString) {
 		$url = new URL();
 		$parts = parse_url($urlString);
@@ -298,32 +341,26 @@ class URL {
 		return $this->getQueryParameter(self::DYNAMIC_QUERY_PARAMETER_PREFIX.$name);
 	}
 	
-	private function removeAllQueryParameters($prefix=NULL) {
-		if ($prefix === NULL) {
+	private function removeAllQueryParameters($keepPrefix=NULL) {
+		if ($keepPrefix === NULL) {
 			$this->query = NULL;
 		} else {
-			foreach ($u->query as $name => $value) {
-				if (StringUtils::startsWith($name, $prefix)) {
-					unset($u->query[$name]);
+			foreach ($this->query as $name => $value) {
+				if (!StringUtils::startsWith($name, $keepPrefix)) {
+					unset($this->query[$name]);
 				}
 			}
 		}
 	}
 		
-	public function removeAllStaticQueryParameters() {
+	public function removeAllNonStaticQueryParameters() {
 		$this->removeAllQueryParameters(self::STATIC_QUERY_PARAMETER_PREFIX);
 	}
 	
-	public function removeAllDynamicQueryParameters() {
+	public function removeAllNonDynamicQueryParameters() {
 		$this->removeAllQueryParameters(self::DYNAMIC_QUERY_PARAMETER_PREFIX);
 	}
-	
-	public static function createStatic(URL $url) {
-		$u = new URL($url);
-		$u->removeAllDynamicQueryParameters();
-		return $u;
-	}
-	
+		
 	public function setPathRelativeToCurrentPath($relativePath) {
 		$path = $this->getPath();
 		

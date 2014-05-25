@@ -12,6 +12,7 @@ require_once 'lib/pageelements/pageelement.php';
 	require_once 'lib/pageelements/pagecalendarlist.php';
 	require_once 'lib/pageelements/pagecalendarlistitem.php';
 	require_once 'lib/pageelements/pagefonticon.php';
+	require_once 'lib/pageelements/pagegroupeditor.php';
 	require_once 'lib/pageelements/pagegroupmanagement.php';
 	require_once 'lib/pageelements/pageimage.php';
 	require_once 'lib/pageelements/pagelink.php';

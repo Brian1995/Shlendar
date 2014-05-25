@@ -44,9 +44,9 @@ class PageAppointmentListItem{
         $description = new XMLElement('p');
         $description->addChild(new XMLText($this->description));
         
-		$url = URL::urlFromRelativePath('index.php');
-		$url->setQueryParameter('action', 'deleteAppointment');
-		$url->setQueryParameter('appointment', $this->id);
+		$url = URL::createStatic();
+		$url->setDynamicQueryParameter('action', 'deleteAppointment');
+		$url->setDynamicQueryParameter('appointment', $this->id);
 		$deleteBtn = new PageLink(new PageText("löschen"), $url);
 		
         $item = new XMLElement('div');

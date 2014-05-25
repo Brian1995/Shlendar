@@ -26,14 +26,15 @@ class PageAddAppointment extends PageContainer{
 				$from        = filter_input(INPUT_POST, 'fromDate');
 				$to          = filter_input(INPUT_POST, 'toDate');
 				$description = filter_input(INPUT_POST, 'description');
-				$url = URL::urlFromCurrent();
-				$calendar = $url->getQueryParameter('calendar');
+				$url = URL::createCurrent();
+				$calendar = $url->getDynamicQueryParameter('calendar');
 				$result = $dbConnection->query(
 					"INSERT INTO appointments (calendar_id, start_date, end_date, title, description)
 					 VALUE ('%s', '%s', '%s', '%s', '%s');"
 					, $calendar, $from, $to, $title, $description);
 				if ($result) {
-					$url->setQueryParameter('action', 'listAppointments');
+					$url = URL::createStatic();
+					$url->setDynamicQueryParameter('action', 'listAppointments');
 					$url->redirect();
 				} else {
 					echo mysql_error();

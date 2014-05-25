@@ -73,13 +73,13 @@ class PageCalendar extends PageElement {
 		$nav->addChild($navTitle    = new XMLElement('div', 'class', 'title'));
 		$nav->addChild($navNext     = new XMLElement('div', 'class', 'next'));
 		
-		$urlPrevious = URL::urlFromCurrent();
-		$urlPrevious->setQueryParameter('viewDate', $viewDate->copy()->addMonths(-1)->toDateString());
+		$urlPrevious = URL::createCurrent();
+		$urlPrevious->setStaticQueryParameter('viewDate', $viewDate->copy()->addMonths(-1)->toDateString());
 		$linkPrevious = new PageLink(new PageFontIcon('chevron-left', PageFontIcon::NORMAL, TRUE), $urlPrevious);
 		$navPrevious->addChild($linkPrevious->toXML());
 
-		$urlNext = URL::urlFromCurrent();
-		$urlNext->setQueryParameter('viewDate', $viewDate->copy()->addMonths(1)->toDateString());
+		$urlNext = URL::createCurrent();
+		$urlNext->setStaticQueryParameter('viewDate', $viewDate->copy()->addMonths(1)->toDateString());
 		$linkNext = new PageLink(new PageFontIcon('chevron-right', PageFontIcon::NORMAL, TRUE), $urlNext);
 		$navNext->addChild($linkNext->toXML());
 		
@@ -117,8 +117,8 @@ class PageCalendar extends PageElement {
 					$class .= ' weekend';
 				}
 				$cell->setAttribute('class', $class);
-				$url = URL::urlFromCurrent();
-				$url->setQueryParameter('viewDate', $day->toDateString());
+				$url = URL::createCurrent();
+				$url->setStaticQueryParameter('viewDate', $day->toDateString());
 				$link = new PageLink(new PageText($day->formatLocalized('%e')), $url);
 				$cell->addChild($link->toXML());
 				$day->addDays(1);
