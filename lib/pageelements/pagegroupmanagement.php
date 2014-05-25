@@ -60,7 +60,7 @@ class PageGroupManagement extends PageElement {
 			$deleteUrl = URL::createStatic();
 			$deleteUrl->setDynamicQueryParameter('action', 'delete-group');
 			$deleteUrl->setDynamicQueryParameter('id', $groupId);
-			$deleteUrl->setDynamicQueryParameter('referrer', URL::urlFromCurrent());
+			$deleteUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 
 			$delete = new XMLElement('form', 'class', 'groupitem-delete', 'action', $deleteUrl, 'method', 'post');
 			$deleteButton = new PageButton('Löschen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE));
@@ -81,7 +81,7 @@ class PageGroupManagement extends PageElement {
 	private function createInsertDialog() {
 		$submitUrl = URL::createStatic();
 		$submitUrl->setDynamicQueryParameter('action', 'insert-group');
-		$submitUrl->setDynamicQueryParameter('referrer', URL::urlFromCurrent());
+		$submitUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
 		$dialog = new XMLElement('div', 'class', 'group-insert');
 		$header = new PageTextContainer('h2', 'Gruppe erstellen');
