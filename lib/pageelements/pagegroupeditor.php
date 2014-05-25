@@ -25,9 +25,15 @@ class PageGroupEditor extends PageElement {
 	}
 	
 	private function createMemberList() {
-		$groupNameResult = $this->db->query("SELECT name FROM groups WHERE id = '%s';", $this->groupId);
+		$groupNameResult = $this->db->query("SELECT name, user_id AS owner FROM groups WHERE id = '%s';", $this->groupId);
 		$groupNameRow = DatabaseConnection::fetchRow($groupNameResult);
 		$groupName = $groupNameRow['name'];
+		$groupOwner = $groupNameRow['owner'];
+		
+		if ($groupOwner != $this->userId) {
+			$url = URL::createClean();
+			$url->redirect();
+		}
 		
 		$members = $this->db->query(
 			"SELECT r.id, u.username
