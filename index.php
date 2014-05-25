@@ -83,15 +83,22 @@ function addSidebarCalendar() {
 function addSidebarActions() {
 	global $sidebar;
 	$sidebarActions = new PageContainer('div', 'id', 'sidebar-actions');
+	$sidebarActions->addChild(new PageTextContainer(PageTextContainer::H2, 'Aktionen'));
 	$sidebarActions->addChild($sidebarActionsContainer = new PageContainer('div', 'class', 'action-container'));
-	$sidebarActionsContainer->addChild(new PageAction('manage-calendars', 'Kalender verwalten', new PageFontIcon('calendar-o', PageFontIcon::NORMAL, TRUE)));
-	$sidebarActionsContainer->addChild(new PageAction('manage-groups', 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::NORMAL, TRUE)));
+
+	$url_calendars = URL::createStatic();
+	$url_calendars->setDynamicQueryParameter('action', 'manage-calendars');
+	$sidebarActionsContainer->addChild(new PageAction($url_calendars, 'Kalender verwalten', new PageFontIcon('calendar-o', PageFontIcon::NORMAL, TRUE)));
+	
+	$url_groups = URL::createStatic();
+	$url_groups->setDynamicQueryParameter('action', 'manage-groups');
+	$sidebarActionsContainer->addChild(new PageAction($url_groups, 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::NORMAL, TRUE)));
 	$sidebar->addChild($sidebarActions);
 }
 
 function addSidebarCalendarList() {
 	global $sidebar, $dbConnection;
-	$calendars = new PageCalendarList($dbConnection);
+	$calendars = new PageCalendarList($dbConnection);	
 	$sidebar->addChild($calendars);
 }
 

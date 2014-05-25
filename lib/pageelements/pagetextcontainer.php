@@ -13,14 +13,19 @@ class PageTextContainer extends PageElement {
 	/** @var PageText */
 	private $text;
 	
+	/** @var PageElement */
+	private $icon;
+	
 	/**
 	 * 
 	 * @param string $headerType
 	 * @param PageText|string|null $text
+	 * @param PageElement|null $icon
 	 */
-	function __construct($headerType, $text=NULL) {
+	function __construct($headerType, $text=NULL, $icon=NULL) {
 		parent::__construct($headerType);
 		$this->setText($text);
+		$this->setIcon($icon);
 	}
 	
 	/**
@@ -42,11 +47,34 @@ class PageTextContainer extends PageElement {
 	
 	/**
 	 * 
+	 * @return PageElement|null
+	 */
+	public function getIcon() {
+		return $this->icon;
+	}
+
+	/**
+	 * 
+	 * @param PageElement|null $icon
+	 * @return PageTextContainer
+	 */
+	public function setIcon($icon) {
+		$this->icon = $icon;
+		return $this;
+	}
+
+		
+	/**
+	 * 
 	 * @return XMLElement
 	 */
 	public function toXML() {
 		$element = parent::toXML();
+		$icon = $this->getIcon();
 		$text = $this->getText();
+		if ($icon !== NULL) {
+			$element->addChild($icon->toXML());
+		}
 		if ($text !== NULL) {
 			$element->addChild($text->toXML());
 		}
