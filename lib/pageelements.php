@@ -11,6 +11,7 @@ require_once 'lib/pageelements/pageelement.php';
 	require_once 'lib/pageelements/pagecalendar.php';
 	require_once 'lib/pageelements/pagecalendarlist.php';
 	require_once 'lib/pageelements/pagecalendarlistitem.php';
+	require_once 'lib/pageelements/pagecalendarmanagement.php';
 	require_once 'lib/pageelements/pagefonticon.php';
 	require_once 'lib/pageelements/pagegroupeditor.php';
 	require_once 'lib/pageelements/pagegroupmanagement.php';

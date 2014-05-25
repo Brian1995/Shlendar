@@ -129,6 +129,15 @@ switch ($action) {
 		$content->addChild($groupManagement);
 		break;
 	
+        case 'manage-calendars':
+            ensureLogin();
+            addSidebarCalendar();
+            addSidebarActions();
+            addSidebarCalendarList();
+            $calendarManagement = new PageCalendarManagement($dbConnection);
+            $content->addChild($calendarManagement);
+            break;
+            
 	case 'insert-group':
 		ensureLogin();
 		$referrer = $url_current->getDynamicQueryParameter('referrer');
@@ -138,7 +147,17 @@ switch ($action) {
 			// TODO error page
 		}
 		break;
-		
+	
+        case 'insert-calendar':
+            ensureLogin();
+            $referrer = $url_current->getDynamicQueryParameter('referrer');
+            if(PageCalendarManagement::insertCalendar($dbConnection)){
+                URL::create($referrer)->redirect();
+            } else {
+                
+            }
+            break;
+                
 	case 'delete-group':
 		ensureLogin();
 		$userId = Session::getUserID();
