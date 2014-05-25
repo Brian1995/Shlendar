@@ -93,43 +93,7 @@ class URL {
 		return $u;
 	}
 	
-	
-	public static function urlFromString($urlString) {
-		$url = new URL();
-		$parts = parse_url($urlString);
-		if ($parts) {
-			URL::set($url->scheme, $parts, 'scheme');
-			URL::set($url->host, $parts, 'host');
-			URL::set($url->port, $parts, 'port');
-			URL::set($url->user, $parts, 'user');
-			URL::set($url->pass, $parts, 'pass');
-			URL::set($url->path, $parts, 'path');
-			URL::set($url->query, $parts, 'query', TRUE);
-			URL::set($url->fragment, $parts, 'fragment');
-			return $url;
-		}
-		throw new InvalidArgumentException('not parseable url (url=\''.$urlString.'\'');
-	}
-	
-	/**
-	 * 
-	 * @return URL
-	 * @throws Exception
-	 */
-	public static function urlFromCurrent() {
-		$https      = filter_input(INPUT_SERVER, 'HTTPS');
-		$httpHost   = filter_input(INPUT_SERVER, 'HTTP_HOST');
-		$requestURI = filter_input(INPUT_SERVER, 'REQUEST_URI');
-		$protocol   = $https ? 'https' : 'http';
-		if ($httpHost && $requestURI) {
-			$urlString = $protocol.'://'.$httpHost.$requestURI;
-			return URL::urlFromString($urlString);
-		} else {
-			throw new Exception('could note dertermine host or request uri');
-		}
-	}
-	
-	public static function urlFromBase() {
+	public static function createBase() {
 		return self::urlFromString(self::$BASE_URL);
 	}
 	
@@ -146,7 +110,7 @@ class URL {
 	 * @param URL|null $url
 	 * @return URL 
 	 */
-	public static function urlFromRelativePath($relativePath, $url = NULL) {
+	public static function createRelative($relativePath, $url = NULL) {
 		if ($url === NULL) {
 			$url = URL::urlFromCurrent();
 		}
@@ -252,11 +216,12 @@ class URL {
 	 * the value of a query parameter to NULL will remove the existing query 
 	 * parameter.
 	 * 
+	 * Please consider using the preferred static and dynamic functions.
+	 * 
 	 * @param string $name
 	 * @param string|null $value
 	 * @return string|null
 	 * @throws InvalidArgumentException
-	 * @deprecated since version 0.1
 	 */
 	public function setQueryParameter($name, $value) {
 		if ($name === NULL) {
@@ -341,7 +306,7 @@ class URL {
 		return $this->getQueryParameter(self::DYNAMIC_QUERY_PARAMETER_PREFIX.$name);
 	}
 	
-	private function removeAllQueryParameters($keepPrefix=NULL) {
+	public function removeAllQueryParameters($keepPrefix=NULL) {
 		if ($keepPrefix === NULL) {
 			$this->query = NULL;
 		} else {

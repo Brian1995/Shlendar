@@ -18,9 +18,9 @@ class PageCalendarListItem {
         $text = new XMLElement('h3');
         $text->addChild($name);
         
-        $url = URL::urlFromRelativePath('index.php');
-        $url->setQueryParameter('action', 'listAppointments');
-        $url->setQueryParameter('calendar', $this->id);
+        $url = URL::createStatic();
+        $url->setDynamicQueryParameter('action', 'listAppointments');
+        $url->setDynamicQueryParameter('calendar', $this->id);
         $link = new XMLElement('a');
         $link->addAttribute('href', $url);
         $link->addChild($text);
