@@ -77,11 +77,11 @@ main { display: flex; }
 
 /** SIDEBAR *******************************************************************/
 #sidebar { <?=$C_SIDEBAR?> }
-#sidebar h2 { display: none; }
-
+#sidebar > div > h2 { text-align:center; padding: 0.2em; border-bottom: 1px solid <?=GRAY_DARKER?>; <?=FONT_IMPORTANT?> font-size:1.0em; }
+#sidebar > div > div { margin-bottom: 0.5em; }
 /** SIDEBAR CALENDAR **********************************************************/
-#sidebar-calendar { padding: 0.5em; margin: 0 auto; margin-top: 0.5em; max-width:20em; }
-#sidebar-calendar-header { display: table; padding: 0 0.5em; width:100%; box-sizing: border-box; }
+#sidebar-calendar { margin: 0 auto; margin-top: 0.5em; max-width:20em; }
+#sidebar-calendar-header { display: table; margin-bottom:0.5em; width:100%; box-sizing: border-box; font-size:0.85em; border-bottom: 1px solid <?=GRAY_DARKER?>;}
 #sidebar-calendar-header .previous { display: table-cell; width:49%; text-align: left; }
 #sidebar-calendar-header .title    { display: table-cell; width:2%; white-space: nowrap; }
 #sidebar-calendar-header .next     { display: table-cell; width:49%; text-align: right; }
@@ -91,19 +91,19 @@ main { display: flex; }
 #sidebar-calendar-entries { display: table; width: 100%; box-sizing: border-box; text-align: center; padding: 0 0.5em; }
 #sidebar-calendar-entries > div { display: table-row; }
 #sidebar-calendar-entries > div > div { display: table-cell;  }
-#sidebar-calendar-entries > div > div > a { display:block; font-size: 0.9em; padding: 0.2em 0.4em; color: <?=GRAY_DARKER?>; }
+#sidebar-calendar-entries > div > div > a { display:block; font-size: 0.85em; padding: 0.2em 0.4em; color: <?=GRAY_DARKER?>; }
 #sidebar-calendar-entries .current-month a { color: <?=BLUE_DARKER?>; }
 #sidebar-calendar-entries .current-month.current a { color: <?=WHITE?>; background: <?=GRAY_DARKER?>;}
 #sidebar-calendar-entries .current-month.selected a { color: <?=WHITE?>; background: <?=ORANGE?>; }
 #sidebar-calendar-entries > div > div > a:hover { background: <?=GRAY_LIGHTER?>; }
-#sidebar-calendar-entries .dayrow { text-transform: uppercase; <?=FONT_HEADLINE?> font-size:0.8em; }
+#sidebar-calendar-entries .dayrow { text-transform: uppercase; <?=FONT_HEADLINE?> font-size:0.75em; }
 
 /** SIDEBAR ACTIONS ***********************************************************/
-#sidebar-actions { font-size: 0.9em; padding: 0.5em 0; }
+#sidebar-actions { }
 #sidebar-actions .container { }
 #sidebar-actions .action a { display: block; }
 #sidebar-actions .action a:hover { background: <?=GRAY_LIGHTER?>; }
-#sidebar-actions .action a span { line-height: 2em; }
+#sidebar-actions .action a span { line-height: 2em; font-size: 0.85em; }
 
 /** SIDEBAR CALENDAR LIST *****************************************************/
 #sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
