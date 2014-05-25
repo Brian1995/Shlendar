@@ -112,7 +112,7 @@ main { display: flex; }
 /** CONTENT *******************************************************************/
 #content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> background: <?=GRAY_LIGHTER?> }
 #content > div { display: flex; flex-flow: row wrap; justify-content:flex-start; align-items: stretch; padding: 0.5em; }
-#content > div > div { flex: 1 0 auto; margin: 0.5em; padding: 1em; background: <?=WHITE?>; border: 1px solid <?=GRAY_LIGHT?>; }
+#content > div > div { flex: 1 0 auto; max-width:40em; margin: 0.5em; padding: 1em; background: <?=WHITE?>; border: 1px solid <?=GRAY_LIGHT?>; }
 #content h1 { margin: 0.7em 0.625em 0em 0.625em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 #content h2 { margin-bottom: 0.9em; font-size: 1.4em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 
