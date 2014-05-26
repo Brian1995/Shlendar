@@ -228,9 +228,6 @@ switch ($action) {
     
     case 'add-group-to-calendar':
         ensureLogin();
-		addSidebarCalendar();
-        addSidebarActions();
-        addSidebarCalendarList();
 		
 		$referrer = $url_current->getDynamicQueryParameter('referrer');
 		
@@ -241,7 +238,16 @@ switch ($action) {
 		URl::create($referrer)->redirect();
         break;
 	
-
+	case 'remove-group-from-calendar':
+		ensureLogin();
+		$referrer = $url_current->getDynamicQueryParameter('referrer');
+		var_dump($referrer);
+		$id = $url_current->getDynamicQueryParameter('id');
+		PageCalendarEditor::removeGroupFromCalendar($dbConnection, $id);
+		var_dump("bla");
+//		URL::create($referrer)->redirect();
+		break;
+		
     case 'listAppointments':
         ensureLogin();
         $titleText = 'Termine';

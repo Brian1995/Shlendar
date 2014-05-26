@@ -93,6 +93,12 @@ class PageCalendarEditor extends PageElement{
     }
 	
 	public static function addGroupToCalendar(DatabaseConnection $db, $calendarID, $groupID, $rights){
-		$db->query("INSERT INTO group_calendar_relations (group_id, calendar_id, rights) VALUES ('%s', '%s', '%s')", $groupID, $calendarID, $rights);
+		return $db->query("INSERT INTO group_calendar_relations (group_id, calendar_id, rights) VALUES ('%s', '%s', '%s')", $groupID, $calendarID, $rights);
+	}
+	
+	public static function removeGroupFromCalendar(DatabaseConnection $db, $id){
+		$result = $db->query("DELETE FROM group_calendar_relations WHERE id = '%s';", $id);
+		var_dump($result);
+		return $result;
 	}
 }
