@@ -47,7 +47,7 @@ $C_WARNING      = "background: ".RED."; color: ".WHITE.";";
 h1, h2, h3, h4, h5, h6 { <?=FONT_HEADLINE?> }
 
 html { height: 100%; <?=FONT_PARAGRAPH?> }
-body { min-height: 100%; width: 100%; <?=$C_BASE?> }
+body { min-height: 100%; <?=$C_BASE?> }
 
 /** HEADER, CONTENT AND FOOTER ************************************************/
 body   { display: flex; flex-flow: column nowrap; }
@@ -70,8 +70,8 @@ header .header-actions a:hover { <?=$C_HEADER_HOVER?> }
 header .header-actions a span { display: block; <?=FONT_HEADLINE?> font-size:1.2em; padding: 0.5em; }
 
 /** MAIN **********************************************************************/
-main { display: flex; }
-#main-columns { flex: 1 0 auto; display: flex; flex-flow: row wrap; align-content: flex-start; }
+main { display: flex; flex-flow: column nowrap; background: red; }
+#main-columns { flex: 1 0 auto; display: flex; flex-flow: row wrap; align-items: stretch; background:blue; }
 #sidebar { flex: 1 0 auto; }
 #content { flex: 100000 1 240px; min-width: 240px; }
 
@@ -106,8 +106,11 @@ main { display: flex; }
 #sidebar-actions .action a span { line-height: 2em; font-size: 0.85em; }
 
 /** SIDEBAR CALENDAR LIST *****************************************************/
-#sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
-#sidebar-calendar-list { font-size: 0.9em; padding: 0.5em 0;}
+#sidebar-calendars { }
+#sidebar-calendars .container { }
+#sidebar-calendars .action a { display: block; }
+#sidebar-calendars .action a:hover { background: <?=GRAY_LIGHTER?>; }
+#sidebar-calendars .action a span { line-height: 2em; font-size: 0.85em; }
 
 /** CONTENT *******************************************************************/
 #content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> background: <?=GRAY_LIGHTER?> }
