@@ -8,7 +8,7 @@ class PageGroupEditor extends PageElement {
 	private $groupId;
 	private $userId;
 	
-	private $groupOwnerName;
+	private $groupName;
 	private $groupOwnerId;
 	
 	function __construct(DatabaseConnection $db, $groupId, $userId) {
@@ -18,7 +18,7 @@ class PageGroupEditor extends PageElement {
 		$this->groupId = $groupId;
 		$this->userId = $userId;
 		
-		$this->groupOwnerName = self::getGroupOwnerName($db, $groupId);
+		$this->groupName = self::getGroupName($db, $groupId);
 		$this->groupOwnerId = self::getGroupOwnerId($db, $groupId);
 		
 		if ($this->groupOwnerId != $this->userId) {
@@ -29,10 +29,31 @@ class PageGroupEditor extends PageElement {
 	public function toXML() {
 		$element = parent::toXML();
 		
+		$element->addChild($this->createRename()->toXml());
 		$element->addChild($this->createMemberList()->toXML());
 		$element->addChild($this->createMemberAdd()->toXML());
 		
 		return $element;
+	}
+	
+	private function createRename() {
+		$container = new PageContainer('div', 'class', 'group-rename');
+		$header = new PageTextContainer(PageTextContainer::H2, 'Gruppe umbenennen');
+		
+		$action = URL::createStatic();
+		$action->setDynamicQueryParameter('action', 'rename-group');
+		$action->setDynamicQueryParameter('id', $this->groupId);
+		$action->setDynamicQueryParameter('referrer', URL::createCurrent());
+		
+		$form = new PageContainer('form', 'class', 'group-rename-form', 'action', $action, 'method', 'post');
+		$nameField = new PageElement('input', 'type', 'text', 'name', 'name', 'value', $this->groupName);
+		$applyButton = new PageButton('Anwenden', PageButton::STYLE_SUBMIT, PageFontIcon::create('check'));
+		
+		$container->addChild($header);
+		$container->addChild($form);
+			$form->addChild($nameField);
+			$form->addChild($applyButton);
+		return $container;
 	}
 	
 	private function createMemberList() {		
@@ -45,7 +66,7 @@ class PageGroupEditor extends PageElement {
 			, $this->groupId, $this->userId);
 		
 		$container = new PageContainer('div', 'class', 'member-list');
-		$header = new PageTextContainer(PageTextContainer::H2, 'Gruppenmitglieder von "'.$this->groupOwnerName.'"');
+		$header = new PageTextContainer(PageTextContainer::H2, 'Gruppenmitglieder von "'.$this->groupName.'"');
 		$content = new PageContainer('div', 'class', 'member-list-container');
 		if ($members) {
 			$index = 1;
@@ -119,11 +140,11 @@ class PageGroupEditor extends PageElement {
 		$action->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
 		$form = new PageContainer('form', 'class', 'member-add', 'action', $action, 'method', 'post');
-		$remove = new PageButton('Hinzufügen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square'));
+		$addButton = new PageButton('Hinzufügen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square'));
 		
 		$item->addChild($name);
 		$item->addChild($form);
-			$form->addChild($remove);
+			$form->addChild($addButton);
 		
 		return $item;
 	}
@@ -143,14 +164,14 @@ class PageGroupEditor extends PageElement {
 		self::redirectToError("Can't determine owner. Group (id=$groupId) was not found.");
 	}
 	
-	public static function getGroupOwnerName(DatabaseConnection $db, $groupId) {
+	public static function getGroupName(DatabaseConnection $db, $groupId) {
 		$result = $db->query("SELECT name FROM groups WHERE id = '%s';", $groupId);
 		if ($result && DatabaseConnection::countRows($result) == 1) {
 			$row = DatabaseConnection::fetchRow($result);
 			return $row['name'];
 		}
 		self::redirectToError();
-	}
+	}	
 
 	public static function removeMember(DatabaseConnection $db, $relationId) {
 		$relationResult = $db->query("SELECT group_id FROM group_user_relations WHERE id = '%s';", $relationId);
