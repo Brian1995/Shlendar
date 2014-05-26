@@ -92,6 +92,11 @@ class URL {
 		return $u;
 	}
 	
+	/**
+	 * 
+	 * @param URL|null $url
+	 * @return URL
+	 */	
 	public static function createClean($url=NULL) {
 		$u = $url === NULL ? self::createCurrent() : new URL($url);
 		$u->removeAllQueryParameters();

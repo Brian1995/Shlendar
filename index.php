@@ -206,8 +206,18 @@ switch ($action) {
 	case 'remove-user-from-group':
 		ensureLogin();
 		
-		$group_user_relation_id = $url_current->getDynamicQueryParameter('id');
-		PageGroupEditor::removeMember($group_user_relation_id);
+		$relationId = $url_current->getDynamicQueryParameter('relation_id');
+		PageGroupEditor::removeMember($dbConnection, $relationId);
+		
+		URL::create($url_current->getDynamicQueryParameter('referrer'))->redirect();
+		break;
+	
+	case 'add-user-to-group':
+		ensureLogin();
+		
+		$userId = $url_current->getDynamicQueryParameter('user_id');
+		$groupId = $url_current->getDynamicQueryParameter('group_id');
+		PageGroupEditor::addMember($dbConnection, $groupId, $userId);
 		
 		URL::create($url_current->getDynamicQueryParameter('referrer'))->redirect();
 		break;
@@ -273,6 +283,17 @@ switch ($action) {
     case 'addAppointment':
         $i = PageAddAppointment::addApppointment($dbConnection);
         break;
+	
+	case 'error':
+		$message = $url_current->getDynamicQueryParameter('message');
+		$content->addChild(new PageTextContainer(PageTextContainer::H1, 'Fehler'));
+		$content->addChild(new PageTextContainer(PageTextContainer::H2, 'Fehlermeldung:'));
+		if ($message !== NULL) {
+			$content->addChild(new PageTextContainer(PageTextContainer::P, $message));
+		} else {
+			$content->addChild(new PageTextContainer(PageTextContainer::P, 'keine Details angegeben'));
+		}
+		break;
 
     default:
         addSidebarCalendar();
