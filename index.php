@@ -8,22 +8,17 @@ mb_internal_encoding("UTF-8");
 setlocale(LC_ALL, 'de_DE.utf-8');
 URL::setBasePath('projekt');
 session_start();
-Session::fixMimeType();
+#Session::fixMimeType();
 
 $dbConnection = new DatabaseConnection('localhost', 'projekt', 'projekt', 'projekt');
 $dbConnection->connect();
 
 $logged_in = Session::isLoggedIn();
 
-$url_current = URL::urlFromCurrent();
-$url_base = URL::urlFromBase();
-$url_start = new URL($url_current);
+$url_current = URL::createCurrent();
+$url_start = URL::createStatic($url_current);
 
-$url_start->setPathRelativeToCurrentPath('index.php');
-$url_start->setQuery($url_current->getQuery());
-$url_start->setQueryParameter('action', NULL);
-
-$action = $url_current->getQueryParameter('action');
+$action = $url_current->getDynamicQueryParameter('action');
 
 /** MAIN STRUCTURE *********************************************************** */
 $body = new PageContainer('body');
@@ -53,15 +48,14 @@ $header->addChild(new PageLogo('Shlendar', $url_start));
 $header->addChild($topActions = new PageContainer());
 $topActions->setProperty('class', 'header-actions');
 if ($logged_in) {
-	$topLoginActionText = 'Ausloggen';
-	$topLoginActionAction = 'logout';
+    $topLoginActionText = 'Ausloggen';
+    $topLoginActionAction = 'logout';
 } else {
-	$topLoginActionText = 'Einloggen';
-	$topLoginActionAction = 'login';
+    $topLoginActionText = 'Einloggen';
+    $topLoginActionAction = 'login';
 }
 $topLoginActionUrl = new URL($url_start);
-$topLoginActionUrl->setQuery(NULL);
-$topLoginActionUrl->setQueryParameter('action', $topLoginActionAction);
+$topLoginActionUrl->setDynamicQueryParameter('action', $topLoginActionAction);
 $topLoginAction = new PageLink(new PageText($topLoginActionText), $topLoginActionUrl);
 $topLoginAction->setProperty('id', 'header-actions-login');
 $topActions->addChild($topLoginAction);
@@ -69,138 +63,221 @@ $topActions->addChild($topLoginAction);
 /* HELPERS ******************************************************************* */
 
 function ensureLogin() {
-	if (!Session::isLoggedIn()) {
-		global $url_start;
-		$url_start->redirect(); // TODO Should redirect to login page?
-		exit(0);
-	}
+    if (!Session::isLoggedIn()) {
+        global $url_current, $url_start;
+        $loginUrl = new URL($url_start);
+        $loginUrl->setDynamicQueryParameter('action', 'login');
+        $loginUrl->setDynamicQueryParameter('referrer', $url_current);
+        $loginUrl->redirect();
+        exit(0);
+    }
 }
 
 function addSidebarCalendar() {
-	global $sidebar, $url_current;
-	$calendar = new PageCalendar();
-	$calendar->setViewDate(new Date($url_current->getQueryParameter('viewDate')));
-	$sidebar->addChild($calendar);
+    global $sidebar, $url_current;
+    $calendar = new PageCalendar();
+    $calendar->setViewDate(new Date($url_current->getStaticQueryParameter('viewDate')));
+    $sidebar->addChild($calendar);
 }
 
 function addSidebarActions() {
-	global $sidebar;
-	$sidebarActions = new PageContainer('div', 'id', 'sidebar-actions');
-	$sidebarActions->addChild($sidebarActionsContainer = new PageContainer('div', 'class', 'container'));
-	$sidebarActionsContainer->addChild(new PageAction('manage-calendars', 'Kalender verwalten', new PageFontIcon('calendar-o', PageFontIcon::NORMAL, TRUE)));
-	$sidebarActionsContainer->addChild(new PageAction('manage-groups', 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::NORMAL, TRUE)));
-	$sidebar->addChild($sidebarActions);
+    global $sidebar;
+    $sidebarActions = new PageContainer('div', 'id', 'sidebar-actions');
+    $sidebarActions->addChild(new PageTextContainer(PageTextContainer::H2, 'Aktionen'));
+    $sidebarActions->addChild($sidebarActionsContainer = new PageContainer('div', 'class', 'action-container'));
+
+    $url_calendars = URL::createStatic();
+    $url_calendars->setDynamicQueryParameter('action', 'manage-calendars');
+    $sidebarActionsContainer->addChild(new PageAction($url_calendars, 'Kalender verwalten', new PageFontIcon('calendar-o', PageFontIcon::NORMAL, TRUE)));
+
+    $url_groups = URL::createStatic();
+    $url_groups->setDynamicQueryParameter('action', 'manage-groups');
+    $sidebarActionsContainer->addChild(new PageAction($url_groups, 'Gruppen verwalten', new PageFontIcon('users', PageFontIcon::NORMAL, TRUE)));
+    $sidebar->addChild($sidebarActions);
 }
 
 function addSidebarCalendarList() {
-	global $sidebar, $dbConnection;
-	$calendars = new PageCalendarList($dbConnection);
-	$sidebar->addChild($calendars);
+    global $sidebar, $dbConnection;
+    $calendars = new PageCalendarList($dbConnection);
+    $sidebar->addChild($calendars);
 }
 
 /* CONTENT ******************************************************************* */
-
 $titleText = NULL;
+
 switch ($action) {
-	case 'login':
-		$titleText = 'Login';
-		$url = URL::urlFromRelativePath("index.php", URL::urlFromBase());
-		$url->setQueryParameter('action', 'login_exec');
-		$content->addChild(new PageLogin($url));
-		addSidebarCalendar();
-		break;
-	case 'login_exec':
-		Session::execLogin($dbConnection);
-		break;
-	case 'logout':
-		Session::logout();
-		break;
-	case 'manage-groups':
-		ensureLogin();
-		$titleText = 'Gruppen Verwalten';
-		addSidebarCalendar();
-		addSidebarActions();
-		addSidebarCalendarList();
-		$groupManagement = new PageGroupManagement($dbConnection);
-		$content->addChild($groupManagement);
-		break;
-	case 'insert-group':
-		ensureLogin();
-		$referrer = $url_current->getQueryParameter('referrer');
-		if (PageGroupManagement::insertGroup($dbConnection)) {
-			URL::urlFromString($referrer)->redirect();
-		} else {
-			// TODO error page
-		}
-		break;
-	case 'delete-group':
-		ensureLogin();
-		$userId = Session::getUserID();
-		$groupId = $url_current->getQueryParameter('id');
-		$referrer = $url_current->getQueryParameter('referrer');
-		if (PageGroupManagement::isGroupOwner($dbConnection, $userId, $groupId) &&
-			PageGroupManagement::deleteGroup($dbConnection, $userId, $groupId)) {
-			URL::urlFromString($referrer)->redirect();
-		} else {
-			// TODO error page
-		}
-		break;
-	case 'manage-calendars':
-		ensureLogin();
-		addSidebarCalendar();
-		break;
-	case 'listAppointments':
-		ensureLogin();
-		$calendar = $url_current->getQueryParameter('calendar');
-		$app = new PageAppointmentList($dbConnection, $calendar);
-		$url = URL::urlFromCurrent();
-		$url->setQueryParameter('action', 'addAppointment');
-		$add = new PageAddAppointment($url);
-		$content->addChild($app);
-		$content->addChild($add);
-		
-		addSidebarCalendar();
-		addSidebarActions();
-		addSidebarCalendarList();
-		break;
-	case 'deleteAppointment':
-		ensureLogin();
-		$url = URL::urlFromCurrent();
-		$id = $url->getQueryParameter('appointment');
-		$result = $dbConnection->query("DELETE FROM appointments WHERE id = '%s';", $id);
-		$url->setQueryParameter('action', 'listAppointments');
-		$url->redirect();
-		break;
-	case 'addAppointment':
-		$i = PageAddAppointment::addApppointment($dbConnection);
-		break;
-	default:
-		addSidebarCalendar();
-		if ($logged_in) {
-			addSidebarActions();
-			addSidebarCalendarList();
-		}
-		if ($logged_in) {
-			$titleText = 'Willkommen '.Session::getUserName();
-		} else {
-			$titleText = 'Willkommen bei Shlendar';
-		}
-		$content->addChild(new PageTextContainer(PageTextContainer::P, 'Ein fürchterlicher Kalender...'));
-		break;
+
+    case 'login':
+        $titleText = 'Login';
+        $url = URL::createStatic();
+        $url->setDynamicQueryParameter('action', 'login_exec');
+        $url->setDynamicQueryParameter('referrer', $url_current->getDynamicQueryParameter('referrer'));
+        $content->addChild(new PageLogin($url));
+        addSidebarCalendar();
+        break;
+
+    case 'login_exec':
+        $referrer = $url_current->getDynamicQueryParameter('referrer');
+        $referrerUrl = $referrer ? URL::create($referrer) : NULL;
+        Session::execLogin($dbConnection, $referrerUrl);
+        break;
+
+    case 'logout':
+        Session::logout();
+        break;
+
+    case 'manage-groups':
+        ensureLogin();
+        $titleText = 'Gruppen Verwalten';
+        addSidebarCalendar();
+        addSidebarActions();
+        addSidebarCalendarList();
+        $groupManagement = new PageGroupManagement($dbConnection);
+        $content->addChild($groupManagement);
+        break;
+
+    case 'manage-calendars':
+        ensureLogin();
+        addSidebarCalendar();
+        addSidebarActions();
+        addSidebarCalendarList();
+        $calendarManagement = new PageCalendarManagement($dbConnection);
+        $content->addChild($calendarManagement);
+        break;
+
+    case 'insert-group':
+        ensureLogin();
+        $referrer = $url_current->getDynamicQueryParameter('referrer');
+        if (PageGroupManagement::insertGroup($dbConnection)) {
+            URL::create($referrer)->redirect();
+        } else {
+            // TODO error page
+        }
+        break;
+
+    case 'insert-calendar':
+        ensureLogin();
+        $referrer = $url_current->getDynamicQueryParameter('referrer');
+        if (PageCalendarManagement::insertCalendar($dbConnection)) {
+            URL::create($referrer)->redirect();
+        } else {
+            
+        }
+        break;
+
+    case 'delete-group':
+        ensureLogin();
+        $userId = Session::getUserID();
+        $groupId = $url_current->getDynamicQueryParameter('id');
+        $referrer = $url_current->getDynamicQueryParameter('referrer');
+        if (PageGroupManagement::isGroupOwner($dbConnection, $userId, $groupId) &&
+                PageGroupManagement::deleteGroup($dbConnection, $userId, $groupId)) {
+            URL::create($referrer)->redirect();
+        } else {
+            // TODO error page
+        }
+        break;
+
+    case 'delete-calendar':
+        ensureLogin();
+        $calendarID = $url_current->getDynamicQueryParameter('id');
+        $referrer = $url_current->getDynamicQueryParameter('referrer');
+        if(PageCalendarManagement::deleteCalendar($dbConnection, $calendarID)){
+            URL::create($referrer)->redirect();
+        } else {
+            var_dump("scheiße");
+            var_dump($calendarID);
+        }
+        break;
+
+    case 'edit-group':
+        ensureLogin();
+        $titleText = 'Gruppe bearbeiten';
+        addSidebarCalendar();
+        addSidebarActions();
+        addSidebarCalendarList();
+
+        $groupId = $url_current->getDynamicQueryParameter('id');
+        $userId = Session::getUserID();
+
+        $editor = new PageGroupEditor($dbConnection, $groupId, $userId);
+        $content->addChild($editor);
+        break;
+    
+    case 'edit-calendar':
+        ensureLogin();
+        addSidebarCalendar();
+        addSidebarActions();
+        addSidebarCalendarList();
+        
+        $calendarID = $url_current->getDynamicQueryParameter('id');
+        
+        $editor = new PageCalendarEditor($dbConnection, $calendarID);
+        $content->addChild($editor);
+        break;
+    
+    case 'manage-calendars':
+        ensureLogin();
+        addSidebarCalendar();
+        break;
+
+    case 'listAppointments':
+        ensureLogin();
+        $titleText = 'Termine';
+        addSidebarCalendar();
+        addSidebarActions();
+        addSidebarCalendarList();
+
+        $calendar = $url_current->getDynamicQueryParameter('calendar');
+        $app = new PageAppointmentList($dbConnection, $calendar);
+        $url = URL::createStatic();
+        $url->setDynamicQueryParameter('action', 'addAppointment');
+        $add = new PageAddAppointment($url);
+        $content->addChild($app);
+        $content->addChild($add);
+        break;
+
+    case 'deleteAppointment':
+        ensureLogin();
+        $id = $url_current->getDynamicQueryParameter('appointment');
+        $result = $dbConnection->query("DELETE FROM appointments WHERE id = '%s';", $id);
+        $url = URL::createStatic();
+        $url->setDynamicQueryParameter('action', 'listAppointments');
+        $url->redirect();
+        break;
+
+    case 'addAppointment':
+        $i = PageAddAppointment::addApppointment($dbConnection);
+        break;
+
+    default:
+        addSidebarCalendar();
+        if ($logged_in) {
+            addSidebarActions();
+            addSidebarCalendarList();
+        }
+        if ($logged_in) {
+            $titleText = 'Willkommen ' . Session::getUserName();
+        } else {
+            $titleText = 'Willkommen bei Shlendar';
+        }
+        $content->addChild(new PageTextContainer(PageTextContainer::P, 'Ein fürchterlicher Kalender...'));
+        break;
 }
 
 /* PAGE CONSTRUCTION ********************************************************* */
 
 if ($sidebar->hasChildren()) {
-	$mainColumns->addChild($sidebar);
+    $mainColumns->addChild($sidebar);
 }
 if ($content->hasChildren()) {
-	$content->addChild(new PageTextContainer(PageTextContainer::H1, $titleText), 0);
-	$mainColumns->addChild($content);
+    $content->addChild(new PageTextContainer(PageTextContainer::H1, $titleText), 0);
+    $mainColumns->addChild($content);
 }
 
-echo '<?xml version="1.0" encoding="UTF-8" ?>' . "\r\n";
-echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\r\n\r\n";
+/* echo '<?xml version="1.0" encoding="UTF-8" ?>' . "\r\n";
+  echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\r\n\r\n"; */
+echo '<!DOCTYPE HTML>';
 
 $rootNode = new XMLElement('html', 'xmlns', 'http://www.w3.org/1999/xhtml');
 $headNode = new XMLElement('head');
@@ -216,6 +293,10 @@ $headNode->addChild(new XMLElement('meta', 'name', 'viewport', 'content', 'width
 $headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'css/style.php'));
 $headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext'));
 $headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css'));
+$headNode->addChild(new XMLElement('link', 'rel', 'stylesheet', 'type', 'text/css', 'href', 'js/jquery.datetimepicker.css'));
+$headNode->addChild(new XMLElement('script', 'type', 'text/javascript', 'src', 'js/jquery-2.1.1.js'));
+$headNode->addChild(new XMLElement('script', 'type', 'text/javascript', 'src', 'js/jquery.datetimepicker.js'));
+$headNode->addChild(new XMLElement('script', 'type', 'text/javascript', 'src', 'js/script.js'));
 
 $rootNode->addChild($body->toXML());
 

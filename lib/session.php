@@ -94,15 +94,15 @@ class Session {
 			Session::setUserID($row['id']);
 			Session::setLoginFailed(false);
 			if ($loginUrl === NULL) {
-				$loginUrl = URL::urlFromCurrent();
-				$loginUrl->setQueryParameter('action', NULL);
+				$loginUrl = URL::createCurrent();
+				$loginUrl->setDynamicQueryParameter('action', NULL);
 			}
 			$loginUrl->redirect();
 		} else {
 			Session::setLoginFailed(true);
 			if ($failedUrl === NULL) {
-				$failedUrl = URL::urlFromCurrent();
-				$failedUrl->setQueryParameter('action', 'login');
+				$failedUrl = URL::createCurrent();
+				$failedUrl->setDynamicQueryParameter('action', 'login');
 			}
 			$failedUrl->redirect();
 		}
@@ -115,8 +115,7 @@ class Session {
 	public static function logout($logoutUrl=NULL) {
 		session_destroy();
 		if ($logoutUrl === NULL) {
-			$logoutUrl = URL::urlFromRelativePath('index.php');
-			$logoutUrl->setQuery(NULL);
+			$logoutUrl = URL::createClean();
 		}
 		$logoutUrl->redirect();
 	}

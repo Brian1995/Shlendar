@@ -17,6 +17,10 @@ class PageFontIcon extends PageElement {
 		$this->fixedWidth = $fixedWidth;
 	}
 	
+	public static function create($name, $size=NORMAL, $fixedWidth=FALSE) {
+		return new PageFontIcon($name, $size, $fixedWidth);
+	}
+	
 		
 	public function toXML() {
 		$element = parent::toXML();

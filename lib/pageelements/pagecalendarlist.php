@@ -2,7 +2,7 @@
 
 require_once 'lib/utils.php';
 
-class PageCalendarList extends PageContainer{
+class PageCalendarList extends PageContainer {
     
     /**
      *@var DatabaseConnection
@@ -18,6 +18,9 @@ class PageCalendarList extends PageContainer{
     }
     
     public function toXML() {
+		$element = parent::toXML();
+		$element->setAttribute('id', 'sidebar-calendars');
+		
         $result = $this->dbConnection->query("
             SELECT DISTINCT c.id, c.name 
             FROM ( 
@@ -37,16 +40,16 @@ class PageCalendarList extends PageContainer{
 				WHERE ca.user_id = '%s';", Session::getUserID(), Session::getUserID());
         
         $container = new XMLElement('div');
-        $container->addAttribute('class', 'container');
+        $container->addAttribute('class', 'action-container');
         $rowCount = $this->dbConnection->countRows($result);
         while($a = mysql_fetch_row($result)) {
             $item = new PageCalendarListItem($a[0], $a[1]);
             $container->addChild($item->toXML());
         }
         
-        $calendarList = new XMLElement('div');
-        $calendarList->addAttribute('id', 'sidebar-actions');
-        $calendarList->addChild($container);
-        return $calendarList;
+		$header = new PageTextContainer(PageTextContainer::H2, 'Kalender');
+		$element->addChild($header->toXML());
+        $element->addChild($container);
+        return $element;
     }
 }

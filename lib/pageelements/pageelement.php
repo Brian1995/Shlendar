@@ -233,12 +233,16 @@ class PageContainer extends PageElement {
 	}
 
 	/**
+	 * Adds a child element to this container. If the element is NULL then this 
+	 * call will be silently ignored and no child added.
 	 * 
-	 * @param PageElement $element
+	 * @param PageElement|null $element
 	 * @param integer $index
 	 */
 	public function addChild($element, $index = -1) {
-		$this->children->add($element, $index);
+		if ($element !== NULL) {
+			$this->children->add($element, $index);
+		}
 	}
 
 	/**

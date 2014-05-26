@@ -40,6 +40,13 @@ class DatabaseConnection {
 		return mysql_num_rows($result);
 	}
 	
+	/**
+	 * Returns an mapped array of strings that contains the result of a single 
+	 * result row or FALSE if no more rows are available.
+	 * 
+	 * @param resource $result
+	 * @return boolean|array
+	 */
 	public static function fetchRow($result) {
 		return mysql_fetch_array($result);
 	}

@@ -2,7 +2,16 @@
 
 require_once 'lib/external/http_build_url.php';
 
+/**
+ * This class represents an generic URL which can be created, modified and 
+ * converted to strings in various ways.
+ * 
+ * @author Tobias Oelgarte
+ */
 class URL {
+	
+	const STATIC_QUERY_PARAMETER_PREFIX = 's-';
+	const DYNAMIC_QUERY_PARAMETER_PREFIX = 'd-';
 	
 	private static $BASE_URL = NULL;
 	private static $HTTPS_ENFORCED = FALSE;
@@ -42,7 +51,7 @@ class URL {
 		}
 	}
 	
-	public static function urlFromString($urlString) {
+	public static function create($urlString) {
 		$url = new URL();
 		$parts = parse_url($urlString);
 		if ($parts) {
@@ -56,28 +65,35 @@ class URL {
 			URL::set($url->fragment, $parts, 'fragment');
 			return $url;
 		}
-		throw new InvalidArgumentException('not parseable url (url=\''.$urlString.'\'');
+		throw new InvalidArgumentException('not parseable url (url=\''.$urlString.'\'');		
 	}
 	
-	/**
-	 * 
-	 * @return URL
-	 * @throws Exception
-	 */
-	public static function urlFromCurrent() {
+	public static function createCurrent() {
 		$https      = filter_input(INPUT_SERVER, 'HTTPS');
 		$httpHost   = filter_input(INPUT_SERVER, 'HTTP_HOST');
 		$requestURI = filter_input(INPUT_SERVER, 'REQUEST_URI');
 		$protocol   = $https ? 'https' : 'http';
 		if ($httpHost && $requestURI) {
 			$urlString = $protocol.'://'.$httpHost.$requestURI;
-			return URL::urlFromString($urlString);
+			return self::create($urlString);
 		} else {
 			throw new Exception('could note dertermine host or request uri');
 		}
 	}
 	
-	public static function urlFromBase() {
+	public static function createStatic($url=NULL) {
+		$u = $url === NULL ? self::createCurrent() : new URL($url);
+		$u->removeAllNonStaticQueryParameters();
+		return $u;
+	}
+	
+	public static function createClean($url=NULL) {
+		$u = $url === NULL ? self::createCurrent() : new URL($url);
+		$u->removeAllQueryParameters();
+		return $u;
+	}
+	
+	public static function createBase() {
 		return self::urlFromString(self::$BASE_URL);
 	}
 	
@@ -94,7 +110,7 @@ class URL {
 	 * @param URL|null $url
 	 * @return URL 
 	 */
-	public static function urlFromRelativePath($relativePath, $url = NULL) {
+	public static function createRelative($relativePath, $url = NULL) {
 		if ($url === NULL) {
 			$url = URL::urlFromCurrent();
 		}
@@ -187,6 +203,7 @@ class URL {
 	 * 
 	 * @param string $name
 	 * @return string|null
+	 * @deprecated since version 0.1
 	 */
 	public function getQueryParameter($name) {
 		$query = $this->getQuery();
@@ -198,6 +215,8 @@ class URL {
 	 * exists it will be overriden and the old value will be returned. Setting 
 	 * the value of a query parameter to NULL will remove the existing query 
 	 * parameter.
+	 * 
+	 * Please consider using the preferred static and dynamic functions.
 	 * 
 	 * @param string $name
 	 * @param string|null $value
@@ -229,6 +248,84 @@ class URL {
 		return $old;
 	}
 	
+	/**
+	 * Sets a static query parameter. Static query parameters are meant to be 
+	 * global query parameters that should be kept while chaning from one 
+	 * action to another.
+	 * 
+	 * @param string $name 
+	 *        Name of the parameter, never NULL.
+	 * @param string|null $value 
+	 *        Value of the parameter. If it is NULL the parameter will be 
+	 *        removed.
+	 * @return string|null 
+	 *         Returns the previously assigned value, or NULL if there was no 
+	 *         such parameter set.
+	 */
+	public function setStaticQueryParameter($name, $value) {
+		return $this->setQueryParameter(self::STATIC_QUERY_PARAMETER_PREFIX.$name, $value);
+	}
+	
+	/**
+	 * Sets a dynamic query parameter. Dynamic query parameters should be 
+	 * omitted when creating an URL with a different action.
+	 * 
+	 * @param string $name
+	 * @param string|null $value
+	 * @return string|null
+	 */
+	public function setDynamicQueryParameter($name, $value) {
+		return $this->setQueryParameter(self::DYNAMIC_QUERY_PARAMETER_PREFIX.$name, $value);
+	}
+	
+	/**
+	 * Returns the value of the static parameter or NULL if the parameter does 
+	 * not exist.
+	 * 
+	 * @param string $name
+	 *        Name of the parameter, never NULL.
+	 * @return string|null
+	 *         The value of the parameter or NULL if it does not exist.
+	 * @see setStaticQueryParameter()
+	 */
+	public function getStaticQueryParameter($name) {
+		return $this->getQueryParameter(self::STATIC_QUERY_PARAMETER_PREFIX.$name);
+	}
+	
+	/**
+	 * Returns the value of the dynamic parameter or NULL if the parameter does 
+	 * not exist.
+	 * 
+	 * @param string $name
+	 *        Name of the parameter, never NULL.
+	 * @return string|null
+	 *         The value of the parameter or NULL if it does not exist.
+	 * @see setDynamicQueryParameter()
+	 */
+	public function getDynamicQueryParameter($name) {
+		return $this->getQueryParameter(self::DYNAMIC_QUERY_PARAMETER_PREFIX.$name);
+	}
+	
+	public function removeAllQueryParameters($keepPrefix=NULL) {
+		if ($keepPrefix === NULL) {
+			$this->query = NULL;
+		} else {
+			foreach ($this->query as $name => $value) {
+				if (!StringUtils::startsWith($name, $keepPrefix)) {
+					unset($this->query[$name]);
+				}
+			}
+		}
+	}
+		
+	public function removeAllNonStaticQueryParameters() {
+		$this->removeAllQueryParameters(self::STATIC_QUERY_PARAMETER_PREFIX);
+	}
+	
+	public function removeAllNonDynamicQueryParameters() {
+		$this->removeAllQueryParameters(self::DYNAMIC_QUERY_PARAMETER_PREFIX);
+	}
+		
 	public function setPathRelativeToCurrentPath($relativePath) {
 		$path = $this->getPath();
 		
@@ -252,7 +349,7 @@ class URL {
 	
 	public function redirect() {
 		if ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.1') {
-			if(php_sapi_name() == 'cqi'){
+			if(php_sapi_name() == 'cgi'){
 				header('Status: 303 See Other');
 			} else {
 				header('HTTP/1.1 303 See Other');
