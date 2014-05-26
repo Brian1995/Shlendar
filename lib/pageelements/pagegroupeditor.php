@@ -22,8 +22,7 @@ class PageGroupEditor extends PageElement {
 		$this->groupOwnerId = self::getGroupOwnerId($groupId);
 		
 		if ($this->groupOwnerId != $this->userId) {
-			$url = URL::createClean();
-			$url->redirect();
+			URL::createClean()->redirect();
 		}
 	}
 	
@@ -115,13 +114,17 @@ class PageGroupEditor extends PageElement {
 	}
 
 	public static function removeMember($group_user_relation_id) {
-		$result = $this->db->query("SELECT user_id, group_id FROM group_user_relations WHERE id = '&s'");
+		$result = $this->db->query("SELECT group_id FROM group_user_relations WHERE id = '&s'");
 		$row = DatabaseConnection::fetchRow($result);
-		$relUserId = $row['user_id'];
 		$relGroupId = $row['group_id'];
 		$ownerId = self::getGroupOwnerId($relGroupId);
 		
-		if ($ownerId != Session::getUserID()) {
+		if ($ownerId == Session::getUserID()) {
+			$this->db->query(
+				"DELETE FROM group_user_relations 
+				 WHERE id = '%s';", $group_user_relation_id);
+		} else {
+			URL::createClean()->redirect();
 		}
 	}
 }
