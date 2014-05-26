@@ -314,7 +314,7 @@ class URL {
 	public function removeAllQueryParameters($keepPrefix=NULL) {
 		if ($keepPrefix === NULL) {
 			$this->query = NULL;
-		} else {
+		} else if ($this->query !== NULL) {
 			foreach ($this->query as $name => $value) {
 				if (!StringUtils::startsWith($name, $keepPrefix)) {
 					unset($this->query[$name]);
