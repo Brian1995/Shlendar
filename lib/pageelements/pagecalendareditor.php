@@ -20,6 +20,12 @@ class PageCalendarEditor extends PageElement{
     
     function createCalendarMembers(){
         $element = new XMLElement('div');
+		$result = $this->db->query("SELECT * FROM group_calendar_relations WHERE calendar_id = '%s';", $this->calendarID);
+		while ($row = mysql_fetch_row($query)) {
+			
+		}
+		
+		
         return $element;
     }
     
@@ -27,7 +33,19 @@ class PageCalendarEditor extends PageElement{
         $element = new XMLElement('div');
         $element->addAttribute('class', 'calendar-member-item');
         
-        
+		$delete_url = URL::createCurrent();
+		$delete_url->setDynamicQueryParameter('referrer', $delete_url);
+		$delete_url->setDynamicQueryParameter('action', 'remove-group-from-calendar');
+		$delete_url->setDynamicQueryParameter('action', 'remove-group-from-calendar');
+		
+		$nameText = new PageText($name);
+		$rightsText = new PageText($rights);
+		
+		$deleteButton = new PageButton('Entfernen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE));
+		$delete = new XMLElement('form', 'action', $delete-url);
+		
+        $element->addChild($nameText);
+        $element->addChild($rightsText);		
         return $element;
     }
     
@@ -41,10 +59,15 @@ class PageCalendarEditor extends PageElement{
     }
     
     function createNonMemberItem($id, $name){
+		$addUrl = URL::createCurrent();
+		$addUrl->setDynamicQueryParameter('action', 'add-group-to-calendar');
+		$addUrl->setDynamicQueryParameter('group', $id);
+		$addUrl->setQueryParameter('referrer', URL::createCurrent());
+		//TODO referrer
         $element = new XMLElement('div');
         $element->setAttribute('class', 'calendar-non-member-item');
         $name = new PageText($name);
-        $add = new XMLElement('form');
+        $add = new XMLElement('form', 'action', $addUrl, 'method', 'post');
         $addButton = new PageButton('Hinzufügen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square', PageFontIcon::NORMAL, TRUE));
         $add->addChild($addButton->toXML());
         
@@ -55,8 +78,11 @@ class PageCalendarEditor extends PageElement{
     
     function toXML() {
         $element = parent::toXML();
-        $element->addChild(new XMLText("Kalender bearbeiten"));
         $element->addChild($this->createNonMembers());
         return $element;
     }
+	
+	public static function addGroupToCalendar(DatabaseConnection $db, $calendarID, $groupID, $rights){
+		$db->query("INSERT INTO group_calendar_relations (group_id, calendar_id, rights) VALUES ('%s', '%s', '%s')", $groupID, $calendarID, $rights);
+	}
 }

@@ -16,6 +16,22 @@ class PageCalendarManagement extends PageElement{
         $this->db =$db;
     }
     
+    function toXML() {
+        $element = parent::toXML();
+        $element->addChild($this->createCalendarList());
+        $element->addChild($this->createInsertDialog());
+        return $element;
+    }
+	
+    function createCalendarList(){
+        $element = new XMLElement('div');
+        $result = $this->db->query("SELECT * FROM calendars WHERE user_id = '%s';", Session::getUserID());
+        while ($row = mysql_fetch_row($result)){
+            $element->addChild($this->createListItem($row[0], $row[1]));
+        }
+        return $element;
+    }
+	
     function createInsertDialog(){
         $submitUrl = URL::createStatic();
         $submitUrl->setDynamicQueryParameter('action', 'insert-calendar');
@@ -31,7 +47,7 @@ class PageCalendarManagement extends PageElement{
     
     function createListItem($id, $name){
         $element = new XMLElement('div');
-        $element->addAttribute('class', 'calendar-list-container');
+        $element->addAttribute('class', 'calendar-list-item');
         
         $deleteUrl = URL::createStatic();
         $deleteUrl->setDynamicQueryParameter('action', 'delete-calendar');
@@ -44,7 +60,8 @@ class PageCalendarManagement extends PageElement{
         
         $editUrl = $deleteUrl;
         $editUrl->setDynamicQueryParameter('action', 'edit-calendar');
-        
+        $editUrl->setDynamicQueryParameter('name', $name);
+		
         $edit = new XMLElement('form', 'class', 'calendaritem-edit', 'action', $editUrl, 'method', 'post');
         $editButton = new PageButton('Bearbeiten', PageButton::STYLE_EDIT, PageFontIcon::create('edit', PageFontIcon::NORMAL, TRUE));
         $edit->addChild($editButton->toXML());
@@ -56,22 +73,7 @@ class PageCalendarManagement extends PageElement{
         return $element;
     }
     
-    function createCalendarList(){
-        $element = new XMLElement('div');
-        $result = $this->db->query("SELECT * FROM calendars WHERE user_id = '%s';", Session::getUserID());
-        while ($row = mysql_fetch_row($result)){
-            $element->addChild($this->createListItem($row[0], $row[1]));
-        }
-        return $element;
-    }
     
-    function toXML() {
-        $element = parent::toXML();
-        $element->addChild(new XMLText('Kalender verwalten'));
-        $element->addChild($this->createInsertDialog());
-        $element->addChild($this->createCalendarList());
-        return $element;
-    }
     
     public static function insertCalendar(DatabaseConnection $db){
         $user = Session::getUserID();

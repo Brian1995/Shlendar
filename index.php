@@ -138,6 +138,7 @@ switch ($action) {
 
     case 'manage-calendars':
         ensureLogin();
+		$titleText = "Kalender verwalten";
         addSidebarCalendar();
         addSidebarActions();
         addSidebarCalendarList();
@@ -185,8 +186,6 @@ switch ($action) {
         if(PageCalendarManagement::deleteCalendar($dbConnection, $calendarID)){
             URL::create($referrer)->redirect();
         } else {
-            var_dump("scheiße");
-            var_dump($calendarID);
         }
         break;
 
@@ -209,17 +208,30 @@ switch ($action) {
         addSidebarCalendar();
         addSidebarActions();
         addSidebarCalendarList();
-        
+		$calendarName = $url_current->getDynamicQueryParameter('name');
         $calendarID = $url_current->getDynamicQueryParameter('id');
-        
+		
+		
+        $titleText = $calendarName." bearbeiten";
         $editor = new PageCalendarEditor($dbConnection, $calendarID);
         $content->addChild($editor);
         break;
     
-    case 'manage-calendars':
+    case 'add-group-to-calendar':
         ensureLogin();
-        addSidebarCalendar();
+		addSidebarCalendar();
+        addSidebarActions();
+        addSidebarCalendarList();
+		
+		$referrer = $url_current->getDynamicQueryParameter('referrer');
+		
+		$calendar = $url_current->getDynamicQueryParameter('id');
+		$group = $url_current->getDynamicQueryParameter('group');
+		PageCalendarEditor::addGroupToCalendar($dbConnection, $calendar, $group, 1);
+		
+		URl::create($referrer)->redirect();
         break;
+	
 
     case 'listAppointments':
         ensureLogin();
