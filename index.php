@@ -228,7 +228,6 @@ switch ($action) {
     
     case 'add-group-to-calendar':
         ensureLogin();
-		
 		$referrer = $url_current->getDynamicQueryParameter('referrer');
 		
 		$calendar = $url_current->getDynamicQueryParameter('id');
@@ -241,11 +240,9 @@ switch ($action) {
 	case 'remove-group-from-calendar':
 		ensureLogin();
 		$referrer = $url_current->getDynamicQueryParameter('referrer');
-		var_dump($referrer);
 		$id = $url_current->getDynamicQueryParameter('id');
 		PageCalendarEditor::removeGroupFromCalendar($dbConnection, $id);
-		var_dump("bla");
-//		URL::create($referrer)->redirect();
+		URL::create($referrer)->redirect();
 		break;
 		
     case 'listAppointments':

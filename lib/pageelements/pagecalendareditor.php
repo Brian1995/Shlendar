@@ -36,7 +36,7 @@ class PageCalendarEditor extends PageElement{
         $element = new XMLElement('div');
         $element->addAttribute('class', 'calendar-member-item');
         
-		$deleteUrl = URL::createCurrent();
+		$deleteUrl = URL::createStatic();
 		$deleteUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 		$deleteUrl->setDynamicQueryParameter('action', 'remove-group-from-calendar');
 		$deleteUrl->setDynamicQueryParameter('id', $realationID);
@@ -45,7 +45,7 @@ class PageCalendarEditor extends PageElement{
 		$rightsText = new PageText($rights);
 		
 		$deleteButton = new PageButton('Entfernen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE));
-		$delete = new XMLElement('form', 'action', $deleteUrl);
+		$delete = new XMLElement('form', 'action', $deleteUrl, 'method', 'post');
 		$delete->addChild($deleteButton->toXML());
 		
         $element->addChild($nameText->toXML());
@@ -67,10 +67,11 @@ class PageCalendarEditor extends PageElement{
     }
     
     function createNonMemberItem($id, $name){
-		$addUrl = URL::createCurrent();
+		$addUrl = URL::createStatic();
 		$addUrl->setDynamicQueryParameter('action', 'add-group-to-calendar');
 		$addUrl->setDynamicQueryParameter('group', $id);
-		$addUrl->setQueryParameter('referrer', URL::createCurrent());
+		$addUrl->setDynamicQueryParameter('id', $this->calendarID);
+		$addUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
 		//TODO referrer
         $element = new XMLElement('div');
