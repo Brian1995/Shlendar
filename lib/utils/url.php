@@ -325,6 +325,9 @@ class URL {
 					unset($this->query[$name]);
 				}
 			}
+			if (count($this->query) == 0) {
+				$this->query = NULL;
+			}
 		}
 	}
 		
