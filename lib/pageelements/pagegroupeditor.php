@@ -18,22 +18,22 @@ class PageGroupEditor extends PageElement {
 		$this->groupId = $groupId;
 		$this->userId = $userId;
 		
-		$this->groupOwnerName = self::getGroupOwnerName($groupId);
-		$this->groupOwnerId = self::getGroupOwnerId($groupId);
+		$this->groupOwnerName = self::getGroupOwnerName($db, $groupId);
+		$this->groupOwnerId = self::getGroupOwnerId($db, $groupId);
 		
 		if ($this->groupOwnerId != $this->userId) {
 			URL::createClean()->redirect();
 		}
 	}
 	
-	public static function getGroupOwnerId($groupId) {
-		$result = $this->db->query("SELECT user_id AS ownerId FROM groups WHERE id = '%s';", $groupId);
+	public static function getGroupOwnerId(DatabaseConnection $db, $groupId) {
+		$result = $db->query("SELECT user_id AS ownerId FROM groups WHERE id = '%s';", $groupId);
 		$row = DatabaseConnection::fetchRow($result);
 		return $row['ownerId'];
 	}
 	
-	public static function getGroupOwnerName($groupId) {
-		$result = $this->db->query("SELECT name as ownerName FROM groups WHERE id = '%s';", $groupId);
+	public static function getGroupOwnerName(DatabaseConnection $db, $groupId) {
+		$result = $db->query("SELECT name as ownerName FROM groups WHERE id = '%s';", $groupId);
 		$row = DatabaseConnection::fetchRow($result);
 		return $row['ownerName'];
 	}
@@ -117,12 +117,10 @@ class PageGroupEditor extends PageElement {
 		$result = $this->db->query("SELECT group_id FROM group_user_relations WHERE id = '&s'");
 		$row = DatabaseConnection::fetchRow($result);
 		$relGroupId = $row['group_id'];
-		$ownerId = self::getGroupOwnerId($relGroupId);
+		$ownerId = self::getGroupOwnerId($this->db, $relGroupId);
 		
 		if ($ownerId == Session::getUserID()) {
-			$this->db->query(
-				"DELETE FROM group_user_relations 
-				 WHERE id = '%s';", $group_user_relation_id);
+			$this->db->query("DELETE FROM group_user_relations WHERE id = '%s';", $group_user_relation_id);
 		} else {
 			URL::createClean()->redirect();
 		}

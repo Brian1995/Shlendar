@@ -10,14 +10,14 @@ class PageFontIcon extends PageElement {
 	private $size;
 	private $fixedWidth;
 	
-	function __construct($name, $size=NORMAL, $fixedWidth=FALSE) {
+	function __construct($name, $size=self::NORMAL, $fixedWidth=FALSE) {
 		parent::__construct('i');
 		$this->name = $name;
 		$this->size = $size;
 		$this->fixedWidth = $fixedWidth;
 	}
 	
-	public static function create($name, $size=NORMAL, $fixedWidth=FALSE) {
+	public static function create($name, $size=self::NORMAL, $fixedWidth=FALSE) {
 		return new PageFontIcon($name, $size, $fixedWidth);
 	}
 	

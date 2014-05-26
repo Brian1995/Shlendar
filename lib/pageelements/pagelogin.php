@@ -41,6 +41,7 @@ class PageLogin extends PageElement {
 		
 		$submitContainer = new XMLElement('div', 'class', 'login-button');
 				
+		$failed = NULL;
 		if (Session::loginFailed()) {
 			$failed = new XMLElement('div', 'class', 'login-failed');
 			$failedText1 = new PageTextContainer(PageTextContainer::P, 'Fehler beim letzten Anmeldeversuch!');
