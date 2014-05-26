@@ -177,6 +177,7 @@ main { display: flex; }
 /** CALENDAR MANAGEMENT *******************************************************/
 #calendar-management { box-sizing: border-box; }
 #calendar-management .calendar-list-container{ display: flex; flex-flow: column nowrap; align-items: stretch; margin: -0.3em -0.6em; }
+#calendar-management .calendar-list-item{ display: flex; flex-direction: column; flex-flow: column nowrap; align-items: stretch; margin: -0.3em -0.6em; }
 
 /** FOOTER ********************************************************************/
 footer { <?=$C_FOOTER?> height: 200px; }
