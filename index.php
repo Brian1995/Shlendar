@@ -202,6 +202,15 @@ switch ($action) {
         $editor = new PageGroupEditor($dbConnection, $groupId, $userId);
         $content->addChild($editor);
         break;
+	
+	case 'remove-user-from-group':
+		ensureLogin();
+		
+		$group_user_relation_id = $url_current->getDynamicQueryParameter('id');
+		PageGroupEditor::removeMember($group_user_relation_id);
+		
+		URL::create($url_current->getDynamicQueryParameter('referrer'))->redirect();
+		break;
     
     case 'edit-calendar':
         ensureLogin();

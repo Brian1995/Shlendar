@@ -81,6 +81,11 @@ class URL {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param URL|null $url
+	 * @return URL
+	 */
 	public static function createStatic($url=NULL) {
 		$u = $url === NULL ? self::createCurrent() : new URL($url);
 		$u->removeAllNonStaticQueryParameters();
