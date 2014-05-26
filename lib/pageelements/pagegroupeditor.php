@@ -8,8 +8,8 @@ class PageGroupEditor extends PageElement {
 	private $groupId;
 	private $userId;
 	
-	private $groupName;
-	private $groupOwner;
+	private $groupOwnerName;
+	private $groupOwnerId;
 	
 	function __construct(DatabaseConnection $db, $groupId, $userId) {
 		parent::__construct('div');
@@ -18,16 +18,27 @@ class PageGroupEditor extends PageElement {
 		$this->groupId = $groupId;
 		$this->userId = $userId;
 		
-		$groupNameResult = $this->db->query("SELECT name, user_id AS owner FROM groups WHERE id = '%s';", $this->groupId);
-		$groupNameRow = DatabaseConnection::fetchRow($groupNameResult);
-		$this->groupName = $groupNameRow['name'];
-		$this->groupOwner = $groupNameRow['owner'];
+		$this->groupOwnerName = self::getGroupOwnerName($groupId);
+		$this->groupOwnerId = self::getGroupOwnerId($groupId);
 		
-		if ($this->groupOwner != $this->userId) {
+		if ($this->groupOwnerId != $this->userId) {
 			$url = URL::createClean();
 			$url->redirect();
 		}
 	}
+	
+	public static function getGroupOwnerId($groupId) {
+		$result = $this->db->query("SELECT user_id AS ownerId FROM groups WHERE id = '%s';", $groupId);
+		$row = DatabaseConnection::fetchRow($result);
+		return $row['ownerId'];
+	}
+	
+	public static function getGroupOwnerName($groupId) {
+		$result = $this->db->query("SELECT name as ownerName FROM groups WHERE id = '%s';", $groupId);
+		$row = DatabaseConnection::fetchRow($result);
+		return $row['ownerName'];
+	}
+	
 	
 	public function toXML() {
 		$element = parent::toXML();
@@ -48,7 +59,7 @@ class PageGroupEditor extends PageElement {
 			, $this->groupId, $this->userId);
 		
 		$container = new PageContainer('div', 'class', 'member-list');
-		$header = new PageTextContainer(PageTextContainer::H2, 'Gruppenmitglieder von "'.$this->groupName.'"');
+		$header = new PageTextContainer(PageTextContainer::H2, 'Gruppenmitglieder von "'.$this->groupOwnerName.'"');
 		$content = new PageContainer('div', 'class', 'member-list-container');
 		if ($members) {
 			$index = 1;
@@ -70,7 +81,7 @@ class PageGroupEditor extends PageElement {
 		$name->setProperty('class', 'member-name');
 		$action = URL::createStatic();
 		$action->setDynamicQueryParameter('action', 'remove-user-from-group');
-		$action->setDynamicQueryParameter('relation_id', $row['id']);
+		$action->setDynamicQueryParameter('id', $row['id']);
 		$form = new PageContainer('form', 'class', 'member-delete', 'action', $action);
 		$remove = new PageButton('Entfernen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o'));
 		
@@ -104,6 +115,13 @@ class PageGroupEditor extends PageElement {
 	}
 
 	public static function removeMember($group_user_relation_id) {
+		$result = $this->db->query("SELECT user_id, group_id FROM group_user_relations WHERE id = '&s'");
+		$row = DatabaseConnection::fetchRow($result);
+		$relUserId = $row['user_id'];
+		$relGroupId = $row['group_id'];
+		$ownerId = self::getGroupOwnerId($relGroupId);
 		
+		if ($ownerId != Session::getUserID()) {
+		}
 	}
 }
