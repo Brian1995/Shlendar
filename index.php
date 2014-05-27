@@ -267,23 +267,23 @@ switch ($action) {
 		$list = new PageAppointmentList($dbConnection, $calendar);
 		$url = URL::createStatic();
 		
-		$content->addChild($list);
+		$appContainer = new PageContainer('div');
+		$appContainer->addChild($list);
 		$canEdit = PageAddAppointment::userCanEdit($dbConnection, Session::getUserID(), $calendar);
 		if ($canEdit) {
 			$url->setDynamicQueryParameter('action', 'addAppointment');
 			$url->setDynamicQueryParameter('calendar', $calendar);
 			$add = new PageAddAppointment($url);
-			$content->addChild($add);
+			$appContainer->addChild($add);
 		}
+		$content->addChild($appContainer);
 		break;
 
 	case 'deleteAppointment':
 		ensureLogin();
 		$id = $url_current->getDynamicQueryParameter('appointment');
 		$result = $dbConnection->query("DELETE FROM appointments WHERE id = '%s';", $id);
-		$url = URL::createStatic();
-		$url->setDynamicQueryParameter('action', 'listAppointments');
-		$url->redirect();
+		URL::create($url_current->getDynamicQueryParameter('referrer'))->redirect();
 		break;
 
 	case 'addAppointment':

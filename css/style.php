@@ -156,12 +156,15 @@ main { display: flex; flex-flow: column nowrap; background: red; }
 /** CONTENT *******************************************************************/
 #content { <?=$C_CONTENT?> <?=FONT_PARAGRAPH?> background: <?=GRAY_LIGHTER?> }
 #content > div { display: flex; flex-flow: row wrap; justify-content:flex-start; align-items: stretch; padding: 0.5em; }
-#content > div > div { flex: 1 0 auto; max-width:40em; margin: 0.5em; padding: 1em; background: <?=WHITE?>; border: 1px solid <?=GRAY_LIGHT?>; }
+#content > div > div { flex: 1 0 auto; max-width:30em; margin: 0.5em; padding: 1em; background: <?=WHITE?>; border: 1px solid <?=GRAY_LIGHT?>; }
 #content h1 { margin: 0.7em 0.625em 0em 0.625em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 #content h2 { margin-bottom: 0.9em; font-size: 1.4em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
+#content h3 { margin-bottom: 0.4em; font-size: 1.1em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 
-#content input[type=text], #content input[type=password]             { padding:0.1em 0.2em; font-size: 0.9em; color: <?=BLUE_DARKER?>; border: 1px solid <?=GRAY_LIGHT?>; border-radius: 5px; transition: all 0.30s ease-in-out; }
-#content input[type=text]:focus, #content input[type=password]:focus { border: 1px solid <?=GRAY_DARK?>; background: <?=WHITE?>; }
+#content input[type=text], #content input[type=password], #content textarea
+{ padding:0.1em 0.2em; font-size: 0.9em; color: <?=BLUE_DARKER?>; border: 1px solid <?=GRAY_LIGHT?>; border-radius: 5px; transition: all 0.30s ease-in-out; }
+#content input[type=text]:focus, #content input[type=password]:focus, #content textarea:focus
+{ border: 1px solid <?=GRAY_DARK?>; background: <?=WHITE?>; }
 #content button              { padding:0.1em 0.2em; <?=FONT_IMPORTANT?> font-size: 0.9em; border: 1px solid <?=GRAY_DARK?>; border-radius: 5px; background: <?=GRAY_DARK?>; color: <?=WHITE?>; cursor: pointer; transition: all 0.30s ease-in-out; }
 #content button:hover        { background: <?=GRAY_DARKER?>; }
 #content button.submit       { border: 1px solid <?=GREEN_DARK?>; background: <?=GREEN_DARK?>; }

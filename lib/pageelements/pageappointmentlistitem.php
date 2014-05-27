@@ -4,7 +4,7 @@
  *
  * @author Brian
  */
-class PageAppointmentListItem{
+class PageAppointmentListItem extends PageContainer {
     
     private $id;
     private $calendar_id;
@@ -25,35 +25,43 @@ class PageAppointmentListItem{
     private $description;
     
     function __construct($id, $calendar_id, $start_date, $end_date, $title, $description) {
+		parent::__construct('div');
+		$this->setProperty('class', 'groupv');
+		$this->setProperty('style', 'border-bottom: 1px solid #95a5a6; margin-bottom: 0.5em; ');
+		
 		$this->id = $id;
         $this->calendar_id = $calendar_id;
         $this->start_date = $start_date;
         $this->end_date = $end_date;
         $this->title = $title;
         $this->description = $description;
-    }
-    
-    public function toXML(){
-        $title = new XMLElement('p');
-        $title->addChild(new XMLText($this->title));
+		
+        $title = new PageTextContainer(PageTextContainer::H3, $this->title);
+		$title->setProperty('class', 'entry stretch flexible');
         
-        $time = new XMLElement('p');
-        $time->addChild(new XMLText("Von: ".$this->start_date." "));
-        $time->addChild(new XMLText("Bis: ".$this->end_date." "));
+        $time = new PageContainer('div', 'class', 'entry group fill', 'style', 'font-size:0.8em;');
+        $time->addChild($from = new PageTextContainer(PageTextContainer::P, "Von: ".$this->start_date));
+		$from->setProperty('class', 'entry');
+        $time->addChild($to = new PageTextContainer(PageTextContainer::P, "Bis: ".$this->end_date));
+		$to->setProperty('class', 'entry');
         
-        $description = new XMLElement('p');
-        $description->addChild(new XMLText($this->description));
+        $description = new PageTextContainer(PageTextContainer::P, $this->description);
+		$description->setProperty('class', 'entry fill');
         
 		$url = URL::createStatic();
 		$url->setDynamicQueryParameter('action', 'deleteAppointment');
 		$url->setDynamicQueryParameter('appointment', $this->id);
-		$deleteBtn = new PageLink(new PageText("löschen"), $url);
+		$url->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
-        $item = new XMLElement('div');
-        $item->addChild($title);
-        $item->addChild($time);
-        $item->addChild($description);
-		$item->addChild($deleteBtn->toXML());
-        return $item;
+		$form = new PageContainer('form', 'action', $url, 'method', 'post', 'class', 'entry');
+		$form->addChild($deleteBtn = new PageButton('Löschen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE)));
+		$deleteBtn->setProperty('class', 'fill');
+		
+        $this->addChild($top = new PageContainer('div', 'class', 'entry group'));
+			$top->addChild($title);
+			$top->addChild($form);
+		$this->addChild($bottom = new PageContainer('div', 'class', 'entry group'));
+			$bottom->addChild($time);
+			$bottom->addChild($description);
     }
 }

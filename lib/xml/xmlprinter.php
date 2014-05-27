@@ -10,7 +10,7 @@ class XMLPrinter {
 		$this->indent = $indent;
 		$this->linebreak = $linebreak;
 		if ($noShortCloseList === NULL) {
-			$this->noShortCloseList = array('div', 'span', 'a', 'i', 'b', 'u', 'em', 'script', 'form');
+			$this->noShortCloseList = array('div', 'span', 'a', 'i', 'b', 'u', 'em', 'script', 'form', 'textarea');
 		} else {
 			$this->noShortCloseList = $noShortCloseList;
 		}

@@ -31,7 +31,7 @@ class PageAddAppointment extends PageContainer {
 
         $descriptionLabel = new XMLElement('div');
         $descriptionLabel->addChild(new XMLText("Beschreibung"));
-        $description = new XMLElement('input', 'type', 'text', 'name', 'description', 'class', 'fill');
+        $description = new XMLElement('textarea', 'name', 'description', 'rows', '5', 'class', 'fill');
 
         $divTitle = new XMLElement('div', 'id', 'add-appointment-title', 'class', 'entry');
         $divTitle->addChild($titleLabel);

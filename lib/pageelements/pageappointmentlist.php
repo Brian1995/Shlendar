@@ -27,11 +27,15 @@ class PageAppointmentList extends PageContainer {
 		$result = $this->dbConnection->query("SELECT * FROM appointments a WHERE a.calendar_id = '%s' ORDER BY a.start_date;", $this->calendar_id);
 
 		$element = parent::toXML();
+		$container = new PageContainer('div');
+		$container->addChild($header = new PageTextContainer(PageTextContainer::H2, 'Termine'));
+		$container->addChild($list = new PageContainer('div'));
+		
 		while ($a = mysql_fetch_row($result)) {
 			$item = new PageAppointmentListItem($a[0], $a[1], $a[2], $a[3], $a[4], $a[5]);
-			$element->addChild($item->toXML());
+			$list->addChild($item);
 		}
-
+		$element->addChild($container->toXML());
 		return $element;
 	}
 
