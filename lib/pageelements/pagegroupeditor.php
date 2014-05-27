@@ -29,9 +29,9 @@ class PageGroupEditor extends PageElement {
 	public function toXML() {
 		$element = parent::toXML();
 		
-		$element->addChild($this->createRename()->toXml());
 		$element->addChild($this->createMemberList()->toXML());
 		$element->addChild($this->createMemberAdd()->toXML());
+		$element->addChild($this->createRename()->toXml());
 		
 		return $element;
 	}
@@ -45,9 +45,10 @@ class PageGroupEditor extends PageElement {
 		$action->setDynamicQueryParameter('id', $this->groupId);
 		$action->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
-		$form = new PageContainer('form', 'class', 'group-rename-form', 'action', $action, 'method', 'post');
-		$nameField = new PageElement('input', 'type', 'text', 'name', 'name', 'value', $this->groupName);
+		$form = new PageContainer('form', 'class', 'group-rename-form group', 'action', $action, 'method', 'post');
+		$nameField = new PageElement('input', 'class', 'entry stretch flexible', 'type', 'text', 'name', 'name', 'value', $this->groupName );
 		$applyButton = new PageButton('Anwenden', PageButton::STYLE_SUBMIT, PageFontIcon::create('check'));
+		$applyButton->setProperty('class', 'entry');
 		
 		$container->addChild($header);
 		$container->addChild($form);
@@ -82,22 +83,22 @@ class PageGroupEditor extends PageElement {
 	}
 	
 	private function createMemberListElement($row, $index) {
-		$item = new PageContainer('div', 'class', 'member-item list-item');
+		$item = new PageContainer('div', 'class', 'member-item group');
 		$name = new PageTextContainer('div', $row['username']);
-		$name->setProperty('class', 'member-name list-item-name');
+		$name->setProperty('class', 'member-name entry stretch flexible');
 		
 		$action = URL::createStatic();
 		$action->setDynamicQueryParameter('action', 'remove-user-from-group');
 		$action->setDynamicQueryParameter('relation_id', $row['relation_id']);
 		$action->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
-		$form = new PageContainer('form', 'class', 'member-delete list-item-buttongroup', 'action', $action, 'method', 'post');
-		$remove = new PageButton('Entfernen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o'));
-		$remove->setProperty('class', 'list-item-button');
+		$form = new PageContainer('form', 'class', 'member-delete entry', 'action', $action, 'method', 'post');
+		$removeButton = new PageButton('Entfernen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o'));
+		$removeButton->setProperty('class', 'entry');
 		
 		$item->addChild($name);
 		$item->addChild($form);
-			$form->addChild($remove);
+			$form->addChild($removeButton);
 		
 		return $item;
 	}
@@ -130,9 +131,9 @@ class PageGroupEditor extends PageElement {
 	}
 	
 	private function createMemberAddElement($row, $index) {
-		$item = new PageContainer('div', 'class', 'member-item');
+		$item = new PageContainer('div', 'class', 'member-item group');
 		$name = new PageTextContainer('div', $row['username']);
-		$name->setProperty('class', 'member-name');
+		$name->setProperty('class', 'member-name entry stretch flexible');
 		
 		$action = URL::createStatic();
 		$action->setDynamicQueryParameter('action', 'add-user-to-group');
@@ -140,8 +141,9 @@ class PageGroupEditor extends PageElement {
 		$action->setDynamicQueryParameter('user_id', $row['user_id']);
 		$action->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
-		$form = new PageContainer('form', 'class', 'member-add', 'action', $action, 'method', 'post');
+		$form = new PageContainer('form', 'class', 'member-add entry', 'action', $action, 'method', 'post');
 		$addButton = new PageButton('Hinzufügen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square'));
+		$addButton->setProperty('class', 'fill');
 		
 		$item->addChild($name);
 		$item->addChild($form);

@@ -44,8 +44,8 @@ class PageGroupManagement extends PageElement {
 
     private function createGroupElement($row, $index, $userId, $groupId) {
         $isGroupOwner = self::isGroupOwner($this->db, $userId, $groupId);
-        $groupItem = new XMLElement('div', 'class', 'group-list-item');
-        $groupItem->addChild($name = new XMLElement('div', 'class', 'group-list-item-name'));
+        $groupItem = new XMLElement('div', 'class', 'group-list-item group');
+        $groupItem->addChild($name = new XMLElement('div', 'class', 'group-list-item-name entry stretch flexible'));
         $name->addChild(new XMLText($row['name']));
 
         if ($isGroupOwner) {
@@ -54,7 +54,7 @@ class PageGroupManagement extends PageElement {
             $editUrl->setDynamicQueryParameter('action', 'edit-group');
             $editUrl->setDynamicQueryParameter('id', $groupId);
 
-            $edit = new XMLElement('form', 'class', 'groupitem-edit', 'action', $editUrl, 'method', 'post');
+            $edit = new XMLElement('form', 'class', 'groupitem-edit entry', 'action', $editUrl, 'method', 'post');
             $editButton = new PageButton('Bearbeiten', PageButton::STYLE_EDIT, PageFontIcon::create('edit', PageFontIcon::NORMAL, TRUE));
 
             $deleteUrl = URL::createStatic();
@@ -62,10 +62,10 @@ class PageGroupManagement extends PageElement {
             $deleteUrl->setDynamicQueryParameter('id', $groupId);
             $deleteUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 
-            $delete = new XMLElement('form', 'class', 'groupitem-delete', 'action', $deleteUrl, 'method', 'post');
+            $delete = new XMLElement('form', 'class', 'groupitem-delete entry', 'action', $deleteUrl, 'method', 'post');
             $deleteButton = new PageButton('Löschen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE));
 
-            $buttonGroup = new XMLElement('div', 'class', 'button-group');
+            $buttonGroup = new XMLElement('div', 'class', 'button-group entry group');
 
             $groupItem->addChild($buttonGroup);
             $buttonGroup->addChild($edit);

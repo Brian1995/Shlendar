@@ -48,6 +48,7 @@ const nowrap = 'nowrap';
 
 const stretch      = 'stretch';
 const center       = 'center';
+const baseline     = 'baseline';
 const start        = 'flex-start';
 const end          = 'flex-end';
 const spacebetween = 'space-between';
@@ -65,6 +66,10 @@ function displayFlex($direction=NULL, $wrap=NULL, $itemAlignment=NULL, $justific
 
 function flex($grow=1, $shrink=0, $basis=auto) {
 	return "flex: $grow $shrink $basis; -webkit-flex: $grow $shrink $basis;";
+}
+
+function flexShrink($shrink=0) {
+	return "flex-shrink: $shrink; -webkit-flex-shrink: $shrink;";
 }
 
 ?>
@@ -104,10 +109,11 @@ main { display: flex; flex-flow: column nowrap; background: red; }
 #sidebar { flex: 1 0 auto; }
 #content { flex: 100000 1 240px; min-width: 240px; }
 
-#content .list { }
-#content .list-item { display: flex}
-#content .list-item-name { <?=flex(1,0,auto)?> }
-#content .list-item-
+#content .group { <?=displayFlex(row,wrap,baseline)?> margin: -0.2em -0.3em; }
+#content .entry { <?=flex(1,0,auto)?> margin: 0.2em 0.3em; }
+#content .stretch { <?=flex(100000,0,auto)?> }
+#content .flexible { <?=flexShrink(1)?> }
+#content .fill { width: 100%; box-sizing: border-box; }
 
 /** SIDEBAR *******************************************************************/
 #sidebar { <?=$C_SIDEBAR?> }
@@ -153,16 +159,16 @@ main { display: flex; flex-flow: column nowrap; background: red; }
 #content h1 { margin: 0.7em 0.625em 0em 0.625em; font-size: 1.6em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 #content h2 { margin-bottom: 0.9em; font-size: 1.4em; <?=$C_CONTENT_HEAD?> <?=FONT_HEADLINE?> }
 
-#content input[type=text], #content input[type=password] { font-size: 0.9em; padding:0.1em 0.3em; color: <?=BLUE_DARKER?>; border: 1px solid <?=GRAY_LIGHT?>; border-radius: 5px; margin: 0.2em 0; transition: all 0.30s ease-in-out; }
+#content input[type=text], #content input[type=password]             { padding:0.1em 0.2em; font-size: 0.9em; color: <?=BLUE_DARKER?>; border: 1px solid <?=GRAY_LIGHT?>; border-radius: 5px; transition: all 0.30s ease-in-out; }
 #content input[type=text]:focus, #content input[type=password]:focus { border: 1px solid <?=GRAY_DARK?>; background: <?=WHITE?>; }
-#content button[type=submit] { <?=FONT_IMPORTANT?> font-size: 0.9em; padding:0.1em 0.3em; border: 1px solid <?=GRAY_DARK?>; border-radius: 5px; background: <?=GRAY_DARK?>; color: <?=WHITE?>; cursor: pointer; transition: all 0.30s ease-in-out; }
-#content button[type=submit]:hover { background: <?=GRAY_DARKER?>; }
-#content button[type=submit].submit { border: 1px solid <?=GREEN_DARK?>; background: <?=GREEN_DARK?>; }
-#content button[type=submit].submit:hover { background: <?=GREEN?>; }
-#content button[type=submit].delete { border: 1px solid <?=RED_DARK?>; background: <?=RED_DARK?>; }
-#content button[type=submit].delete:hover { background: <?=RED?>; }
-#content button[type=submit].edit { border: 1px solid <?=BLUE_LIGHT?>; background: <?=BLUE_LIGHT?>; }
-#content button[type=submit].edit:hover { background: <?=BLUE_LIGHTER?>; }
+#content button              { padding:0.1em 0.2em; <?=FONT_IMPORTANT?> font-size: 0.9em; border: 1px solid <?=GRAY_DARK?>; border-radius: 5px; background: <?=GRAY_DARK?>; color: <?=WHITE?>; cursor: pointer; transition: all 0.30s ease-in-out; }
+#content button:hover        { background: <?=GRAY_DARKER?>; }
+#content button.submit       { border: 1px solid <?=GREEN_DARK?>; background: <?=GREEN_DARK?>; }
+#content button.submit:hover { background: <?=GREEN?>; }
+#content button.delete       { border: 1px solid <?=RED_DARK?>; background: <?=RED_DARK?>; }
+#content button.delete:hover { background: <?=RED?>; }
+#content button.edit         { border: 1px solid <?=BLUE_LIGHT?>; background: <?=BLUE_LIGHT?>; }
+#content button.edit:hover   { background: <?=BLUE_LIGHTER?>; }
 
 /** LOGIN *********************************************************************/
 #login { box-sizing: border-box; }
@@ -190,7 +196,7 @@ main { display: flex; flex-flow: column nowrap; background: red; }
 
 /** GROUP MANAGEMENT **********************************************************/
 #group-management { box-sizing: border-box; }
-#group-management .group-list-container  { display: flex; flex-flow: column nowrap; align-items: stretch; margin: -0.3em -0.6em; }
+/*#group-management .group-list-container  { display: flex; flex-flow: column nowrap; align-items: stretch; margin: -0.3em -0.6em; }
 #group-management .group-list-item { flex: 1 0 auto; padding: 0.3em 0.6em; }
 
 #group-management .group-list-item { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.3em -0.6em; }
@@ -209,7 +215,7 @@ main { display: flex; flex-flow: column nowrap; background: red; }
 #group-management .group-insert-form .group-insert-button-container { flex: 1 1 auto; padding: 0.2em; }
 
 #group-management .group-insert-form .group-insert-name { width:100%; }
-#group-management .group-insert-form .submit            { width:100%; }
+#group-management .group-insert-form .submit            { width:100%; }*/
 
 /** CALENDAR MANAGEMENT *******************************************************/
 #calendar-management { box-sizing: border-box; }

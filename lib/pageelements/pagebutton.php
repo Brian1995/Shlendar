@@ -55,12 +55,14 @@ class PageButton extends PageElement {
 		$style = $this->getStyle();
 		$icon = $this->getIcon();
 		if ($style !== NULL) {
-			$element->setAttribute('class', $style);
+			$oldValue = $element->getAttribute('class');
+			$element->setAttribute('class', $oldValue.' '.$style);
 		}
+		$element->addChild($span = new XMLElement('span'));
 		if ($icon !== NULL) {
-			$element->addChild($icon->toXML());
+			$span->addChild($icon->toXML());
 		}
-		$element->addChild(new XMLText($label));
+		$span->addChild(new XMLText($label));
 		return $element;
 	}
 
