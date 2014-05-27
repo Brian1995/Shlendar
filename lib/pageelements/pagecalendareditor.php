@@ -73,12 +73,23 @@ class PageCalendarEditor extends PageElement{
 		$addUrl->setDynamicQueryParameter('id', $this->calendarID);
 		$addUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
-		//TODO referrer
         $element = new XMLElement('div');
         $element->setAttribute('class', 'calendar-non-member-item');
         $name = new PageText($name);
-        $add = new XMLElement('form', 'action', $addUrl, 'method', 'post');
+		
+		$option1 = new XMLElement('option', 'value', '0');
+		$option1->addChild(new XMLText('lesen'));
+		$option2 = new XMLElement('option', 'value', '1');
+		$option2->addChild(new XMLText('lesen/schreiben'));		
+				
+		$select = new XMLElement('select', 'name', 'rights');
+		$select->addChild($option1);
+		$select->addChild($option2);
+		
         $addButton = new PageButton('Hinzufügen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square', PageFontIcon::NORMAL, TRUE));
+		
+        $add = new XMLElement('form', 'action', $addUrl, 'method', 'post');
+        $add->addChild($select);
         $add->addChild($addButton->toXML());
         
         $element->addChild($name->toXML());
@@ -99,7 +110,18 @@ class PageCalendarEditor extends PageElement{
 	
 	public static function removeGroupFromCalendar(DatabaseConnection $db, $id){
 		$result = $db->query("DELETE FROM group_calendar_relations WHERE id = '%s';", $id);
-		var_dump($result);
 		return $result;
+	}
+	
+	public static function groupCanEdit(DatabaseConnection $db, $calendar, $group){
+		$result = $db->query("SELECT rights FROM group_calendar_realtions WHERE calendar_id = '%s' AND group_id = '%s';", $calendar, $group);
+		$row = mysql_fetch_array($result);
+		if($row[0] == 0){
+			return false;
+		} else if($row[0] == 1){
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

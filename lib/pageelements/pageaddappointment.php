@@ -15,36 +15,6 @@ class PageAddAppointment extends PageContainer {
         $this->submitURL = $submitURL;
     }
 
-    /**
-     * 
-     * @param DatabaseConnection $dbConnection
-     * @return boolean
-     */
-    public static function addApppointment($dbConnection) {
-        if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_DEFAULT) === 'POST') {
-            if (filter_has_var(INPUT_POST, 'title') && filter_has_var(INPUT_POST, 'fromDate') && filter_has_var(INPUT_POST, 'toDate') && filter_has_var(INPUT_POST, 'description')) {
-                $title = filter_input(INPUT_POST, 'title');
-                $from = filter_input(INPUT_POST, 'fromDate');
-                $to = filter_input(INPUT_POST, 'toDate');
-                $description = filter_input(INPUT_POST, 'description');
-                $url = URL::createCurrent();
-                $calendar = $url->getDynamicQueryParameter('calendar');
-                $result = $dbConnection->query(
-                        "INSERT INTO appointments (calendar_id, start_date, end_date, title, description)
-					 VALUE ('%s', '%s', '%s', '%s', '%s');"
-                        , $calendar, $from, $to, $title, $description);
-                if ($result) {
-                    $url = URL::createStatic();
-                    $url->setDynamicQueryParameter('action', 'listAppointments');
-                    $url->redirect();
-                } else {
-                    echo mysql_error();
-                }
-            }
-        }
-        return false;
-    }
-
     public function toXML() {
         $titleLabel = new XMLElement('div');
         $titleLabel->addChild(new XMLText("Titel"));
@@ -95,5 +65,46 @@ class PageAddAppointment extends PageContainer {
 
         return $addAppointment;
     }
-
+	
+	public static function addApppointment($dbConnection) {
+        if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_DEFAULT) === 'POST') {
+            if (filter_has_var(INPUT_POST, 'title') && filter_has_var(INPUT_POST, 'fromDate') && filter_has_var(INPUT_POST, 'toDate') && filter_has_var(INPUT_POST, 'description')) {
+                $title = filter_input(INPUT_POST, 'title');
+                $from = filter_input(INPUT_POST, 'fromDate');
+                $to = filter_input(INPUT_POST, 'toDate');
+                $description = filter_input(INPUT_POST, 'description');
+                $url = URL::createCurrent();
+                $calendar = $url->getDynamicQueryParameter('calendar');
+				var_dump($calendar);
+                $result = $dbConnection->query(
+                        "INSERT INTO appointments (calendar_id, start_date, end_date, title, description)
+					 VALUE ('%s', '%s', '%s', '%s', '%s');"
+                        , $calendar, $from, $to, $title, $description);
+                if ($result) {
+                    $url = URL::createStatic();
+                    $url->setDynamicQueryParameter('action', 'listAppointments');
+                    $url->redirect();
+                } else {
+                    echo mysql_error();
+                }
+            }
+        }
+        return false;
+    }
+	
+	public static function userCanEdit(DatabaseConnection $db, $user, $calendar){
+		$user_id = $db->query("SELECT user_id FROM calendars WHERE id = '%s';", $calendar);
+		$a = mysql_fetch_array($user_id);
+		if($a[0] == $user){ return true; }
+		
+		$result = $db->query("SELECT group_id FROM group_calendar_relations WHERE calendar_id = '%s' AND group_id IN "
+				. "(SELECT group_id FROM group_user_relations WHERE user_id = '%s');", $calendar, $user);
+		var_dump(mysql_num_rows($result));
+		while ($a = mysql_fetch_array($result)){
+			if(PageCalendarEditor::groupCanEdit($db, $calendar, $a[0])){ 
+				return true; 
+			}
+		}
+		return false;
+	}
 }

@@ -52,15 +52,18 @@ class PageCalendarManagement extends PageElement{
         $deleteUrl = URL::createStatic();
         $deleteUrl->setDynamicQueryParameter('action', 'delete-calendar');
         $deleteUrl->setDynamicQueryParameter('id', $id);
+		$deleteUrl->setDynamicQueryParameter('name', $name);
         $deleteUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
         
         $delete = new XMLElement('form', 'class', 'calendaritem-delete', 'action', $deleteUrl, 'method', 'post');
         $deleteButton = new PageButton('Löschen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE));
         $delete->addChild($deleteButton->toXML());
         
-        $editUrl = $deleteUrl;
+        $editUrl = URL::createStatic();
         $editUrl->setDynamicQueryParameter('action', 'edit-calendar');
+		$editUrl->setDynamicQueryParameter('id', $id);
         $editUrl->setDynamicQueryParameter('name', $name);
+		$editUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
         $edit = new XMLElement('form', 'class', 'calendaritem-edit', 'action', $editUrl, 'method', 'post');
         $editButton = new PageButton('Bearbeiten', PageButton::STYLE_EDIT, PageFontIcon::create('edit', PageFontIcon::NORMAL, TRUE));
