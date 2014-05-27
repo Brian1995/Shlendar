@@ -242,9 +242,10 @@ switch ($action) {
 		
 		$calendar = $url_current->getDynamicQueryParameter('id');
 		$group = $url_current->getDynamicQueryParameter('group');
-		PageCalendarEditor::addGroupToCalendar($dbConnection, $calendar, $group, 1);
+		$rights = filter_input(INPUT_POST, 'rights');
+		PageCalendarEditor::addGroupToCalendar($dbConnection, $calendar, $group, $rights);
 		
-		URl::create($referrer)->redirect();
+		URL::create($referrer)->redirect();
         break;
 	
 	case 'remove-group-from-calendar':
