@@ -7,6 +7,7 @@
  */
 class PageAddAppointment extends PageContainer {
 
+	/** @var URL */
     private $submitURL;
 
     public function __construct($submitURL) {
@@ -48,7 +49,7 @@ class PageAddAppointment extends PageContainer {
         $divDescription->addChild($descriptionLabel);
         $divDescription->addChild($description);
 
-		$submitContainer = new XMLElement('div', 'class', 'fill');
+		$submitContainer = new XMLElement('div', 'class', 'entry');
         $submit = new PageButton('Hinzufügen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square'));
 		$submit->setProperty('class', 'fill');
 		$submitContainer->addChild($submit->toXML());
@@ -57,19 +58,18 @@ class PageAddAppointment extends PageContainer {
 		$dateGroup->addChild($divFrom);
 		$dateGroup->addChild($divTo);
 		
-        $form = new XMLElement('form', 'id', 'add-appointment', 'action', $this->submitURL, 'method', 'post', 'class', '');
+		$this->submitURL->setDynamicQueryParameter('referrer', URL::createCurrent());
+		
+        $form = new XMLElement('form', 'id', 'add-appointment', 'action', $this->submitURL, 'method', 'post');
         $form->addChild($divTitle);
         $form->addChild($dateGroup);
         $form->addChild($divDescription); 
+		$form->addChild($submitContainer);
 
-		$buttonGroup = new XMLElement('div', 'class', 'entry');
-		$buttonGroup->addChild($submitContainer);
-		
 		$header = new XMLElement('h2');
 		$header->addChild(new XMLText('Termin hinzufügen'));
 		$container = new XMLElement('div', 'class', 'groupv');
 		$container->addChild($form);
-		$container->addChild($buttonGroup);
 				
 		$over = new XMLElement('div');
 		$over->addChild($header);
@@ -94,12 +94,8 @@ class PageAddAppointment extends PageContainer {
                         "INSERT INTO appointments (calendar_id, start_date, end_date, title, description)
 					 VALUE ('%s', '%s', '%s', '%s', '%s');"
                         , $calendar, $from, $to, $title, $description);
-                if ($result) {
-                    $url = URL::createStatic();
-                    $url->setDynamicQueryParameter('action', 'listAppointments');
-                    $url->redirect();
-                } else {
-                    //echo mysql_error();
+                if (!$result) {
+					echo mysql_error();
                 }
             }
         }

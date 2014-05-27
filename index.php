@@ -231,7 +231,6 @@ switch ($action) {
 		$calendarName = $url_current->getDynamicQueryParameter('name');
 		$calendarID = $url_current->getDynamicQueryParameter('id');
 
-
 		$titleText = $calendarName . " bearbeiten";
 		$editor = new PageCalendarEditor($dbConnection, $calendarID);
 		$content->addChild($editor);
@@ -266,11 +265,13 @@ switch ($action) {
 
 		$calendar = $url_current->getDynamicQueryParameter('calendar');
 		$list = new PageAppointmentList($dbConnection, $calendar);
-		$url = URL::createCurrent();
+		$url = URL::createStatic();
+		
 		$content->addChild($list);
 		$canEdit = PageAddAppointment::userCanEdit($dbConnection, Session::getUserID(), $calendar);
 		if ($canEdit) {
 			$url->setDynamicQueryParameter('action', 'addAppointment');
+			$url->setDynamicQueryParameter('calendar', $calendar);
 			$add = new PageAddAppointment($url);
 			$content->addChild($add);
 		}
@@ -287,6 +288,7 @@ switch ($action) {
 
 	case 'addAppointment':
 		$i = PageAddAppointment::addApppointment($dbConnection);
+		URL::create($url_current->getDynamicQueryParameter('referrer'))->redirect();
 		break;
 
 	case 'error':
