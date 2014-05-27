@@ -67,7 +67,7 @@ class PageGroupEditor extends PageElement {
 		
 		$container = new PageContainer('div', 'class', 'member-list');
 		$header = new PageTextContainer(PageTextContainer::H2, 'Gruppenmitglieder von "'.$this->groupName.'"');
-		$content = new PageContainer('div', 'class', 'member-list-container');
+		$content = new PageContainer('div', 'class', 'member-list-container list');
 		if ($members) {
 			$index = 1;
 			while (($row = DatabaseConnection::fetchRow($members)) != FALSE) {
@@ -82,17 +82,18 @@ class PageGroupEditor extends PageElement {
 	}
 	
 	private function createMemberListElement($row, $index) {
-		$item = new PageContainer('div', 'class', 'member-item');
+		$item = new PageContainer('div', 'class', 'member-item list-item');
 		$name = new PageTextContainer('div', $row['username']);
-		$name->setProperty('class', 'member-name');
+		$name->setProperty('class', 'member-name list-item-name');
 		
 		$action = URL::createStatic();
 		$action->setDynamicQueryParameter('action', 'remove-user-from-group');
 		$action->setDynamicQueryParameter('relation_id', $row['relation_id']);
 		$action->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
-		$form = new PageContainer('form', 'class', 'member-delete', 'action', $action, 'method', 'post');
+		$form = new PageContainer('form', 'class', 'member-delete list-item-buttongroup', 'action', $action, 'method', 'post');
 		$remove = new PageButton('Entfernen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o'));
+		$remove->setProperty('class', 'list-item-button');
 		
 		$item->addChild($name);
 		$item->addChild($form);

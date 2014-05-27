@@ -38,6 +38,35 @@ $C_CONTENT      = "background: transparent; color: ".CONTENT_TEXT.";";
 $C_CONTENT_HEAD = "background: transparent; color: ".BLUE_DARKER.";";
 $C_WARNING      = "background: ".RED."; color: ".WHITE.";";
 
+const auto = 'auto';
+
+const row    = 'row';
+const column = 'column';
+
+const wrap   = 'wrap';
+const nowrap = 'nowrap';
+
+const stretch      = 'stretch';
+const center       = 'center';
+const start        = 'flex-start';
+const end          = 'flex-end';
+const spacebetween = 'space-between';
+const spacearound  = 'space-around';
+
+function displayFlex($direction=NULL, $wrap=NULL, $itemAlignment=NULL, $justification=NULL, $contentAlignment=NULL) {
+	$s = 'display: flex; display: -webkit-flex';
+	if ($direction)        { $s .= "flex-direction: $direction; -webkit-flex-direction: $direction;"; }
+	if ($wrap)             { $s .= "flex-wrap: $wrap; -webkit-flex-wrap: $wrap;"; }
+	if ($itemAlignment)    { $s .= "align-items: $itemAlignment; -webkit-align-items: $itemAlignment;"; }
+	if ($justification)    { $s .= "justify-content: $justification; -webkit-justify-content: $justification;"; }
+	if ($contentAlignment) { $s .= "align-content: $contentAlignment; -webkit-align-content: $contentAlignment;"; }
+	return $s;
+}
+
+function flex($grow=1, $shrink=0, $basis=auto) {
+	return "flex: $grow $shrink $basis; -webkit-flex: $grow $shrink $basis;";
+}
+
 ?>
 <style>
 	
@@ -74,6 +103,11 @@ main { display: flex; flex-flow: column nowrap; background: red; }
 #main-columns { flex: 1 0 auto; display: flex; flex-flow: row wrap; align-items: stretch; background:blue; }
 #sidebar { flex: 1 0 auto; }
 #content { flex: 100000 1 240px; min-width: 240px; }
+
+#content .list { }
+#content .list-item { display: flex}
+#content .list-item-name { <?=flex(1,0,auto)?> }
+#content .list-item-
 
 /** SIDEBAR *******************************************************************/
 #sidebar { <?=$C_SIDEBAR?> }
