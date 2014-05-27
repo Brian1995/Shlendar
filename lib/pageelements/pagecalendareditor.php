@@ -118,7 +118,7 @@ class PageCalendarEditor extends PageElement{
 		$row = mysql_fetch_array($result);
 		if($row[0] == 0){
 			return false;
-		} else if($row[0] == 0){
+		} else if($row[0] == 1){
 			return true;
 		} else {
 			return false;
