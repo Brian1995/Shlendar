@@ -55,12 +55,12 @@ const spacebetween = 'space-between';
 const spacearound  = 'space-around';
 
 function displayFlex($direction=NULL, $wrap=NULL, $itemAlignment=NULL, $justification=NULL, $contentAlignment=NULL) {
-	$s = 'display: flex; display: -webkit-flex';
-	if ($direction)        { $s .= "flex-direction: $direction; -webkit-flex-direction: $direction;"; }
-	if ($wrap)             { $s .= "flex-wrap: $wrap; -webkit-flex-wrap: $wrap;"; }
-	if ($itemAlignment)    { $s .= "align-items: $itemAlignment; -webkit-align-items: $itemAlignment;"; }
-	if ($justification)    { $s .= "justify-content: $justification; -webkit-justify-content: $justification;"; }
-	if ($contentAlignment) { $s .= "align-content: $contentAlignment; -webkit-align-content: $contentAlignment;"; }
+	$s = 'display: flex; display: -webkit-flex;';
+	if ($direction)        { $s .= " flex-direction: $direction; -webkit-flex-direction: $direction;"; }
+	if ($wrap)             { $s .= " flex-wrap: $wrap; -webkit-flex-wrap: $wrap;"; }
+	if ($itemAlignment)    { $s .= " align-items: $itemAlignment; -webkit-align-items: $itemAlignment;"; }
+	if ($justification)    { $s .= " justify-content: $justification; -webkit-justify-content: $justification;"; }
+	if ($contentAlignment) { $s .= " align-content: $contentAlignment; -webkit-align-content: $contentAlignment;"; }
 	return $s;
 }
 
@@ -110,7 +110,8 @@ main { display: flex; flex-flow: column nowrap; background: red; }
 #content { flex: 100000 1 240px; min-width: 240px; }
 
 #content .group { <?=displayFlex(row,wrap,baseline)?> margin: -0.2em -0.3em; }
-#content .entry { <?=flex(1,0,auto)?> margin: 0.2em 0.3em; }
+#content .groupv { <?=displayFlex(column,nowrap)?> margin: -0.2em -0.3em; }
+#content .entry { <?=flex(1,0,auto)?> padding: 0.2em 0.3em; }
 #content .stretch { <?=flex(100000,0,auto)?> }
 #content .flexible { <?=flexShrink(1)?> }
 #content .fill { width: 100%; box-sizing: border-box; }
@@ -193,34 +194,6 @@ main { display: flex; flex-flow: column nowrap; background: red; }
 #login .login-pass > input { flex: 1 1 auto; margin: 0.2em; }
 
 #login .login-button button { width: 100%; }
-
-/** GROUP MANAGEMENT **********************************************************/
-#group-management { box-sizing: border-box; }
-/*#group-management .group-list-container  { display: flex; flex-flow: column nowrap; align-items: stretch; margin: -0.3em -0.6em; }
-#group-management .group-list-item { flex: 1 0 auto; padding: 0.3em 0.6em; }
-
-#group-management .group-list-item { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.3em -0.6em; }
-#group-management .group-list-item-name { flex: 100000 1 auto; padding: 0.3em 0.6em; font-style: italic; }
-#group-management .button-group         { flex: 1 0 auto; padding: 0.3em 0.6em; }
-
-#group-management .button-group { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.2em; }
-#group-management .groupitem-edit   { flex: 1 0 auto; padding: 0.2em; }
-#group-management .groupitem-delete { flex: 1 0 auto; padding: 0.2em; }
-
-#group-management .groupitem-edit   button { width: 100%; }
-#group-management .groupitem-delete button { width: 100%; }
-
-#group-management .group-insert-form { display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: baseline; margin: -0.2em; }
-#group-management .group-insert-form .group-insert-name-container   { flex: 100000 1 auto; padding: 0.2em; }
-#group-management .group-insert-form .group-insert-button-container { flex: 1 1 auto; padding: 0.2em; }
-
-#group-management .group-insert-form .group-insert-name { width:100%; }
-#group-management .group-insert-form .submit            { width:100%; }*/
-
-/** CALENDAR MANAGEMENT *******************************************************/
-#calendar-management { box-sizing: border-box; }
-#calendar-management .calendar-list-container{ display: flex; flex-flow: column nowrap; align-items: stretch; margin: -0.3em -0.6em; }
-#calendar-management .calendar-list-item{ display: flex; flex-direction: column; flex-flow: column nowrap; align-items: stretch; margin: -0.3em -0.6em; }
 
 /** FOOTER ********************************************************************/
 footer { <?=$C_FOOTER?> height: 200px; }

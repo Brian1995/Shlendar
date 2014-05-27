@@ -269,8 +269,7 @@ switch ($action) {
 		$url = URL::createCurrent();
 		$content->addChild($list);
 		$canEdit = PageAddAppointment::userCanEdit($dbConnection, Session::getUserID(), $calendar);
-		var_dump($canEdit);
-		if (canEdit) {
+		if ($canEdit) {
 			$url->setDynamicQueryParameter('action', 'addAppointment');
 			$add = new PageAddAppointment($url);
 			$content->addChild($add);

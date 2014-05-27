@@ -19,12 +19,10 @@ class PageCalendarEditor extends PageElement{
     }
     
     function createCalendarMembers(){
-        $element = new XMLElement('div');
-		$title = new PageText("Gruppen entfernen");
-		$element->addChild($title->toXML());
+        $element = new PageContainer('div');
+		$element->addChild(new PageTextContainer(PageTextContainer::H2, "Gruppen entfernen"));
 		
 		$result = $this->db->query("SELECT * FROM group_calendar_relations JOIN groups ON group_id = groups.id WHERE calendar_id = '%s';", $this->calendarID);
-		var_dump(mysql_num_rows($result));
 		while ($row = mysql_fetch_row($result)) {
 			$item = $this->createMemberItem($row[0], $row[1], $row[5], $row[3]);
 			$element->addChild($item);
@@ -33,31 +31,31 @@ class PageCalendarEditor extends PageElement{
     }
     
     function createMemberItem($realationID, $groupID, $name, $rights){
-        $element = new XMLElement('div');
-        $element->addAttribute('class', 'calendar-member-item');
+        $element = new PageContainer('div', 'class', 'calendar-member-item group');
         
 		$deleteUrl = URL::createStatic();
 		$deleteUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 		$deleteUrl->setDynamicQueryParameter('action', 'remove-group-from-calendar');
 		$deleteUrl->setDynamicQueryParameter('id', $realationID);
 		
-		$nameText = new PageText($name);
-		$rightsText = new PageText($rights);
+		$nameText = new PageTextContainer('div', $name);
+		$nameText->setProperty('class', 'entry stretch flexible');
+		$rightsText = new PageTextContainer('div', $rights == 0 ? 'lesen' : 'lesen/schreiben');
+		$rightsText->setProperty('class', 'entry');
 		
-		$deleteButton = new PageButton('Entfernen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE));
-		$delete = new XMLElement('form', 'action', $deleteUrl, 'method', 'post');
-		$delete->addChild($deleteButton->toXML());
+		$deleteContainer = new PageContainer('form', 'action', $deleteUrl, 'method', 'post', 'class', 'entry');
+		$deleteContainer->addChild($deleteButton = new PageButton('Entfernen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE)));
+		$deleteButton->setProperty('class', 'fill');
 		
-        $element->addChild($nameText->toXML());
-        $element->addChild($rightsText->toXML());		
-		$element->addChild($delete);
+        $element->addChild($nameText);
+        $element->addChild($rightsText);		
+		$element->addChild($deleteContainer);
         return $element;
     }
     
     function createNonMembers(){
-        $element = new XMLElement('div');
-		$title = new PageText("Gruppen hinzufügen");
-		$element->addChild($title->toXML());
+        $element = new PageContainer('div');
+		$element->addChild($title = new PageTextContainer(PageTextContainer::H2, "Gruppen hinzufügen"));
 		
         $result = $this->db->query("SELECT * FROM groups WHERE user_id = '%s' AND id NOT IN( SELECT group_id FROM group_calendar_relations WHERE calendar_id = '%s');", Session::getUserID(), $this->calendarID);
         while($row = mysql_fetch_row($result)){
@@ -73,34 +71,37 @@ class PageCalendarEditor extends PageElement{
 		$addUrl->setDynamicQueryParameter('id', $this->calendarID);
 		$addUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
-        $element = new XMLElement('div');
-        $element->setAttribute('class', 'calendar-non-member-item');
-        $name = new PageText($name);
+        $element = new PageContainer('div', 'class', 'calendar-non-member-item group');
+        $name = new PageTextContainer('div', $name);
+		$name->setProperty('class', 'entry stretch flexible');
 		
-		$option1 = new XMLElement('option', 'value', '0');
-		$option1->addChild(new XMLText('lesen'));
-		$option2 = new XMLElement('option', 'value', '1');
-		$option2->addChild(new XMLText('lesen/schreiben'));		
+		$option1 = new PageTextContainer('option', 'lesen');
+		$option1->setProperty('value', '0');
+		$option2 = new PageTextContainer('option', 'lesen/schreiben');
+		$option2->setProperty('value', '1');
 				
-		$select = new XMLElement('select', 'name', 'rights');
+		$selectContainer = new PageContainer('div', 'class', 'entry');
+		$selectContainer->addChild($select = new PageContainer('select', 'name', 'rights', 'class', 'fill'));
 		$select->addChild($option1);
 		$select->addChild($option2);
 		
-        $addButton = new PageButton('Hinzufügen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square', PageFontIcon::NORMAL, TRUE));
+		$addButtonContainer = new PageContainer('div', 'class', 'entry');
+        $addButtonContainer->addChild($addButton = new PageButton('Hinzufügen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square', PageFontIcon::NORMAL, TRUE)));
+		$addButton->setProperty('class', 'fill');
 		
-        $add = new XMLElement('form', 'action', $addUrl, 'method', 'post');
-        $add->addChild($select);
-        $add->addChild($addButton->toXML());
+        $add = new PageContainer('form', 'action', $addUrl, 'method', 'post', 'class', 'entry group');
+        $add->addChild($selectContainer);
+        $add->addChild($addButtonContainer);
         
-        $element->addChild($name->toXML());
+        $element->addChild($name);
         $element->addChild($add);
         return $element;
     }
     
     function toXML() {
         $element = parent::toXML();
-		$element->addChild($this->createCalendarMembers());
-        $element->addChild($this->createNonMembers());
+		$element->addChild($this->createCalendarMembers()->toXML());
+        $element->addChild($this->createNonMembers()->toXML());
         return $element;
     }
 	

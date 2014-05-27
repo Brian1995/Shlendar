@@ -13,16 +13,15 @@ class PageGroupManagement extends PageElement {
 
     public function toXML() {
         $element = parent::toXML();
-        $element->addChild($this->createGroupList());
-        $element->addChild($this->createInsertDialog());
+        $element->addChild($this->createGroupList()->toXML());
+        $element->addChild($this->createInsertDialog()->toXML());
         return $element;
     }
 
     private function createGroupList() {
-        $list = new XMLElement('div', 'class', 'group-list');
-        $list->addChild($header = new XMLElement('h2'));
-        $header->addChild(new XMLText('Gruppen bearbeiten'));
-        $list->addChild($content = new XMLElement('div', 'class', 'group-list-container'));
+        $list = new PageContainer('div', 'class', 'group-list');
+        $list->addChild($header = new PageTextContainer(PageTextContainer::H2, 'Gruppen bearbeiten'));
+        $list->addChild($content = new PageContainer('div', 'class', 'group-list-container'));
 
         $userId = Session::getUserID();
         $result = $this->db->query(
@@ -44,9 +43,9 @@ class PageGroupManagement extends PageElement {
 
     private function createGroupElement($row, $index, $userId, $groupId) {
         $isGroupOwner = self::isGroupOwner($this->db, $userId, $groupId);
-        $groupItem = new XMLElement('div', 'class', 'group-list-item group');
-        $groupItem->addChild($name = new XMLElement('div', 'class', 'group-list-item-name entry stretch flexible'));
-        $name->addChild(new XMLText($row['name']));
+        $groupItem = new PageContainer('div', 'class', 'group-list-item group');
+        $groupItem->addChild($name = new PageTextContainer('div', $row['name']));
+		$name->setProperty('class', 'group-list-item-name entry stretch flexible');
 
         if ($isGroupOwner) {
 
@@ -54,24 +53,26 @@ class PageGroupManagement extends PageElement {
             $editUrl->setDynamicQueryParameter('action', 'edit-group');
             $editUrl->setDynamicQueryParameter('id', $groupId);
 
-            $edit = new XMLElement('form', 'class', 'groupitem-edit entry', 'action', $editUrl, 'method', 'post');
+            $edit = new PageContainer('form', 'class', 'groupitem-edit entry', 'action', $editUrl, 'method', 'post');
             $editButton = new PageButton('Bearbeiten', PageButton::STYLE_EDIT, PageFontIcon::create('edit', PageFontIcon::NORMAL, TRUE));
+			$editButton->setProperty('class', 'fill');
 
             $deleteUrl = URL::createStatic();
             $deleteUrl->setDynamicQueryParameter('action', 'delete-group');
             $deleteUrl->setDynamicQueryParameter('id', $groupId);
             $deleteUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 
-            $delete = new XMLElement('form', 'class', 'groupitem-delete entry', 'action', $deleteUrl, 'method', 'post');
+            $delete = new PageContainer('form', 'class', 'groupitem-delete entry', 'action', $deleteUrl, 'method', 'post');
             $deleteButton = new PageButton('Löschen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE));
+			$deleteButton->setProperty('class', 'fill');
 
-            $buttonGroup = new XMLElement('div', 'class', 'button-group entry group');
+            $buttonGroup = new PageContainer('div', 'class', 'button-group entry group');
 
             $groupItem->addChild($buttonGroup);
-            $buttonGroup->addChild($edit);
-            $edit->addChild($editButton->toXML());
-            $buttonGroup->addChild($delete);
-            $delete->addChild($deleteButton->toXML());
+				$buttonGroup->addChild($edit);
+					$edit->addChild($editButton);
+				$buttonGroup->addChild($delete);
+					$delete->addChild($deleteButton);
         }
         return $groupItem;
     }
@@ -81,22 +82,23 @@ class PageGroupManagement extends PageElement {
         $submitUrl->setDynamicQueryParameter('action', 'insert-group');
         $submitUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 
-        $dialog = new XMLElement('div', 'class', 'group-insert');
+        $dialog = new PageContainer('div', 'class', 'group-insert');
         $header = new PageTextContainer('h2', 'Gruppe erstellen');
 
-        $form = new XMLElement('form', 'class', 'group-insert-form', 'action', $submitUrl, 'method', 'post');
-        $groupNameContainer = new XMLElement('div', 'class', 'group-insert-name-container');
-        $groupButtonContainer = new XMLElement('div', 'class', 'group-insert-button-container');
+        $form = new PageContainer('form', 'class', 'group-insert-form group', 'action', $submitUrl, 'method', 'post');
+        $groupNameContainer = new PageContainer('div', 'class', 'group-insert-name-container entry stretch flexible');
+        $groupButtonContainer = new PageContainer('div', 'class', 'group-insert-button-container entry');
 
-        $groupName = new XMLElement('input', 'class', 'group-insert-name', 'type', 'text', 'name', 'group-name');
+        $groupName = new PageElement('input', 'class', 'group-insert-name fill', 'type', 'text', 'name', 'group-name');
         $submitButton = new PageButton('Erstellen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square', PageFontIcon::NORMAL, TRUE));
+		$submitButton->setProperty('class', 'fill');
 
-        $dialog->addChild($header->toXML());
+        $dialog->addChild($header);
         $dialog->addChild($form);
-        $form->addChild($groupNameContainer);
-        $groupNameContainer->addChild($groupName);
-        $form->addChild($groupButtonContainer);
-        $groupButtonContainer->addChild($submitButton->toXML());
+			$form->addChild($groupNameContainer);
+				$groupNameContainer->addChild($groupName);
+			$form->addChild($groupButtonContainer);
+				$groupButtonContainer->addChild($submitButton);
 
         return $dialog;
     }

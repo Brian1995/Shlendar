@@ -46,14 +46,19 @@ class PageGroupEditor extends PageElement {
 		$action->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
 		$form = new PageContainer('form', 'class', 'group-rename-form group', 'action', $action, 'method', 'post');
-		$nameField = new PageElement('input', 'class', 'entry stretch flexible', 'type', 'text', 'name', 'name', 'value', $this->groupName );
+		$nameFieldContainer = new PageContainer('div', 'class', 'entry stretch flexible');
+		$applyButtonContainer = new PageContainer('div', 'class', 'entry');
+		
+		$nameField = new PageElement('input', 'class', 'fill', 'type', 'text', 'name', 'name', 'value', $this->groupName );
 		$applyButton = new PageButton('Anwenden', PageButton::STYLE_SUBMIT, PageFontIcon::create('check'));
-		$applyButton->setProperty('class', 'entry');
+		$applyButton->setProperty('class', 'fill');
 		
 		$container->addChild($header);
 		$container->addChild($form);
-			$form->addChild($nameField);
-			$form->addChild($applyButton);
+			$form->addChild($nameFieldContainer);
+				$nameFieldContainer->addChild($nameField);
+			$form->addChild($applyButtonContainer);
+				$applyButtonContainer->addChild($applyButton);
 		return $container;
 	}
 	

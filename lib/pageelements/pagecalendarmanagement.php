@@ -18,36 +18,25 @@ class PageCalendarManagement extends PageElement{
     
     function toXML() {
         $element = parent::toXML();
-        $element->addChild($this->createCalendarList());
-        $element->addChild($this->createInsertDialog());
+        $element->addChild($this->createCalendarList()->toXML());
+        $element->addChild($this->createInsertDialog()->toXML());
         return $element;
     }
 	
     function createCalendarList(){
-        $element = new XMLElement('div');
+        $element = new PageContainer('div');
+		$element->addChild($header = new PageTextContainer(PageTextContainer::H2, 'Kalender'));
+		$element->addChild($list = new PageContainer('div'));
+		
         $result = $this->db->query("SELECT * FROM calendars WHERE user_id = '%s';", Session::getUserID());
         while ($row = mysql_fetch_row($result)){
-            $element->addChild($this->createListItem($row[0], $row[1]));
+            $list->addChild($this->createListItem($row[0], $row[1]));
         }
         return $element;
     }
 	
-    function createInsertDialog(){
-        $submitUrl = URL::createStatic();
-        $submitUrl->setDynamicQueryParameter('action', 'insert-calendar');
-        $submitUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
-        
-        $element = new XMLElement('div');
-        $element->addChild($title = new XMLText('Kalender ertellen'));
-        $element->addChild($form = new XMLElement('form', 'name', 'calendar-insert-from', 'action', $submitUrl, 'method', 'post'));
-        $form->addChild(new XMLElement('input', 'type', 'text', 'name', 'calendar-name'));
-        $form->addChild(new XMLElement('input', 'type', 'submit', 'action'));
-        return $element;
-    }
-    
     function createListItem($id, $name){
-        $element = new XMLElement('div');
-        $element->addAttribute('class', 'calendar-list-item');
+        $element = new PageContainer('div', 'class', 'calendar-list-item group');
         
         $deleteUrl = URL::createStatic();
         $deleteUrl->setDynamicQueryParameter('action', 'delete-calendar');
@@ -55,28 +44,49 @@ class PageCalendarManagement extends PageElement{
 		$deleteUrl->setDynamicQueryParameter('name', $name);
         $deleteUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
         
-        $delete = new XMLElement('form', 'class', 'calendaritem-delete', 'action', $deleteUrl, 'method', 'post');
+        $deleteContainer = new PageContainer('form', 'class', 'calendaritem-delete entry', 'action', $deleteUrl, 'method', 'post');
         $deleteButton = new PageButton('Löschen', PageButton::STYLE_DELETE, PageFontIcon::create('trash-o', PageFontIcon::NORMAL, TRUE));
-        $delete->addChild($deleteButton->toXML());
+		$deleteButton->setProperty('class', 'fill');
+        $deleteContainer->addChild($deleteButton);
         
         $editUrl = URL::createStatic();
         $editUrl->setDynamicQueryParameter('action', 'edit-calendar');
 		$editUrl->setDynamicQueryParameter('id', $id);
         $editUrl->setDynamicQueryParameter('name', $name);
-		$editUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
 		
-        $edit = new XMLElement('form', 'class', 'calendaritem-edit', 'action', $editUrl, 'method', 'post');
+        $editContainer = new PageContainer('form', 'class', 'calendaritem-edit entry', 'action', $editUrl, 'method', 'post');
         $editButton = new PageButton('Bearbeiten', PageButton::STYLE_EDIT, PageFontIcon::create('edit', PageFontIcon::NORMAL, TRUE));
-        $edit->addChild($editButton->toXML());
+		$editButton->setProperty('class', 'fill');
+        $editContainer->addChild($editButton);
+		
+		$nameContainer = new PageContainer('div', 'class', 'entry stretch flexible');
+		$nameContainer->addChild(new PageTextContainer('div', $name));
+		
+		$buttonContainer = new PageContainer('div', 'class', 'entry group');
+		$buttonContainer->addChild($editContainer);
+		$buttonContainer->addChild($deleteContainer);
         
-        $element->addChild(new XMLText($name));
-        $element->addChild($edit);
-        $element->addChild($delete);
+        $element->addChild($nameContainer);
+        $element->addChild($buttonContainer);
         
         return $element;
     }
     
-    
+    function createInsertDialog(){
+        $submitUrl = URL::createStatic();
+        $submitUrl->setDynamicQueryParameter('action', 'insert-calendar');
+        $submitUrl->setDynamicQueryParameter('referrer', URL::createCurrent());
+        
+        $element = new PageContainer('div');
+        $element->addChild($title = new PageTextContainer(PageTextContainer::H2,'Kalender erstellen'));
+        $element->addChild($form = new PageContainer('form', 'class', 'group', 'name', 'calendar-insert-from', 'action', $submitUrl, 'method', 'post'));
+		$form->addChild($nameContainer = new PageContainer('div', 'class', 'entry stretch flexible'));
+		$form->addChild($buttonContainer = new PageContainer('div', 'class', 'entry'));
+        $nameContainer->addChild($name = new PageElement('input', 'type', 'text', 'name', 'calendar-name', 'class', 'fill'));
+        $buttonContainer->addChild($button = new PageButton('Erstellen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square', PageFontIcon::NORMAL, TRUE)));
+		$button->setProperty('class', 'fill');
+        return $element;
+    }
     
     public static function insertCalendar(DatabaseConnection $db){
         $user = Session::getUserID();

@@ -18,50 +18,65 @@ class PageAddAppointment extends PageContainer {
     public function toXML() {
         $titleLabel = new XMLElement('div');
         $titleLabel->addChild(new XMLText("Titel"));
-        $title = new XMLElement('input', 'type', 'text', 'name', 'title');
+        $title = new XMLElement('input', 'type', 'text', 'name', 'title', 'class', 'fill');
 
         $fromLabel = new XMLElement('div');
         $fromLabel->addChild(new XMLText("Von"));
-        $from = new XMLElement('input', 'type', 'text', 'name', 'fromDate', 'id', 'datetimepicker-from');
+        $from = new XMLElement('input', 'type', 'text', 'name', 'fromDate', 'id', 'datetimepicker-from', 'class', 'fill');
 
         $toLabel = new XMLElement('div');
         $toLabel->addChild(new XMLText("Bis"));
-        $to = new XMLElement('input', 'type', 'text', 'name', 'toDate', 'id', 'datetimepicker-to');
+        $to = new XMLElement('input', 'type', 'text', 'name', 'toDate', 'id', 'datetimepicker-to', 'class', 'fill');
 
         $descriptionLabel = new XMLElement('div');
         $descriptionLabel->addChild(new XMLText("Beschreibung"));
-        $description = new XMLElement('input', 'type', 'text', 'name', 'description');
+        $description = new XMLElement('input', 'type', 'text', 'name', 'description', 'class', 'fill');
 
-        $divTitle = new XMLElement('div', 'id', 'add-appointment-title');
+        $divTitle = new XMLElement('div', 'id', 'add-appointment-title', 'class', 'entry');
         $divTitle->addChild($titleLabel);
         $divTitle->addChild($title);
 
-        $divFrom = new XMLElement('div');
+        $divFrom = new XMLElement('div', 'class', 'entry');
         $divFrom->addChild($fromLabel);
         $divFrom->addChild($from);
 
-        $divTo = new XMLElement('div');
+        $divTo = new XMLElement('div', 'class', 'entry');
         $divTo->addChild($toLabel);
         $divTo->addChild($to);
 
-        $divDescription = new XMLElement('div');
+        $divDescription = new XMLElement('div', 'class', 'entry');
         $divDescription->addChild($descriptionLabel);
         $divDescription->addChild($description);
 
-        $submitText = new PageText("hintufügen");
+		$submitContainer = new XMLElement('div', 'class', 'fill');
+        $submit = new PageButton('Hinzufügen', PageButton::STYLE_SUBMIT, PageFontIcon::create('plus-square'));
+		$submit->setProperty('class', 'fill');
+		$submitContainer->addChild($submit->toXML());
 
-        $submit = new XMLElement('button', 'type', 'submit', 'name', 'submit-button', 'value', 'val');
-        $submit->addChild($submitText->toXML());
-
-        $form = new XMLElement('form', 'id', 'add-appointment', 'action', $this->submitURL, 'method', 'post');
+		$dateGroup = new XMLElement('div', 'class', 'group entry stretch');
+		$dateGroup->addChild($divFrom);
+		$dateGroup->addChild($divTo);
+		
+        $form = new XMLElement('form', 'id', 'add-appointment', 'action', $this->submitURL, 'method', 'post', 'class', '');
         $form->addChild($divTitle);
-        $form->addChild($divFrom);
-        $form->addChild($divTo);
-        $form->addChild($divDescription);
-        $form->addChild($submit);
+        $form->addChild($dateGroup);
+        $form->addChild($divDescription); 
 
+		$buttonGroup = new XMLElement('div', 'class', 'entry');
+		$buttonGroup->addChild($submitContainer);
+		
+		$header = new XMLElement('h2');
+		$header->addChild(new XMLText('Termin hinzufügen'));
+		$container = new XMLElement('div', 'class', 'groupv');
+		$container->addChild($form);
+		$container->addChild($buttonGroup);
+				
+		$over = new XMLElement('div');
+		$over->addChild($header);
+		$over->addChild($container);
+		
         $addAppointment = parent::toXML();
-        $addAppointment->addChild($form);
+        $addAppointment->addChild($over);
 
         return $addAppointment;
     }
@@ -75,7 +90,6 @@ class PageAddAppointment extends PageContainer {
                 $description = filter_input(INPUT_POST, 'description');
                 $url = URL::createCurrent();
                 $calendar = $url->getDynamicQueryParameter('calendar');
-				var_dump($calendar);
                 $result = $dbConnection->query(
                         "INSERT INTO appointments (calendar_id, start_date, end_date, title, description)
 					 VALUE ('%s', '%s', '%s', '%s', '%s');"
@@ -85,7 +99,7 @@ class PageAddAppointment extends PageContainer {
                     $url->setDynamicQueryParameter('action', 'listAppointments');
                     $url->redirect();
                 } else {
-                    echo mysql_error();
+                    //echo mysql_error();
                 }
             }
         }
@@ -99,7 +113,6 @@ class PageAddAppointment extends PageContainer {
 		
 		$result = $db->query("SELECT group_id FROM group_calendar_relations WHERE calendar_id = '%s' AND group_id IN "
 				. "(SELECT group_id FROM group_user_relations WHERE user_id = '%s');", $calendar, $user);
-		var_dump(mysql_num_rows($result));
 		while ($a = mysql_fetch_array($result)){
 			if(PageCalendarEditor::groupCanEdit($db, $calendar, $a[0])){ 
 				return true; 
