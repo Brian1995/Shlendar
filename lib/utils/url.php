@@ -364,6 +364,10 @@ class URL {
 		die();
 	}
 	
+	public static function setErrorUrl(URL $errorUrl) {
+		self::$ERROR_URL = $errorUrl;
+	}
+	
 	public static function redirectToError($message = '') {
 		if (self::$ERROR_URL === NULL) {
 			$url = URL::createClean();
