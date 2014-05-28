@@ -192,7 +192,7 @@ class PageGroupEditor extends PageElement {
 				return;
 			}
 		}
-		self::redirectToError("Selecting the group id for the relation id failed.");
+		URL::redirectToError("Selecting the group id for the relation id failed.");
 	}
 	
 	public static function addMember(DatabaseConnection $db, $groupId, $userId) {
@@ -214,4 +214,21 @@ class PageGroupEditor extends PageElement {
 			self::redirectToError("Failed to insert group user relation.");
 		}
 	}
+	
+	public static function renameGroup(DatabaseConnection $db) {
+		$userId = Session::getUserID();
+		$groupId = URL::createCurrent()->getDynamicQueryParameter('id');
+		$name = Session::getPostValue('name');
+		
+		if ($groupId === NULL) { URL::redirectToError('renameGroup: group id (id) parameter is missing from submit url'); }
+		if ($name === NULL) { URL::redirectToError('renameGroup: group name (name) parameter is missing from post'); }
+		
+		$groupResult = $db->query("SELECT id FROM groups WHERE id = '%s' AND user_id = '%s';", $groupId, $userId);
+		if (!$groupResult || DatabaseConnection::countRows($groupResult) !== 1) {
+			URL::redirectToError('renameGroup: group does not belong to user');
+		}
+		$renameResult = $db->query("UPDATE groups SET name = '%s' WHERE id = '%s' AND user_id = '%s';", $name, $groupId, $userId);
+		if (!$renameResult) { URL::redirectToError('rename group: updating the name failed'); }
+	}
+	
 }

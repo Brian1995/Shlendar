@@ -120,6 +120,16 @@ class Session {
 		$logoutUrl->redirect();
 	}
 	
+	public static function getPostValue($name, $defaultValue=NULL, $filter=FILTER_DEFAULT, $options=NULL) {
+		if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_DEFAULT) === 'POST' && filter_has_var(INPUT_POST, $name)) {
+			$value = filter_input(INPUT_POST, $name, $filter, $options);
+			if ($value !== NULL) {
+				return $value;
+			}
+		}
+		return $defaultValue;
+	}
+	
 	public static function fixMimeType() {
 		if (stristr(filter_input(INPUT_SERVER, "HTTP_ACCEPT"),"application/xhtml+xml")) {
 			header("Content-type: application/xhtml+xml");

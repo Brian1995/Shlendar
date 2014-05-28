@@ -13,8 +13,11 @@ class URL {
 	const STATIC_QUERY_PARAMETER_PREFIX = 's-';
 	const DYNAMIC_QUERY_PARAMETER_PREFIX = 'd-';
 	
-	private static $BASE_URL = NULL;
+	/** @var boolean */
 	private static $HTTPS_ENFORCED = FALSE;
+	
+	/** @var URL|null */
+	private static $ERROR_URL = NULL;
 	
 	private $scheme;
 	private $host;
@@ -102,18 +105,7 @@ class URL {
 		$u->removeAllQueryParameters();
 		return $u;
 	}
-	
-	public static function createBase() {
-		return self::urlFromString(self::$BASE_URL);
-	}
-	
-	public static function setBasePath($basePath) {
-		$https    = filter_input(INPUT_SERVER, 'HTTPS');
-		$httpHost = filter_input(INPUT_SERVER, 'HTTP_HOST');
-		$protocol = $https ? 'https' : 'http';
-		self::$BASE_URL = $protocol.'://'.$httpHost.'/'.$basePath.'/';
-	}
-	
+		
 	/**
 	 * 
 	 * @param string $relativePath
@@ -370,6 +362,17 @@ class URL {
 		}
 		header('Location: '.$this, true, 303);
 		die();
+	}
+	
+	public static function redirectToError($message = '') {
+		if (self::$ERROR_URL === NULL) {
+			$url = URL::createClean();
+			$url->setDynamicQueryParameter('action', 'error');
+		} else {
+			$url = new URL(self::$ERROR_URL);
+		}
+		$url->setDynamicQueryParameter('message', $message);
+		$url->redirect();
 	}
 	
 	public function __toString() {

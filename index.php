@@ -6,9 +6,8 @@ require_once 'lib/pageelements.php';
 
 mb_internal_encoding("UTF-8");
 setlocale(LC_ALL, 'de_DE.utf-8');
-URL::setBasePath('projekt');
 session_start();
-#Session::fixMimeType();
+//Session::fixMimeType();
 
 $dbConnection = new DatabaseConnection('localhost', 'projekt', 'projekt', 'projekt');
 $dbConnection->connect();
@@ -154,6 +153,40 @@ switch ($action) {
 		$calendarManagement = new PageCalendarManagement($dbConnection);
 		$content->addChild($calendarManagement);
 		break;
+	
+	case 'insert-calendar':
+		ensureLogin();
+		$referrer = $url_current->getDynamicQueryParameter('referrer');
+		if (PageCalendarManagement::insertCalendar($dbConnection)) {
+			URL::create($referrer)->redirect();
+		} else {
+			
+		}
+		break;
+		
+	case 'delete-calendar':
+		ensureLogin();
+		$calendarID = $url_current->getDynamicQueryParameter('id');
+		$referrer = $url_current->getDynamicQueryParameter('referrer');
+		if (PageCalendarManagement::deleteCalendar($dbConnection, $calendarID)) {
+			URL::create($referrer)->redirect();
+		} else {
+			
+		}
+		break;
+		
+	case 'edit-calendar':
+		ensureLogin();
+		addSidebarCalendar();
+		addSidebarActions();
+		addSidebarCalendarList();
+		$calendarName = $url_current->getDynamicQueryParameter('name');
+		$calendarID = $url_current->getDynamicQueryParameter('id');
+
+		$titleText = $calendarName . " bearbeiten";
+		$editor = new PageCalendarEditor($dbConnection, $calendarID);
+		$content->addChild($editor);
+		break;
 
 	case 'insert-group':
 		ensureLogin();
@@ -162,16 +195,6 @@ switch ($action) {
 			URL::create($referrer)->redirect();
 		} else {
 			// TODO error page
-		}
-		break;
-
-	case 'insert-calendar':
-		ensureLogin();
-		$referrer = $url_current->getDynamicQueryParameter('referrer');
-		if (PageCalendarManagement::insertCalendar($dbConnection)) {
-			URL::create($referrer)->redirect();
-		} else {
-			
 		}
 		break;
 
@@ -187,18 +210,13 @@ switch ($action) {
 			// TODO error page
 		}
 		break;
-
-	case 'delete-calendar':
+	
+	case 'rename-group':
 		ensureLogin();
-		$calendarID = $url_current->getDynamicQueryParameter('id');
-		$referrer = $url_current->getDynamicQueryParameter('referrer');
-		if (PageCalendarManagement::deleteCalendar($dbConnection, $calendarID)) {
-			URL::create($referrer)->redirect();
-		} else {
-			
-		}
+		PageGroupEditor::renameGroup($dbConnection);
+		URL::create($url_current->getDynamicQueryParameter('referrer'))->redirect();
 		break;
-
+	
 	case 'edit-group':
 		ensureLogin();
 		$titleText = 'Gruppe bearbeiten';
@@ -230,19 +248,6 @@ switch ($action) {
 		PageGroupEditor::addMember($dbConnection, $groupId, $userId);
 
 		URL::create($url_current->getDynamicQueryParameter('referrer'))->redirect();
-		break;
-
-	case 'edit-calendar':
-		ensureLogin();
-		addSidebarCalendar();
-		addSidebarActions();
-		addSidebarCalendarList();
-		$calendarName = $url_current->getDynamicQueryParameter('name');
-		$calendarID = $url_current->getDynamicQueryParameter('id');
-
-		$titleText = $calendarName . " bearbeiten";
-		$editor = new PageCalendarEditor($dbConnection, $calendarID);
-		$content->addChild($editor);
 		break;
 
 	case 'add-group-to-calendar':
