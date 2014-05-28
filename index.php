@@ -76,7 +76,16 @@ function ensureLogin() {
 function addSidebarCalendar() {
 	global $sidebar, $url_current;
 	$calendar = new PageCalendar();
-	$calendar->setViewDate(new Date($url_current->getStaticQueryParameter('viewDate')));
+	$viewDate = new Date($url_current->getStaticQueryParameter('viewDate'));
+	$calendar->setViewDate($viewDate);
+	$daysBefore = $url_current->getStaticQueryParameter('date-soff');
+	$daysAfter = $url_current->getStaticQueryParameter('date-eoff');
+	if (!$daysBefore) { $daysBefore = 5; }
+	if (!$daysAfter) { $daysAfter = 5; }
+	$minListDate = Date::instance($viewDate)->addDays(-$daysBefore)->setToStartOfDay();
+	$maxListDate = Date::instance($viewDate)->addDays(+$daysAfter)->setToEndOfDay();
+	$calendar->setMinListDate($minListDate);
+	$calendar->setMaxListDate($maxListDate);
 	$sidebar->addChild($calendar);
 }
 

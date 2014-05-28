@@ -14,6 +14,16 @@ class PageCalendar extends PageElement {
 	 */
 	private $viewDate = NULL;
 	
+	/**
+	 * @var Date
+	 */
+	private $minListDate = NULL;
+	
+	/**
+	 * @var Date
+	 */
+	private $maxListDate = NULL;
+	
 	function __construct() {
 		parent::__construct('div');
 		$this->setProperty('id', 'sidebar-calendar');
@@ -56,6 +66,43 @@ class PageCalendar extends PageElement {
 		return $this;
 	}
 	
+	/**
+	 * 
+	 * @return Date|null
+	 */
+	public function getMinListDate() {
+		return $this->minListDate;
+	}
+
+	/**
+	 * 
+	 * @param Date|null $minListDate
+	 * @return \PageCalendar
+	 */
+	public function setMinListDate($minListDate) {
+		$this->minListDate = $minListDate;
+		return $this;
+	}
+
+	/**
+	 * 
+	 * @return Date|null
+	 */
+	public function getMaxListDate() {
+		return $this->maxListDate;
+	}
+
+	/**
+	 * 
+	 * @param Date $maxListDate
+	 * @return \PageCalendar
+	 */
+	public function setMaxListDate($maxListDate) {
+		$this->maxListDate = $maxListDate;
+		return $this;
+	}
+
+			
 	public function toXML() {
 		$calendar = parent::toXML();
 		
@@ -115,6 +162,9 @@ class PageCalendar extends PageElement {
 				}
 				if ($day->isWeekend()) {
 					$class .= ' weekend';
+				}
+				if ($day >= $this->minListDate && $day <= $this->maxListDate) {
+					$class .= ' inrange';
 				}
 				$cell->setAttribute('class', $class);
 				$url = URL::createCurrent();

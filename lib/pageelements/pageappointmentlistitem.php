@@ -40,9 +40,11 @@ class PageAppointmentListItem extends PageContainer {
 		$title->setProperty('class', 'entry stretch flexible');
         
         $time = new PageContainer('div', 'class', 'entry group fill', 'style', 'font-size:0.8em;');
-        $time->addChild($from = new PageTextContainer(PageTextContainer::P, "Von: ".$this->start_date));
+		$ds = new Date($this->start_date);
+        $time->addChild($from = new PageTextContainer(PageTextContainer::P, "Von: ".$ds->formatLocalized(PageAppointmentList::OUTPUT_FORMAT)));
 		$from->setProperty('class', 'entry');
-        $time->addChild($to = new PageTextContainer(PageTextContainer::P, "Bis: ".$this->end_date));
+		$de = new Date($this->end_date);
+        $time->addChild($to = new PageTextContainer(PageTextContainer::P, "Bis: ".$de->formatLocalized(PageAppointmentList::OUTPUT_FORMAT)));
 		$to->setProperty('class', 'entry');
         
         $description = new PageTextContainer(PageTextContainer::P, $this->description);

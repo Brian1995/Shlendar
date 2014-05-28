@@ -136,6 +136,7 @@ main { display: flex; flex-flow: column nowrap; background: red; }
 #sidebar-calendar-entries .current-month a { color: <?=BLUE_DARKER?>; }
 #sidebar-calendar-entries .current-month.current a { color: <?=WHITE?>; background: <?=GRAY_DARKER?>;}
 #sidebar-calendar-entries .current-month.selected a { color: <?=WHITE?>; background: <?=ORANGE?>; }
+#sidebar-calendar-entries .inrange { background: rgba(26, 188, 156, 0.6); }
 #sidebar-calendar-entries > div > div > a:hover { background: <?=GRAY_LIGHTER?>; }
 #sidebar-calendar-entries .dayrow { text-transform: uppercase; <?=FONT_HEADLINE?> font-size:0.75em; }
 
