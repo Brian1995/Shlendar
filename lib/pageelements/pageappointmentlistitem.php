@@ -24,7 +24,7 @@ class PageAppointmentListItem extends PageContainer {
     private $title;
     private $description;
     
-    function __construct($id, $calendar_id, $start_date, $end_date, $title, $description) {
+    function __construct($id, $calendar_id, $start_date, $end_date, $title, $description, $editable) {
 		parent::__construct('div');
 		$this->setProperty('class', 'groupv');
 		$this->setProperty('style', 'border-bottom: 1px solid #95a5a6; margin-bottom: 0.5em; ');
@@ -59,7 +59,7 @@ class PageAppointmentListItem extends PageContainer {
 		
         $this->addChild($top = new PageContainer('div', 'class', 'entry group'));
 			$top->addChild($title);
-			$top->addChild($form);
+			if ($editable) {$top->addChild($form); }
 		$this->addChild($bottom = new PageContainer('div', 'class', 'entry group'));
 			$bottom->addChild($time);
 			$bottom->addChild($description);

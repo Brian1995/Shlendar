@@ -102,7 +102,47 @@ class PageAddAppointment extends PageContainer {
         return false;
     }
 	
-	public static function userCanEdit(DatabaseConnection $db, $user, $calendar){
+	public static function deleteAppointment(DatabaseConnection $db) {	
+		$id = URL::createCurrent()->getDynamicQueryParameter('appointment');
+		$calendarIdResult = $db->query("SELECT calendar_id FROM appointments WHERE id = '%s';", $id);
+		if ($calendarIdResult && DatabaseConnection::countRows($calendarIdResult) == 1) {
+			$calendarIdRow = DatabaseConnection::fetchRow($calendarIdResult);
+			$calendarId = $calendarIdRow['calendar_id'];
+			$canEdit = PageAddAppointment::userCanEdit($db, Session::getUserID(), $calendarId);
+			if ($canEdit) {
+				return $db->query("DELETE FROM appointments WHERE id = '%s';", $id);
+			}
+		}
+		return FALSE;
+	}
+	
+	public static function userCanEdit(DatabaseConnection $db, $userId, $calendarId) {
+		$ownerIdResult = $db->query("SELECT user_id FROM calendars WHERE id = '%s';", $calendarId);
+		$count = DatabaseConnection::countRows($ownerIdResult);
+		var_dump($count);
+		if ($ownerIdResult && DatabaseConnection::countRows($ownerIdResult) == 1) {
+			$ownerIdRow = DatabaseConnection::fetchRow($ownerIdResult);
+			if ($ownerIdRow['user_id'] == $userId) {
+				return TRUE;
+			}
+			$groupsIdResult = $db->query(
+				"SELECT *
+				 FROM group_calendar_relations AS gc
+				 WHERE gc.calendar_id = '%s'
+				 AND gc.rights = 1
+				 AND gc.group_id IN (
+					SELECT gu.group_id
+					FROM group_user_relations AS gu
+					WHERE gu.user_id = '%s'
+				 );", $calendarId, $userId);
+			if ($groupsIdResult && DatabaseConnection::countRows($groupsIdResult) > 0) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+	
+	public static function userCanEditOld(DatabaseConnection $db, $user, $calendar){
 		$user_id = $db->query("SELECT user_id FROM calendars WHERE id = '%s';", $calendar);
 		$a = mysql_fetch_array($user_id);
 		if($a[0] == $user){ return true; }

@@ -12,13 +12,15 @@ class PageAppointmentList extends PageContainer {
 	 */
 	private $dbConnection;
 	private $calendar_id;
+	private $editable;
 
-	function __construct($dbConnection, $calendar_id) {
+	function __construct($dbConnection, $calendar_id, $editable) {
 		parent::__construct('div');
 		$this->setProperty('id', 'appointment-list');
 		
 		$this->dbConnection = $dbConnection;
 		$this->calendar_id = $calendar_id;
+		$this->editable = $editable;
 	}
 	
 	
@@ -32,7 +34,7 @@ class PageAppointmentList extends PageContainer {
 		$container->addChild($list = new PageContainer('div'));
 		
 		while ($a = mysql_fetch_row($result)) {
-			$item = new PageAppointmentListItem($a[0], $a[1], $a[2], $a[3], $a[4], $a[5]);
+			$item = new PageAppointmentListItem($a[0], $a[1], $a[2], $a[3], $a[4], $a[5], $this->editable);
 			$list->addChild($item);
 		}
 		$element->addChild($container->toXML());
