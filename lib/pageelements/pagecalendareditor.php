@@ -20,7 +20,7 @@ class PageCalendarEditor extends PageElement{
     
     function createCalendarMembers(){
         $element = new PageContainer('div');
-		$element->addChild(new PageTextContainer(PageTextContainer::H2, "Gruppen entfernen"));
+		$element->addChild(new PageTextContainer(PageTextContainer::H2, "Zugeordnete Gruppen"));
 		
 		$result = $this->db->query("SELECT * FROM group_calendar_relations JOIN groups ON group_id = groups.id WHERE calendar_id = '%s';", $this->calendarID);
 		while ($row = mysql_fetch_row($result)) {
