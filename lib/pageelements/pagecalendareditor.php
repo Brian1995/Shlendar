@@ -55,7 +55,7 @@ class PageCalendarEditor extends PageElement{
     
     function createNonMembers(){
         $element = new PageContainer('div');
-		$element->addChild($title = new PageTextContainer(PageTextContainer::H2, "Gruppen hinzufügen"));
+		$element->addChild($title = new PageTextContainer(PageTextContainer::H2, "Nicht zugeordnete Gruppen"));
 		
         $result = $this->db->query("SELECT * FROM groups WHERE user_id = '%s' AND id NOT IN( SELECT group_id FROM group_calendar_relations WHERE calendar_id = '%s');", Session::getUserID(), $this->calendarID);
         while($row = mysql_fetch_row($result)){
