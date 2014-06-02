@@ -51,11 +51,22 @@ class DatabaseConnection {
 		return mysql_fetch_array($result);
 	}
 	
+	/**
+	 * Returns an indexed array of mapped arrays of strings that contain the 
+	 * entire result.
+	 * 
+	 * @param resource $result
+	 * @return 
+	 */
 	public static function fetchAllRows($result) {
 		$a = array();
 		$rowCount = DatabaseConnection::countRows($result);
 		for ($i = 0; $i < $rowCount; $i++) {
-			$a[$i] = DatabaseConnection::fetchRow($result);
+			$r = DatabaseConnection::fetchRow($result);
+			if ($r === FALSE) {
+				return FALSE;
+			}
+			$a[$i] = $r;
 		}
 		return $a;
 	}

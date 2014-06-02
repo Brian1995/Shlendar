@@ -118,7 +118,6 @@ class PageAddAppointment extends PageContainer {
 	
 	public static function userCanEdit(DatabaseConnection $db, $userId, $calendarId) {
 		$ownerIdResult = $db->query("SELECT user_id FROM calendars WHERE id = '%s';", $calendarId);
-		$count = DatabaseConnection::countRows($ownerIdResult);
 		if ($ownerIdResult && DatabaseConnection::countRows($ownerIdResult) == 1) {
 			$ownerIdRow = DatabaseConnection::fetchRow($ownerIdResult);
 			if ($ownerIdRow['user_id'] == $userId) {
@@ -140,19 +139,5 @@ class PageAddAppointment extends PageContainer {
 		}
 		return FALSE;
 	}
-	
-//	public static function userCanEditOld(DatabaseConnection $db, $user, $calendar){
-//		$user_id = $db->query("SELECT user_id FROM calendars WHERE id = '%s';", $calendar);
-//		$a = mysql_fetch_array($user_id);
-//		if($a[0] == $user){ return true; }
-//		
-//		$result = $db->query("SELECT group_id FROM group_calendar_relations WHERE calendar_id = '%s' AND group_id IN "
-//				. "(SELECT group_id FROM group_user_relations WHERE user_id = '%s');", $calendar, $user);
-//		while ($a = mysql_fetch_array($result)){
-//			if(PageCalendarEditor::groupCanEdit($db, $calendar, $a[0])){ 
-//				return true; 
-//			}
-//		}
-//		return false;
-//	}
+
 }

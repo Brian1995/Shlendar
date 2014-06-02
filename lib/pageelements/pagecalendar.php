@@ -24,6 +24,13 @@ class PageCalendar extends PageElement {
 	 */
 	private $maxListDate = NULL;
 	
+	/**
+	 * @var string used if appointments should be marked even outside of the 
+	 * range.
+	 */
+	private $calendarId = NULL;
+	private $dbConnection = NULL;
+	
 	function __construct() {
 		parent::__construct('div');
 		$this->setProperty('id', 'sidebar-calendar');
@@ -101,18 +108,48 @@ class PageCalendar extends PageElement {
 		$this->maxListDate = $maxListDate;
 		return $this;
 	}
-
+	
+	public function markDates($calendarId, $dbConnection) {
+		$this->calendarId = $calendarId;
+		$this->dbConnection = $dbConnection;
+	}
+	
+	private function inRangeOfOne(array $appointmentsArray, Date $date) {
+		foreach ($appointmentsArray as $entry) {
+			$start = new Date($entry['start_date']);
+			$start->setToStartOfDay();
+			$end = new Date($entry['end_date']);
+			$end->setToEndOfDay();
+			if ($date >= $start && $date <= $end) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
 			
 	public function toXML() {
 		$calendar = parent::toXML();
 		
 		$currentDate  = $this->getCurrentDate();
 		$viewDate     = $this->getViewDate();
-		$firstOfMonth = $viewDate->copy()->setToFirstWeekdayOfMonth(Date::MONDAY);
+		$firstOfMonth = $viewDate->copy()->setToFirstWeekdayOfMonth(Date::MONDAY)->setToStartOfDay();
 		$topLeftDate  = $firstOfMonth->copy();
 		if ($topLeftDate->getDay() != 1) {
 			$topLeftDate->setToPreviousWeekday();
 		}
+		
+		if ($this->calendarId !== NULL) {
+			$bottomRightDate = $topLeftDate->copy()->addDays(6*7)->setToEndOfDay();
+			$result = $this->dbConnection->query(
+				"SELECT a.start_date, a.end_date
+				FROM appointments AS a
+				WHERE a.calendar_id = '%s'
+					AND a.end_date >= '%s'
+					AND a.start_date <= '%s'
+				ORDER BY a.start_date;", $this->calendarId, $topLeftDate, $bottomRightDate);
+			$appointmentsArray = DatabaseConnection::fetchAllRows($result);
+		}
+		
 		$day = $topLeftDate->copy();
 		
 		$nav = new XMLElement('div', 'id', 'sidebar-calendar-header');
@@ -165,6 +202,9 @@ class PageCalendar extends PageElement {
 				}
 				if ($day >= $this->minListDate && $day <= $this->maxListDate) {
 					$class .= ' inrange';
+				}
+				if ($this->calendarId && $this->inRangeOfOne($appointmentsArray, $day)) {
+					$class .= ' has-appointment';
 				}
 				$cell->setAttribute('class', $class);
 				$url = URL::createCurrent();

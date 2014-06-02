@@ -72,8 +72,8 @@ function ensureLogin() {
 	}
 }
 
-function addSidebarCalendar() {
-	global $sidebar, $url_current;
+function addSidebarCalendar($calendarId=NULL) {
+	global $sidebar, $url_current, $dbConnection;
 	$calendar = new PageCalendar();
 	$viewDate = new Date($url_current->getStaticQueryParameter('viewDate'));
 	$calendar->setViewDate($viewDate);
@@ -85,6 +85,9 @@ function addSidebarCalendar() {
 	$maxListDate = Date::instance($viewDate)->addDays(+$daysAfter)->setToEndOfDay();
 	$calendar->setMinListDate($minListDate);
 	$calendar->setMaxListDate($maxListDate);
+	if ($calendarId) {
+		$calendar->markDates($calendarId, $dbConnection);
+	}
 	$sidebar->addChild($calendar);
 }
 
@@ -272,26 +275,32 @@ switch ($action) {
 
 	case 'listAppointments':
 		ensureLogin();
-		$titleText = 'Termine';
-		addSidebarCalendar();
-		addSidebarActions();
-		addSidebarCalendarList();
 
-		$calendar = $url_current->getDynamicQueryParameter('calendar');
-		$canEdit = PageAddAppointment::userCanEdit($dbConnection, Session::getUserID(), $calendar);
-		$list = new PageAppointmentList($dbConnection, $calendar, $canEdit);
-		$url = URL::createStatic();
+		$calendarId = $url_current->getDynamicQueryParameter('calendar');
+		$canView = PageAppointmentList::userCanView($dbConnection, Session::getUserID(), $calendarId);
+		$canEdit = PageAddAppointment::userCanEdit($dbConnection, Session::getUserID(), $calendarId);
+		if ($canView) {
+			$list = new PageAppointmentList($dbConnection, $calendarId, $canEdit);
+			$url = URL::createStatic();
 		
-		$appContainer = new PageContainer('div');
-		$appContainer->addChild($list);
-		
-		if ($canEdit) {
-			$url->setDynamicQueryParameter('action', 'addAppointment');
-			$url->setDynamicQueryParameter('calendar', $calendar);
-			$add = new PageAddAppointment($url);
-			$appContainer->addChild($add);
+			$appContainer = new PageContainer('div');
+			$appContainer->addChild($list);
+
+			if ($canEdit) {
+				$url->setDynamicQueryParameter('action', 'addAppointment');
+				$url->setDynamicQueryParameter('calendar', $calendarId);
+				$add = new PageAddAppointment($url);
+				$appContainer->addChild($add);
+			}
+			$content->addChild($appContainer);
+			$calendarName = $list->getCalendarName();
+			$titleText = "Termine von \"$calendarName\"";
+			addSidebarCalendar($calendarId);
+			addSidebarActions();
+			addSidebarCalendarList();
+		} else {
+			URL::redirectToError('Keine Berechtigung um diesen Kalender anzusehen');
 		}
-		$content->addChild($appContainer);
 		break;
 
 	case 'deleteAppointment':

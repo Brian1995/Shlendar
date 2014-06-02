@@ -132,12 +132,14 @@ main { display: flex; flex-flow: column nowrap; background: red; }
 #sidebar-calendar-entries { display: table; width: 100%; box-sizing: border-box; text-align: center; padding: 0 0.5em; }
 #sidebar-calendar-entries > div { display: table-row; }
 #sidebar-calendar-entries > div > div { display: table-cell;  }
-#sidebar-calendar-entries > div > div > a { display:block; font-size: 0.85em; padding: 0.2em 0.4em; color: <?=GRAY_DARKER?>; }
-#sidebar-calendar-entries .current-month a { color: <?=BLUE_DARKER?>; }
-#sidebar-calendar-entries .current-month.current a { color: <?=WHITE?>; background: <?=GRAY_DARKER?>;}
+#sidebar-calendar-entries > div > div > a { display:block; font-size: 0.85em; font-style:italic; opacity: 0.6; }
+#sidebar-calendar-entries > div > div > a > span { display:block; padding: 0.2em 0.4em; }
+#sidebar-calendar-entries .current-month a { color: <?=BLUE_DARKER?>; font-style: normal; opacity: 1.0; }
+#sidebar-calendar-entries .current-month.current a { color: <?=WHITE?>; background: <?=BLUE_LIGHT?>; }
 #sidebar-calendar-entries .current-month.selected a { color: <?=WHITE?>; background: <?=ORANGE?>; }
-#sidebar-calendar-entries .inrange { background: rgba(26, 188, 156, 0.6); }
-#sidebar-calendar-entries > div > div > a:hover { background: <?=GRAY_LIGHTER?>; }
+#sidebar-calendar-entries .inrange { background: rgba(243, 156, 18, 0.2); }
+#sidebar-calendar-entries .has-appointment span { background:rgba(142, 68, 173,0.25); }
+#sidebar-calendar-entries > div > div > a:hover { background: rgba(255,255,255,0.5); }
 #sidebar-calendar-entries .dayrow { text-transform: uppercase; <?=FONT_HEADLINE?> font-size:0.75em; }
 
 /** SIDEBAR ACTIONS ***********************************************************/
