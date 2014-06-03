@@ -20,9 +20,10 @@ class DatabaseConnection {
 		$this->link     = NULL;
 	}
 	
-	public function connect() {
+	public function connect($charset=NULL) {
 		$this->link = mysql_connect($this->server, $this->user, $this->password, false);
-		return ($this->link && mysql_select_db($this->schema, $this->link));
+		$result = ($this->link && mysql_select_db($this->schema, $this->link));
+		$result &= mysql_set_charset($charset === NULL ? 'UTF8' : $charset, $this->link);
 	}
 	
 	public function query($query) {
