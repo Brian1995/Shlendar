@@ -337,7 +337,8 @@ switch ($action) {
 		} else {
 			$titleText = 'Willkommen bei Shlendar';
 		}
-		$content->addChild(new PageTextContainer(PageTextContainer::P, 'Ein fürchterlicher Kalender...'));
+		$content->addChild($startPageContainer = new PageContainer());
+		$startPageContainer->addChild(new PageTextContainer(PageTextContainer::P, 'Ein fürchterlicher Kalender...'));
 		break;
 }
 
