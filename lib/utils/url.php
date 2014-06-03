@@ -204,12 +204,13 @@ class URL {
 	/**
 	 * 
 	 * @param string $name
+	 * @param string|null $defaultValue
 	 * @return string|null
 	 * @deprecated since version 0.1
 	 */
-	public function getQueryParameter($name) {
+	public function getQueryParameter($name, $defaultValue=NULL) {
 		$query = $this->getQuery();
-		return $query === NULL ? NULL : isset($query[$name]) ? $query[$name] : NULL;
+		return $query === NULL ? $defaultValue : isset($query[$name]) ? $query[$name] : $defaultValue;
 	}
 	
 	/**
@@ -281,31 +282,37 @@ class URL {
 	}
 	
 	/**
-	 * Returns the value of the static parameter or NULL if the parameter does 
-	 * not exist.
+	 * Returns the value of the static parameter or default value if the 
+	 * parameter does not exist.
 	 * 
 	 * @param string $name
 	 *        Name of the parameter, never NULL.
+	 * @param string|null $defaultValue
+	 *        Value to return if the parameter does not exist
 	 * @return string|null
-	 *         The value of the parameter or NULL if it does not exist.
+	 *         The value of the parameter or the default value if it does not 
+	 *         exist.
 	 * @see setStaticQueryParameter()
 	 */
-	public function getStaticQueryParameter($name) {
-		return $this->getQueryParameter(self::STATIC_QUERY_PARAMETER_PREFIX.$name);
+	public function getStaticQueryParameter($name, $defaultValue=NULL) {
+		return $this->getQueryParameter(self::STATIC_QUERY_PARAMETER_PREFIX.$name, $defaultValue);
 	}
 	
 	/**
-	 * Returns the value of the dynamic parameter or NULL if the parameter does 
-	 * not exist.
+	 * Returns the value of the dynamic parameter or the  default value if the 
+	 * parameter does not exist.
 	 * 
 	 * @param string $name
 	 *        Name of the parameter, never NULL.
+	 * @param string|null $defaultValue
+	 *        Value to return if the parameter does not exist
 	 * @return string|null
-	 *         The value of the parameter or NULL if it does not exist.
+	 *         The value of the parameter or the default value if it does not 
+	 *         exist.
 	 * @see setDynamicQueryParameter()
 	 */
-	public function getDynamicQueryParameter($name) {
-		return $this->getQueryParameter(self::DYNAMIC_QUERY_PARAMETER_PREFIX.$name);
+	public function getDynamicQueryParameter($name, $defaultValue=NULL) {
+		return $this->getQueryParameter(self::DYNAMIC_QUERY_PARAMETER_PREFIX.$name, $defaultValue);
 	}
 	
 	public function removeAllQueryParameters($keepPrefix=NULL) {
