@@ -443,7 +443,7 @@ reference "fig:Gruppe-Erstellen"
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -528,12 +528,10 @@ sideways false
 status open
 
 \begin_layout Plain Layout
-\noindent
-\align center
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Gruppe umbenennen  
+Gruppe umbenennen
 \end_layout
 
 \end_inset
