@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 12, 2014 at 01:53 
+-- Generation Time: Jun 04, 2014 at 11:36 
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
@@ -25,27 +25,17 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `appointments`
 --
 
+DROP TABLE IF EXISTS `appointments`;
 CREATE TABLE IF NOT EXISTS `appointments` (
   `id` int(32) NOT NULL AUTO_INCREMENT,
   `calendar_id` int(32) NOT NULL,
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
-  `title` varchar(255) COLLATE utf32_unicode_ci NOT NULL,
-  `description` varchar(4096) COLLATE utf32_unicode_ci NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` varchar(4096) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `calendar_id` (`calendar_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci AUTO_INCREMENT=1 ;
-
---
--- RELATIONS FOR TABLE `appointments`:
---   `calendar_id`
---       `calendars` -> `id`
---
-
---
--- Dumping data for table `appointments`
---
-
+) ENGINE=InnoDB  DEFAULT CHARSET=utf32 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -53,17 +43,14 @@ CREATE TABLE IF NOT EXISTS `appointments` (
 -- Table structure for table `calendars`
 --
 
+DROP TABLE IF EXISTS `calendars`;
 CREATE TABLE IF NOT EXISTS `calendars` (
   `id` int(32) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf32_unicode_ci NOT NULL,
-  `owner_id` int(32) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `calendars`
---
-
+  `name` varchar(255) NOT NULL,
+  `user_id` int(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_calendars_user_id_idx` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf32 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -71,17 +58,14 @@ CREATE TABLE IF NOT EXISTS `calendars` (
 -- Table structure for table `groups`
 --
 
+DROP TABLE IF EXISTS `groups`;
 CREATE TABLE IF NOT EXISTS `groups` (
   `id` int(32) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf32_unicode_ci NOT NULL,
-  `owner_id` int(32) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `groups`
---
-
+  `name` varchar(255) NOT NULL,
+  `user_id` int(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_groups_user_id_idx` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf32 AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
@@ -89,26 +73,17 @@ CREATE TABLE IF NOT EXISTS `groups` (
 -- Table structure for table `group_calendar_relations`
 --
 
+DROP TABLE IF EXISTS `group_calendar_relations`;
 CREATE TABLE IF NOT EXISTS `group_calendar_relations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
   `calendar_id` int(11) NOT NULL,
   `rights` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `group_id` (`group_id`),
   KEY `calendar_id` (`calendar_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
-
---
--- RELATIONS FOR TABLE `group_calendar_relations`:
---   `calendar_id`
---       `calendars` -> `id`
---   `group_id`
---       `groups` -> `id`
---
-
---
--- Dumping data for table `group_calendar_relations`
---
-
+) ENGINE=InnoDB  DEFAULT CHARSET=utf32 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -116,25 +91,16 @@ CREATE TABLE IF NOT EXISTS `group_calendar_relations` (
 -- Table structure for table `group_user_relations`
 --
 
+DROP TABLE IF EXISTS `group_user_relations`;
 CREATE TABLE IF NOT EXISTS `group_user_relations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(32) NOT NULL,
   `user_id` int(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `group_id` (`group_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
-
---
--- RELATIONS FOR TABLE `group_user_relations`:
---   `user_id`
---       `users` -> `ID`
---   `group_id`
---       `groups` -> `id`
---
-
---
--- Dumping data for table `group_user_relations`
---
-
+) ENGINE=InnoDB  DEFAULT CHARSET=utf32 AUTO_INCREMENT=12 ;
 
 -- --------------------------------------------------------
 
@@ -142,19 +108,13 @@ CREATE TABLE IF NOT EXISTS `group_user_relations` (
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf32_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf32_unicode_ci NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`) VALUES
-(1, 'igor', 'igor');
+) ENGINE=InnoDB  DEFAULT CHARSET=utf32 AUTO_INCREMENT=3 ;
 
 --
 -- Constraints for dumped tables
@@ -164,18 +124,30 @@ INSERT INTO `users` (`id`, `username`, `password`) VALUES
 -- Constraints for table `appointments`
 --
 ALTER TABLE `appointments`
-  ADD CONSTRAINT `appointments_ibfk_1` FOREIGN KEY (`calendar_id`) REFERENCES `calendars` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_appointments_calendar_id` FOREIGN KEY (`calendar_id`) REFERENCES `calendars` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `calendars`
+--
+ALTER TABLE `calendars`
+  ADD CONSTRAINT `fk_calendars_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `groups`
+--
+ALTER TABLE `groups`
+  ADD CONSTRAINT `fk_groups_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `group_calendar_relations`
 --
 ALTER TABLE `group_calendar_relations`
-  ADD CONSTRAINT `group_calendar_relations_ibfk_2` FOREIGN KEY (`calendar_id`) REFERENCES `calendars` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `group_calendar_relations_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_group_calendar_relations_calendar_id` FOREIGN KEY (`calendar_id`) REFERENCES `calendars` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_group_calendar_relations_group_id` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `group_user_relations`
 --
 ALTER TABLE `group_user_relations`
-  ADD CONSTRAINT `group_user_relations_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `group_user_relations_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `group_user_relations_group_id` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `group_user_relations_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

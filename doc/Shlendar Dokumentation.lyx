@@ -295,25 +295,25 @@ Shlendar ist ein Programm zur Verwaltung von Terminen und Terminkalendern
  die sich an die Gegebenheiten der Unternehmensstruktur anpassen lassen.
  So erlaubt es eine Rechteverwaltung mit Hilfe von Nutzergruppen Kalender
  an einen bestimmten Kreis von Personen freizugeben, sodass diese sie gemeinsam
- lesen oder auch editieren können (entsprechende Rechte vorausgesetzt).
+ lesen oder auch editieren können (entsprechende Gruppenrechte vorausgesetzt).
  
 \end_layout
 
 \begin_layout Standard
-Jeder Benutzer ist in der Lage eigene Gruppen anzulegen und zu diesen die
- anderen Benutzer hinzuzufügen.
- Dadurch werden die anderen Benutzer (derzeit automatisch, ohne Rückfrage)
- in die Gruppe mit aufgenommen.
+Jeder Benutzer ist in der Lage eigene Gruppen anzulegen und zu diesen andere
+ Benutzer hinzuzufügen.
+ Dadurch werden ausgewählte Benutzer (derzeit automatisch, keine Einladung,
+ ohne Rückfrage) in die Gruppe mit aufgenommen.
  Ebenso ist der Benutzer in der Lage eine beliebige Anzahl von Kalendern
  zu erstellen und diese mehreren Benutzergruppen mit unterschiedlichen Rechten
  Zugriff auf diese Kalender zu gewähren.
 \end_layout
 
 \begin_layout Standard
-Durch den Einsatz in Unternehmen gibt es bei Shlendar nur Nutzer die vorher
- vom Administrator der Datenbank festgelegt werden müssen.
+Durch den Einsatz in Unternehmen gibt es bei Shlendar nur Benutzer die vorher
+ vom Administrator der Datenbank festgelegt wurden.
  Ein Werkzeug zur Administration der Accounts oder zur Registration eines
- Accounts durch den Nutzer ist kein Bestandteil dieses Projekts.
+ Accounts durch den Nutzer ist nicht Bestandteil des aktuellen Projekts.
  
 \end_layout
 
@@ -322,8 +322,10 @@ Gruppenverwaltung
 \end_layout
 
 \begin_layout Standard
-Jeder einzelne Nutzer ist allerdings in der Lage die anderen Nutzer in seine
- ganz persönlichen Gruppen einzuteilen.
+Jeder einzelne Benutzer ist in der Lage eine beliebige Anzahl von Gruppen
+ zu erstellen und jeder Gruppe einen bestimmten Kreis von Personen/Benutzern
+ zuzuordnen.
+ Darüber hinaus kann er jeder Gruppe bestimmte Rechte einräumen.
 \end_layout
 
 \begin_layout Standard
@@ -434,14 +436,14 @@ reference "fig:Gruppe-Erstellen"
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
 \align center
 \begin_inset Graphics
 	filename Gruppe erstellen.png
-	width 100text%
+	width 100col%
 
 \end_inset
 
@@ -521,18 +523,21 @@ status collapsed
 \begin_layout Plain Layout
 \noindent
 \align center
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Gruppe umbenennen  
-\end_layout
+\begin_inset Graphics
+	filename gruppe umbenennen.PNG
+	width 100col%
 
 \end_inset
 
 
-\begin_inset Graphics
-	filename gruppe umbenennen.PNG
-	width 100text%
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Gruppe umbenennen
+\end_layout
 
 \end_inset
 
